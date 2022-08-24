@@ -3,12 +3,13 @@ import { hot } from "react-hot-loader/root";
 
 //react
 import React from "react";
-import { Routes, BrowserRouter, Route } from "react-router-dom";
+import { Routes, BrowserRouter, Route, Navigate } from "react-router-dom";
 
 
 //pages
 import {
-  Home
+  StudentHome,
+  TeacherHome
 } from "@pages/index";
 
 //antd
@@ -24,7 +25,9 @@ const App = () => {
         <ConfigProvider locale={locale}>
               <BrowserRouter>
                 <Routes>
-                  <Route path="/" element={<Home />} />
+                  <Route path="/" element={<Navigate to="/student" /> } />
+                  <Route path="/student" element={<StudentHome />} />
+                  <Route path="/teacher" element={<TeacherHome />} />
                 </Routes>
               </BrowserRouter>
         </ConfigProvider>

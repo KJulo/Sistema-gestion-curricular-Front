@@ -20,7 +20,7 @@ module.exports = {
       "@components": path.resolve(__dirname, "src/ui/components/"),
       "@containers": path.resolve(__dirname, "src/ui/containers/"),
       "@constants": path.resolve(__dirname, "src/ui/constants/"),
-      "@layout": path.resolve(__dirname, "src/ui/layout/"),
+      "@layouts": path.resolve(__dirname, "src/ui/layouts/"),
       "@pages": path.resolve(__dirname, "src/ui/pages/"),
       "@routes": path.resolve(__dirname, "src/ui/routes/"),
       "@styles": path.resolve(__dirname, "src/ui/styles/"),

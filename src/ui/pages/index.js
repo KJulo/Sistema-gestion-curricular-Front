@@ -1,1 +1,2 @@
-export { default as Home } from "@pages/Home";
+export { default as StudentHome } from "@pages/student/Home";
+export { default as TeacherHome } from "@pages/teacher/Home";
