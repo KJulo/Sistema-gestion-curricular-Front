@@ -1,18 +1,19 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 // styles
 import "@styles/Home.less";
 
-// constants
-import { studentMenu } from '@constants/menu.js';
-import { students } from '@constants/users.js'
-
 // layouts
-import Navbar from '@layouts/Navbar';
+import HomeLayout from '@layouts/HomeLayout';
+
+// constants
+import { student } from '@constants/users';
 
 const Home = () => {
+  const [userLoged, setUserLoged] = useState(student);
+
   return (
-    <Navbar />
+    <HomeLayout user={userLoged} />
   );
 }
 
