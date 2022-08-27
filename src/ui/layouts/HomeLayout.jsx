@@ -4,10 +4,10 @@ import React from 'react';
 import { Layout } from 'antd';
 
 // cs
-import "@styles/Navbar.less";
+import "@styles/Home.less";
 
 // components
-import Navbar from '@components/Navbar';
+import NavBar from '@components/NavBar';
 import HomeContent from '@components/HomeContent';
 
 // variables
@@ -18,14 +18,14 @@ const { Header, Sider, Content } = Layout;
 const HomeLayout = ({user}) => {
 
   return (
-    <Layout className="all-height">
-      <Sider>
-        <Navbar toppics={studentMenu} />
-      </Sider>
-      <Content style={{ marginLeft: 20 }}>
+    <div className='home-grid-layout'>
+      <aside>
+        <NavBar toppics={studentMenu} className='navbar'/>
+      </aside>
+      <Content style={{ marginLeft: 20 }} className='content'>
         <HomeContent user={user} />
       </Content>
-    </Layout>
+    </div>
   );
 };
 

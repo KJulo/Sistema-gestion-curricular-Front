@@ -4,14 +4,25 @@
     background-color: @menu-bg;
 }
 
-.navbar-container {
-    height: 100%;
-    position: absolute;
-}
-
 .all-height {
     height: 100vh;
     max-height: 100vh;
     min-height: 100vh;
     overflow: auto;
+}
+
+.home-grid-layout {
+    display: grid;
+    grid-gap: 20px;
+    grid-template-columns: repeat(4, 1fr);
+}
+
+.home-grid-layout .navbar {
+    grid-column-start: 1;
+    grid-column-end: 2;
+}
+
+.home-grid-layout .content {
+    grid-column-start: 2;
+    grid-column-end: -1;
 }

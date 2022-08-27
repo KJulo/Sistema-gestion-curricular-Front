@@ -1,36 +1,17 @@
-#components-layout-demo-custom-trigger .trigger {
-    font-size: 18px;
-    line-height: 64px;
-    cursor: pointer;
-    transition: color 0.3s;
+.mobileHidden {
+    @media only screen and (max-width: 900px) {
+        visibility: hidden;
+    }
+    @media only screen and (min-width: 900px) {
+        visibility: visible;
+    }
 }
 
-#components-layout-demo-custom-trigger .trigger:hover {
-    color: #1890ff;
-}
-
-#components-layout-demo-custom-trigger .logo {
-    height: 32px;
-    margin: 16px;
-    background: rgba(255, 255, 255, 0.3);
-}
-
-.site-layout .site-layout-background {
-    background: #fff;
-}
-
-.all-height {
-    height: 100vh;
-    max-height: 100vh;
-    min-height: 100vh;
-    overflow: auto;
-}
-
-.button-collapse {
-    margin: 20px;
-    cursor: pointer;
-    margin-inline: 10px;
-    border: 1px solid black;
-    border-radius: 22px;
-    max-width: fit-content;
+.mobileVisible {
+    @media only screen and (min-width: 900px) {
+        visibility: hidden;
+    }
+    @media only screen and (max-width: 900px) {
+        visibility: visible;
+    }
 }

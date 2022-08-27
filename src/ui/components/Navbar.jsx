@@ -1,60 +1,42 @@
 import React, { useState } from 'react';
+import { Button, Drawer, Radio, Space, Anchor } from 'antd';
 
-// antd
-import {
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-  UserOutlined,
-} from '@ant-design/icons';
-import { Layout, Menu } from 'antd';
-const { Header, Sider, Content } = Layout;
+import "@styles/NavBar.less"
 
-// styles
-import "@styles/Navbar.less";
+const { Link } = Anchor;
 
-const Navbar = ({toppics}) => {
-  const [collapsed, setCollapsed] = useState(false);
+const NavBar = ({ toppics }) => {
+	const [visible, setVisible] = useState(false);
 
-  const handdleCollapsed = () => {
-    setCollapsed(collapsed ? false : true)
-  }
+	const showDrawer = () => {
+		setVisible(true);
+	};
 
-  return (
-    <Layout>
+	const onClose = () => {
+		setVisible(false);
+	};
 
-      {/* Menu list */}
-      <Sider trigger={null} collapsible collapsed={collapsed}>
-        <div className="logo" />
-        {toppics.map((toppic, index)=> {
-          return (
-            <Menu
-              key={index}
-              theme="dark"
-              mode="inline"
-              defaultSelectedKeys={['1']}
-              items={[
-                {
-                  key: index,
-                  icon: <UserOutlined />,
-                  label: toppic,
-                }
-              ]}
-            />
-          )
-        })}
-      </Sider>
+	return (
+		<>
+			<div className='mobileVisible' style={{ margin: 40, position: 'fixed' }}>
+				<Button type="primary" onClick={showDrawer}> Ver Módulos </Button>
+				<Drawer title="Módulos" placement="left" onClose={onClose} visible={visible}>
+					<Anchor targetOffset="65">
+						{toppics.map((toppic, index) => {
+							return <Link href={toppic} title={toppic} />
+						})}
+					</Anchor>
+				</Drawer>
+			</div>
+			<div className='mobileHidden'>
+				<Anchor targetOffset="65">
+					{toppics.map((toppic, index) => {
+						return <Link href={toppic} title={toppic} />
+					})}
+				</Anchor>
+			</div>
+		</>
+	)
+}
 
-      {/* Button collapse */}
-      <Layout className="site-layout">
-        <Header className="site-layout-background button-collapse" style={{ paddingInlineStart: 20, paddingInlineEnd: 40 }} onClick={handdleCollapsed} >
-          {React.createElement(collapsed ? MenuUnfoldOutlined : MenuFoldOutlined, {
-            className: 'trigger',
-            onClick: () => setCollapsed(!collapsed),
-          })}
-        </Header>
-      </Layout>
-    </Layout>
-  );
-};
-
-export default Navbar;
+export default NavBar;
