@@ -1,5 +1,40 @@
 @import "App.less";
 
+@media only screen and (min-width: 900px) {
+    .home-grid-layout {
+        display: grid;
+        grid-gap: 20px;
+        grid-template-columns: repeat(5, 1fr);
+    }
+    
+    .home-grid-layout .navbar {
+        grid-column-start: 1;
+        grid-column-end: 2;
+    }
+    
+    .home-grid-layout .content {
+        grid-column-start: 2;
+        grid-column-end: -1;  // -1 is the last column
+    }
+}
+@media only screen and (max-width: 900px) {
+    .home-grid-layout {
+        display: grid;
+        // grid-gap: 20px;
+        grid-template-rows: 50px auto;
+    }
+    
+    .home-grid-layout .navbar {
+        grid-row-start: 1;
+        grid-row-end: 2;
+    }
+    
+    .home-grid-layout .content {
+        grid-row-start: 2;
+        grid-row-end: -1; // -1 is the last row
+    }
+}
+
 .grey {
     background-color: @menu-bg;
 }
@@ -9,20 +44,4 @@
     max-height: 100vh;
     min-height: 100vh;
     overflow: auto;
-}
-
-.home-grid-layout {
-    display: grid;
-    grid-gap: 20px;
-    grid-template-columns: repeat(4, 1fr);
-}
-
-.home-grid-layout .navbar {
-    grid-column-start: 1;
-    grid-column-end: 2;
-}
-
-.home-grid-layout .content {
-    grid-column-start: 2;
-    grid-column-end: -1;
 }

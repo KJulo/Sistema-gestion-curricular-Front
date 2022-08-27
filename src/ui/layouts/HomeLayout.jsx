@@ -18,7 +18,7 @@ const { Header, Sider, Content } = Layout;
 const HomeLayout = ({user}) => {
 
   return (
-    <div className='home-grid-layout'>
+    <div className='home-grid-layout all-height' style={{ margin: 40 }}>
       <aside>
         <NavBar toppics={studentMenu} className='navbar'/>
       </aside>

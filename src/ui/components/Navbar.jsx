@@ -18,20 +18,22 @@ const NavBar = ({ toppics }) => {
 
 	return (
 		<>
-			<div className='mobileVisible' style={{ margin: 40, position: 'fixed' }}>
-				<Button type="primary" onClick={showDrawer}> Ver Módulos </Button>
+			<div className='mobileVisible' style={{ position: 'fixed' }}>
+				<Button type="primary" onClick={showDrawer}>
+					<span>Ver Módulos</span>
+				</Button>
 				<Drawer title="Módulos" placement="left" onClose={onClose} visible={visible}>
 					<Anchor targetOffset="65">
 						{toppics.map((toppic, index) => {
-							return <Link href={toppic} title={toppic} />
+							return <Link href={toppic} title={toppic} key={index} />
 						})}
 					</Anchor>
 				</Drawer>
 			</div>
 			<div className='mobileHidden'>
-				<Anchor targetOffset="65">
+				<Anchor targetOffset="65" >
 					{toppics.map((toppic, index) => {
-						return <Link href={toppic} title={toppic} />
+						return <Link href={toppic} title={toppic} key={index} />
 					})}
 				</Anchor>
 			</div>
