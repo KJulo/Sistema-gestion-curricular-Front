@@ -20,7 +20,7 @@ const HomeLayout = ({user}) => {
   return (
     <div className='home-grid-layout all-height' style={{ margin: 40 }}>
       <aside>
-        <HomeNavBar toppics={studentMenu} className='NavBar'/>
+        <HomeNavBar toppics={studentMenu} user={user} className='NavBar'/>
       </aside>
       <Content style={{ marginLeft: 20 }} className='content'>
         <HomeContent user={user} />

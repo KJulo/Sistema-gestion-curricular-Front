@@ -24,9 +24,9 @@ const HomeContent = ({user}) => {
 				minHeight: 280,
 			}}
 		>
-			<Title> Hola, {user.nombres} {user.apellidos} </Title>
+			<Title> Hola, {user.nombres} {user.apellidos} !</Title>
 
-			<div className='primary-bg flex-container' style={{ justifyContent: 'space-around' }}>
+			<div className='primary-bg flex-container' style={{ padding: '1rem', justifyContent: 'space-around' }}>
 				<img src={SchoolImg} alt="Logo Colegio" style={{ margin: 10 }} />
 				<Notifications />
 			</div>
