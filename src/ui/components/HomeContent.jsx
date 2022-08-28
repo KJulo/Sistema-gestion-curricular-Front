@@ -1,11 +1,18 @@
 import React from 'react';
 
+//components
+import Notifications from '@components/Notifications';
+
 // antd
 import { Layout, Typography } from 'antd';
 const { Content } = Layout;
 const { Title, Text } = Typography
 
-// css
+// styles
+import "@styles/Home.less"
+
+// assets
+import SchoolImg from "@logos/school-img.png"
 
 const HomeContent = ({user}) => {
 
@@ -14,11 +21,15 @@ const HomeContent = ({user}) => {
 			className="site-layout-background"
 			style={{
 				margin: '24px 16px',
-				padding: 50,
 				minHeight: 280,
 			}}
 		>
 			<Title> Hola, {user.nombres} {user.apellidos} </Title>
+
+			<div className='primary-bg flex-container' style={{ justifyContent: 'space-around' }}>
+				<img src={SchoolImg} alt="Logo Colegio" style={{ margin: 10 }} />
+				<Notifications />
+			</div>
 		</div>
   );
 };

@@ -5,7 +5,7 @@ import "@styles/NavBar.less"
 
 const { Link } = Anchor;
 
-const NavBar = ({ toppics }) => {
+const HomeNavBar = ({ toppics }) => {
 	const [visible, setVisible] = useState(false);
 
 	const showDrawer = () => {
@@ -41,4 +41,4 @@ const NavBar = ({ toppics }) => {
 	)
 }
 
-export default NavBar;
+export default HomeNavBar;

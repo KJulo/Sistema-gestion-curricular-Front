@@ -7,7 +7,7 @@ import { Layout } from 'antd';
 import "@styles/Home.less";
 
 // components
-import NavBar from '@components/NavBar';
+import HomeNavBar from '@components/HomeNavBar';
 import HomeContent from '@components/HomeContent';
 
 // variables
@@ -20,7 +20,7 @@ const HomeLayout = ({user}) => {
   return (
     <div className='home-grid-layout all-height' style={{ margin: 40 }}>
       <aside>
-        <NavBar toppics={studentMenu} className='navbar'/>
+        <HomeNavBar toppics={studentMenu} className='NavBar'/>
       </aside>
       <Content style={{ marginLeft: 20 }} className='content'>
         <HomeContent user={user} />
