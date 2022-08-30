@@ -20,11 +20,11 @@ const HomeLayout = ({user}) => {
 
 
   return (
-    <div className='home-grid-layout all-height' style={{ margin: 40 }}>
-      <aside>
+    <div className='home-grid-layout all-height' style={{ margin: "0 40px 0 0" }}>
+      <aside className='primary-bg-mobile'>
         <HomeNavBar toppics={studentMenu} user={user} className='NavBar'/>
       </aside>
-      <Content style={{ marginLeft: 20 }} className='content'>
+      <Content style={{ marginLeft: 20, marginTop: 25 }} className='content'>
         {user.tipo == 'estudiante' ? <StudentContent user={user} /> : <TeacherContent /> }
       </Content>
     </div>

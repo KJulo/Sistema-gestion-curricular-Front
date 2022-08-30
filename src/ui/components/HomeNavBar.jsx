@@ -30,7 +30,7 @@ const HomeNavBar = ({ toppics, user }) => {
 	}
 
 	return (
-		<div style={{ marginTop: 10 }}>
+		<div style={{ margin: 40 }}>
 			<div className='mobileVisible' style={{ position: 'fixed' }}>
 				<Button type="primary" onClick={showDrawer}>
 					<span>Ver Módulos</span>

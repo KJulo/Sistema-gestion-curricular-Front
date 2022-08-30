@@ -9,6 +9,9 @@ img {
     img {
         max-width: 600px;
     }
+    .primary-bg-mobile {
+        background-color: @primary-bg;
+    }
     .home-grid-layout {
         display: grid;
         grid-gap: 20px;
@@ -26,6 +29,10 @@ img {
     }
 }
 @media only screen and (max-width: 900px) {
+    .primary-bg-mobile {
+        background-color: @body-bg;
+    }
+
     .home-grid-layout {
         display: grid;
         // grid-gap: 20px;
@@ -44,7 +51,7 @@ img {
 }
 
 .primary-bg {
-    background-color: @menu-bg;
+    background-color: @primary-bg;
 }
 
 .all-height {
