@@ -5,6 +5,9 @@ import { hot } from "react-hot-loader/root";
 import React from "react";
 import { Routes, BrowserRouter, Route, Navigate } from "react-router-dom";
 
+//redux
+import { Provider } from 'react-redux';
+import store from '@redux'
 
 //pages
 import {
@@ -22,6 +25,7 @@ import locale from "antd/es/locale/es_ES";
 const App = () => {
   return (
     <>
+      <Provider store={store}>
         <ConfigProvider locale={locale}>
               <BrowserRouter>
                 <Routes>
@@ -31,6 +35,7 @@ const App = () => {
                 </Routes>
               </BrowserRouter>
         </ConfigProvider>
+      </Provider>
     </>
   );
 };

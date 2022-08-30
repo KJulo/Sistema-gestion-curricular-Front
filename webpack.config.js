@@ -36,7 +36,8 @@ module.exports = {
       "@network": path.resolve(__dirname, "src/infrastructure/network/"),
 
       "@application": path.resolve(__dirname, "src/application/"),
-      "@redux": path.resolve(__dirname, "src/application/config/redux"),
+      "@redux": path.resolve(__dirname, "src/application/config/redux/"),
+      "@slices": path.resolve(__dirname, "src/application/config/redux/slices/"),
       "@actions": path.resolve(
         __dirname,
         "src/application/config/redux/actions"
