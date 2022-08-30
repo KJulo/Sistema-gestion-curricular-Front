@@ -10,10 +10,9 @@ import HomeLayout from '@layouts/HomeLayout';
 import { student } from '@constants/users';
 
 const Home = () => {
-  const [userLoged, setUserLoged] = useState(student);
 
   return (
-    <HomeLayout user={userLoged} />
+    <HomeLayout user={student} />
   );
 }
 

@@ -14,7 +14,7 @@ import "@styles/Home.less"
 // assets
 import SchoolImg from "@logos/school-img.png"
 
-const HomeContent = ({user}) => {
+const StudentContent = ({user}) => {
 
   return (
 		<div
@@ -34,4 +34,4 @@ const HomeContent = ({user}) => {
   );
 };
 
-export default HomeContent;
+export default StudentContent;

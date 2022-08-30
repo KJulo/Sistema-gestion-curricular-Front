@@ -1,9 +1,19 @@
-import React from 'react'
+import React, { useState } from 'react';
+
+// styles
+import "@styles/Home.less";
+
+// layouts
+import HomeLayout from '@layouts/HomeLayout';
+
+// constants
+import { teacher } from '@constants/users';
 
 const Home = () => {
+
   return (
-    <div>TeacherHome</div>
-  )
+    <HomeLayout user={teacher} />
+  );
 }
 
-export default Home
+export default Home;

@@ -29,6 +29,7 @@ export const students = [
 export const student = {
 	id: "12412c1923m1928dj20d29",
 	id_colegio: "29183080jf102k9dk",
+	tipo: 'estudiante',
 	nombres: "Marcelo Jose",
 	apellidos: "Rojas Tapia",
 	rut: "20539858-5",
@@ -63,6 +64,7 @@ export const teachers = [
 export const teacher = {
 	id: "12412c1923m1928dj20d29",
 	id_colegio: "29183080jf102k9dk",
+	tipo: 'profesor',
 	nombres: "Natalia Riquelme",
 	apellidos: "Toro Tapia",
 	rut: "21239858-5",

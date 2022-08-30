@@ -25,9 +25,9 @@ const App = () => {
         <ConfigProvider locale={locale}>
               <BrowserRouter>
                 <Routes>
-                  <Route path="/" element={<Navigate to="/student" /> } />
-                  <Route path="/student" element={<StudentHome />} />
-                  <Route path="/teacher" element={<TeacherHome />} />
+                  <Route path="/" element={<Navigate to="/estudiante" /> } />
+                  <Route path="/estudiante" element={<StudentHome />} />
+                  <Route path="/profesor" element={<TeacherHome />} />
                 </Routes>
               </BrowserRouter>
         </ConfigProvider>
