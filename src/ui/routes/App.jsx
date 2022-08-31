@@ -6,14 +6,11 @@ import React from "react";
 import { Routes, BrowserRouter, Route, Navigate } from "react-router-dom";
 
 //redux
-import { Provider } from 'react-redux';
-import store from '@redux'
+import { Provider } from "react-redux";
+import store from "@redux";
 
 //pages
-import {
-  StudentHome,
-  TeacherHome
-} from "@pages/index";
+import { StudentHome, TeacherHome, AdminHome } from "@pages/index";
 
 //antd
 import { ConfigProvider } from "antd";
@@ -27,13 +24,14 @@ const App = () => {
     <>
       <Provider store={store}>
         <ConfigProvider locale={locale}>
-              <BrowserRouter>
-                <Routes>
-                  <Route path="/" element={<Navigate to="/estudiante" /> } />
-                  <Route path="/estudiante" element={<StudentHome />} />
-                  <Route path="/profesor" element={<TeacherHome />} />
-                </Routes>
-              </BrowserRouter>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Navigate to="/estudiante" />} />
+              <Route path="/estudiante" element={<StudentHome />} />
+              <Route path="/profesor" element={<TeacherHome />} />
+              <Route path="/administrador" element={<AdminHome />} />
+            </Routes>
+          </BrowserRouter>
         </ConfigProvider>
       </Provider>
     </>
