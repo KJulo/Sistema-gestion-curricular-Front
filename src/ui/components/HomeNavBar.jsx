@@ -19,7 +19,9 @@ const HomeNavBar = ({ toppics, user }) => {
 
 	function getToppics() {
 		return toppics.map((toppic, index) => {
-			return <Link href={toppic} title={toppic} key={index} />
+			if (toppic == 'Inicio')
+				return <Link href={"/"+user.tipo+"/"} title={toppic} key={index} />
+			return <Link href={"/"+user.tipo+"/"+toppic.toLowerCase()} title={toppic} key={index} />
 		})
 	}
 
