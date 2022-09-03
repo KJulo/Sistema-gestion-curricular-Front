@@ -13,8 +13,8 @@ import "@styles/Attendance.less"
 import HomeNavBar from '@components/HomeNavBar';
 
 // constants
-import { student } from '@constants/users';
-import { studentMenu } from "@constants/menu.js"
+import { teacher } from '@constants/users';
+import { teacherMenu } from "@constants/menu.js"
 
 
 let courses = [
@@ -98,6 +98,7 @@ const Attendance = () => {
 
 	const onClick = (course) => {
 		let studentClass = userState.filter((student) => student.idCurso == course.id );
+		// Cambio de nombre de la propiedad checked por la de presente
 		const studentClassRenamed = studentClass.map(({checked: presente, ...rest}) => ({presente, ...rest})) // Datos finales a enviar a endpoint
 	}
 	
@@ -116,7 +117,7 @@ const Attendance = () => {
 	return (
 		<div className="site-page-header-ghost-wrapper home-grid-layout all-height" style={{ margin: "0 40px 0 0", padding: 0 }}>
 			<aside className='primary-bg-mobile'>
-				<HomeNavBar toppics={studentMenu} user={student} className='NavBar'/>
+				<HomeNavBar toppics={teacherMenu} user={teacher} className='NavBar'/>
 			</aside>
 
 			<div className="content" style={{ marginTop: 60, marginLeft: 20 }}>

@@ -6,26 +6,17 @@ import { Layout } from 'antd';
 // cs
 import "@styles/Home.less";
 
-// components
-import HomeNavBar from '@components/HomeNavBar';
-import StudentContent from '@components/StudentContent';
-import TeacherContent from '@components/TeacherContent';
+const { Content } = Layout;
 
-// variables
-import { studentMenu } from "@constants/menu.js"
-
-const { Header, Sider, Content } = Layout;
-
-const HomeLayout = ({user}) => {
-
+const HomeLayout = ({navBarMenu, content}) => {
 
   return (
     <div className='home-grid-layout all-height' style={{ margin: "0 40px 0 0" }}>
       <aside className='primary-bg-mobile'>
-        <HomeNavBar toppics={studentMenu} user={user} className='NavBar'/>
+        { navBarMenu }
       </aside>
       <Content style={{ marginLeft: 20, marginTop: 25 }} className='content'>
-        {user.tipo == 'estudiante' ? <StudentContent user={user} /> : <TeacherContent /> }
+        { content }
       </Content>
     </div>
   );

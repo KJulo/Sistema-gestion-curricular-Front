@@ -19,9 +19,16 @@ const HomeNavBar = ({ toppics, user }) => {
 
 	function getToppics() {
 		return toppics.map((toppic, index) => {
+			// Quitar tildes
+			let toppicURL = toppic.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+			// Quitar espacios
+			toppicURL = toppicURL.replace(' ', '-');
+			// Quitar mayusculas
+			toppicURL = toppicURL.toLowerCase();
+			// Agregar slash para url
 			if (toppic == 'Inicio')
 				return <Link href={"/"+user.tipo+"/"} title={toppic} key={index} />
-			return <Link href={"/"+user.tipo+"/"+toppic.toLowerCase()} title={toppic} key={index} />
+			return <Link href={"/"+user.tipo+"/"+toppicURL} title={toppic} key={index} />
 		})
 	}
 
