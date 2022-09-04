@@ -1,18 +1,17 @@
-import React from 'react'
+import React from 'react';
 
-const Card = ({title, content}) => {
+const Card = ({ title, content }) => {
   return (
     <Card
-      size="small"
+      size='small'
       title={title}
       // extra={<a href="#">More</a>}
       style={{
-          width: 300,
-      }}
-      >
+        width: 300,
+      }}>
       <p>{content}</p>
     </Card>
-  )
-}
+  );
+};
 
 export default Card;
