@@ -3,6 +3,7 @@ import '@styles/Attendance.less';
 
 // antd
 import { Checkbox, Collapse, Typography, Space, DatePicker, Button } from 'antd';
+import { CalendarOutlined } from '@ant-design/icons';
 import moment from 'moment';
 const { Title } = Typography;
 const { Panel } = Collapse;
@@ -20,8 +21,7 @@ import {
 import HomeNavBar from '@components/HomeNavBar';
 
 // constants
-import { teacher } from '@constants/users';
-import { teacherMenu } from '@constants/menu.js';
+import { studentMenu } from '@constants/menu.js';
 
 let course = {
   id: '12s21ksjh2j12k4',
@@ -31,7 +31,9 @@ let course = {
 
 let student = {
   id: '2k1928d9218',
-  nombre: 'John Brown',
+  nombres: 'John',
+  apellidos: 'Brown',
+  tipo: 'estudiante',
   idCurso: '12s21ksjh2j12k4',
   asistencia: [
     { fecha: '2022-09-02', presente: true },
@@ -73,12 +75,12 @@ const Attendance = () => {
       className='site-page-header-ghost-wrapper home-grid-layout all-height'
       style={{ margin: '0 40px 0 0', padding: 0 }}>
       <aside className='container-bg-mobile'>
-        <HomeNavBar toppics={teacherMenu} user={teacher} className='NavBar' />
+        <HomeNavBar toppics={studentMenu} user={student} className='NavBar' />
       </aside>
 
-      <div className='content' style={{ marginTop: 60, marginLeft: 20 }}>
+      <div className='content' style={{ margin: '60px 10px 50px 10px', width: '95%' }}>
         <div className='header-container'>
-          <Title>Módulo Asistencia</Title>
+          <Title>Asistencia</Title>
           <Space direction='vertical'>
             <DatePicker
               defaultValue={moment(currentDate, 'MM-YYYY')}
@@ -87,7 +89,9 @@ const Attendance = () => {
             />
           </Space>
         </div>
-        <Title level={3}>{student.nombre}</Title>
+        <Title level={3}>
+          {student.nombres} {student.apellidos}
+        </Title>
         <table className='table'>
           <thead className='thead'>
             <tr className='trHead'>
