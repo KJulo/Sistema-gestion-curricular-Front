@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Button, Drawer, Anchor, Avatar } from 'antd';
+import { Button, Drawer, Anchor, Avatar, Typography } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 
 import "@styles/NavBar.less"
 
 const { Link } = Anchor;
+const { Title } = Typography;
 
 const HomeNavBar = ({ toppics, user }) => {
 	const [visible, setVisible] = useState(false);
@@ -34,7 +35,10 @@ const HomeNavBar = ({ toppics, user }) => {
 
 	function getUser() {
 		return (
-			<Avatar shape="square" size={120} icon={<UserOutlined />} style={{ margin: '20px 0px 50px' }} />
+			<div style={{ textAlign: 'center', margin: '10px 0 50px 0' }}>
+				<Avatar shape="square" size={120} icon={<UserOutlined />} />
+        <Title level={3} style={{ marginTop: 20 }}>{user.nombres} {user.apellidos}</Title>
+			</div>
 		)
 	}
 
