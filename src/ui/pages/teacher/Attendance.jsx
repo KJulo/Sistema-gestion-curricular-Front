@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react'
+import "@styles/Attendance.less"
 
 // antd
 import { Checkbox, Collapse, Typography, Space, DatePicker, Button } from 'antd';
@@ -6,8 +7,8 @@ import moment from 'moment';
 const { Title } = Typography;
 const { Panel } = Collapse;
 
-
-import "@styles/Attendance.less"
+// hooks
+import { useGetCurrentDate } from '@hooks/useDate';
 
 // components
 import HomeNavBar from '@components/HomeNavBar';
@@ -78,7 +79,7 @@ let data = [
 
 const Attendance = () => {
 
-	const currentDate = getCurrentDate();
+	const currentDate = useGetCurrentDate();
 	const [userState, setUserState] = useState(data)
 	const [selectedDate, setSelectedDate] = useState(currentDate);
 
@@ -100,18 +101,6 @@ const Attendance = () => {
 		let studentClass = userState.filter((student) => student.idCurso == course.id );
 		// Cambio de nombre de la propiedad checked por la de presente
 		const studentClassRenamed = studentClass.map(({checked: presente, ...rest}) => ({presente, ...rest})) // Datos finales a enviar a endpoint
-	}
-	
-	function getCurrentDate () {
-		let date = new Date();
-		let year = date.getFullYear().toString();
-		let month = (date.getMonth()+1).toString();
-		let day = date.getDate().toString();
-
-		month = month.length == 1 ? '0'+month : month;
-		day = day.length == 1 ? '0'+day : day;
-
-		return year+"-"+month+"-"+ day;
 	}
 
 	return (
