@@ -25,7 +25,7 @@ const Notifications = () => {
           bordered
           dataSource={getText(homeWork)}
           renderItem={(item) => (
-            <List.Item>
+            <List.Item className='notification-item'>
               {/* <Card content={item} /> */}
               {item}
             </List.Item>

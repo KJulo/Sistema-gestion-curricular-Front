@@ -28,7 +28,7 @@ const StudentContent = ({ user }) => {
       </Title>
 
       <div
-        className='primary-bg flex-container'
+        className='container-bg flex-container'
         style={{ padding: '1rem', justifyContent: 'space-around' }}>
         <img src={SchoolImg} alt='Logo Colegio' style={{ margin: 10 }} />
         <Notifications />

@@ -72,7 +72,7 @@ const Attendance = () => {
     <div
       className='site-page-header-ghost-wrapper home-grid-layout all-height'
       style={{ margin: '0 40px 0 0', padding: 0 }}>
-      <aside className='primary-bg-mobile'>
+      <aside className='container-bg-mobile'>
         <HomeNavBar toppics={teacherMenu} user={teacher} className='NavBar' />
       </aside>
 

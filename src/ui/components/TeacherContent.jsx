@@ -20,7 +20,7 @@ const TeacherContent = ({ user }) => {
       }}>
       <Title> Mis Cursos</Title>
 
-      <div className='primary-bg flex-container'>
+      <div className='container-bg flex-container'>
         {courses.map((course) => {
           return (
             <div className='course-container'>
