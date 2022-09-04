@@ -12,6 +12,7 @@ import store from '@redux'
 //pages
 import {
   StudentHome,
+  StudentAttendance,
   TeacherAttendance,
   TeacherHome
 } from "@pages/index";
@@ -32,6 +33,7 @@ const App = () => {
                 <Routes>
                   <Route path="/" element={<Navigate to="/estudiante" /> } />
                   <Route path="/estudiante" element={<StudentHome />} />
+                  <Route path="/estudiante/asistencia" element={<StudentAttendance />} />
                   <Route path="/profesor" element={<TeacherHome />} />
                   <Route path="/profesor/modulo-asistencia" element={<TeacherAttendance />} />
                 </Routes>
