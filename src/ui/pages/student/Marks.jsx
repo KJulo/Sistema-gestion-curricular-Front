@@ -10,6 +10,7 @@ const { Panel } = Collapse;
 
 // hooks
 import { useGetCurrentMonth, useGetCurrentYear, useGetCurrentDay } from '@hooks/useDate';
+import { getAverage } from '@hooks/useMath';
 
 // components
 import HomeNavBar from '@components/HomeNavBar';
@@ -132,31 +133,8 @@ const student = {
 };
 
 const Marks = () => {
-  const currentDate = useGetCurrentMonth() + '-' + useGetCurrentYear() + '-' + useGetCurrentDay();
+  const currentDate = useGetCurrentDay() + '-' + useGetCurrentMonth() + '-' + useGetCurrentYear();
   const [userState, setUserState] = useState(student);
-
-  function getAverage(marks, decimals) {
-    let total = 0;
-    let subjects = 0;
-    let sumBySubjects = {};
-
-    // Hacer suma por cada asignatura
-    marks.map((mark) => {
-      if (mark.asignatura in sumBySubjects == false) {
-        subjects += 1;
-        sumBySubjects[mark.asignatura] = 0;
-      }
-      sumBySubjects[mark.asignatura] += mark.nota * mark.total;
-    });
-
-    // Promediar las asignaturas
-    let keySubjects = Object.keys(sumBySubjects);
-    keySubjects.map((subject) => {
-      total += sumBySubjects[subject];
-    });
-
-    return (total / subjects).toFixed(decimals);
-  }
 
   return (
     <div
@@ -184,7 +162,10 @@ const Marks = () => {
             </div>
           </Space>
         </div>
-        <Title level={3}>{student.nombre}</Title>
+
+        <Title level={3}>
+          {student.nombres} {student.apellidos}
+        </Title>
         <table className='table'>
           <thead className='thead'>
             <tr className='trHead'>
@@ -208,11 +189,6 @@ const Marks = () => {
               <td>-</td>
               <td>Promedio: {getAverage(userState.notas, 2)}</td>
             </tr>
-            {/* <tr className='trBody'>
-              {Object.keys(subjectMarks).map((subject) => (
-                <td>{subject}</td>
-              ))}
-            </tr> */}
           </tbody>
         </table>
       </div>

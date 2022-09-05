@@ -120,7 +120,11 @@ const Attendance = () => {
         <div className='header-container'>
           <Title>Módulo Asistencia</Title>
           <Space direction='vertical'>
-            <DatePicker defaultValue={moment(currentDate, 'YYYY-MM-DD')} onChange={onChange} />
+            <DatePicker
+              defaultValue={moment(currentDate, 'DD/MM/YYYY')}
+              format='DD/MM/YYYY'
+              onChange={onChange}
+            />
           </Space>
         </div>
         <Collapse>
