@@ -16,6 +16,7 @@ import {
   StudentAttendance,
   TeacherAttendance,
   TeacherHome,
+  TeacherMarks,
 } from '@pages/index';
 
 //antd
@@ -38,6 +39,7 @@ const App = () => {
               <Route path='/estudiante/notas' element={<StudentMarks />} />
               <Route path='/profesor' element={<TeacherHome />} />
               <Route path='/profesor/modulo-asistencia' element={<TeacherAttendance />} />
+              <Route path='/profesor/modulo-notas' element={<TeacherMarks />} />
             </Routes>
           </BrowserRouter>
         </ConfigProvider>
