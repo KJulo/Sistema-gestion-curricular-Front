@@ -9,13 +9,13 @@ img {
     img {
         max-width: 600px;
     }
-    .primary-bg-mobile {
-        background-color: @primary-bg;
+    .container-bg-mobile {
+        border-right: 4px solid @container-bg;
     }
     .home-grid-layout {
         display: grid;
         grid-gap: 20px;
-        grid-template-columns: repeat(5, 1fr);
+        grid-template-columns: 1fr 6fr;
     }
     
     .home-grid-layout .navbar {
@@ -29,8 +29,8 @@ img {
     }
 }
 @media only screen and (max-width: 900px) {
-    .primary-bg-mobile {
-        background-color: @body-bg;
+    .container-bg-mobile {
+      border-right: 4px solid @container-bg;
     }
 
     .home-grid-layout {
@@ -50,8 +50,8 @@ img {
     }
 }
 
-.primary-bg {
-    background-color: @primary-bg;
+.container-bg {
+    background-color: @container-bg;
 }
 
 .all-height {

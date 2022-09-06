@@ -1,55 +1,79 @@
 import React, { useState } from 'react';
-import { Button, Drawer, Anchor, Avatar } from 'antd';
+import '@styles/NavBar.less';
+
+// hooks
+import { useFormatToURL } from '@hooks/useFormatText';
+
+// antd
+import { Button, Drawer, Anchor, Avatar, Typography } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 
-import "@styles/NavBar.less"
-
 const { Link } = Anchor;
+const { Title } = Typography;
 
 const HomeNavBar = ({ toppics, user }) => {
-	const [visible, setVisible] = useState(false);
+  const [visible, setVisible] = useState(false);
 
-	const showDrawer = () => {
-		setVisible(true);
-	};
+  const showDrawer = () => {
+    setVisible(true);
+  };
 
-	const onClose = () => {
-		setVisible(false);
-	};
+  const onClose = () => {
+    setVisible(false);
+  };
 
-	function getToppics() {
-		return toppics.map((toppic, index) => {
-			return <Link href={toppic} title={toppic} key={index} />
-		})
-	}
+  function getUser() {
+    return (
+      <div style={{ textAlign: 'center', margin: '10px 0 50px 0' }}>
+        <Avatar shape='square' size={120} icon={<UserOutlined />} />
+        <Title level={3} style={{ marginTop: 20 }}>
+          {user.nombres} {user.apellidos}
+        </Title>
+      </div>
+    );
+  }
 
-	function getUser() {
-		return (
-			<Avatar shape="square" size={120} icon={<UserOutlined />} style={{ margin: '20px 0px 50px' }} />
-		)
-	}
-
-	return (
-		<div style={{ margin: 40 }}>
-			<div className='mobileVisible' style={{ position: 'fixed' }}>
-				<Button type="primary" onClick={showDrawer}>
-					<span>Ver Módulos</span>
-				</Button>
-				<Drawer title="Módulos" placement="left" onClose={onClose} visible={visible}>
-					{getUser()}
-					<Anchor targetOffset="65">
-						{getToppics()}
-					</Anchor>
-				</Drawer>
-			</div>
-			<div className='mobileHidden'>
-				{getUser()}
-				<Anchor targetOffset="65" >
-					{getToppics()}
-				</Anchor>
-			</div>
-		</div>
-	)
-}
+  return (
+    <div style={{ margin: 40 }}>
+      <div className='mobileVisible' style={{ position: 'fixed' }}>
+        <Button type='primary' onClick={showDrawer}>
+          <span>Ver Módulos</span>
+        </Button>
+        <Drawer title='Módulos' placement='left' onClose={onClose} visible={visible}>
+          {getUser()}
+          <Anchor targetOffset='65'>
+            {toppics.map((toppic, index) =>
+              toppic == 'Inicio' ? (
+                <Link href={'/' + user.tipo + '/'} title={toppic} key={index} />
+              ) : (
+                <Link
+                  href={'/' + user.tipo + '/' + useFormatToURL(toppic)}
+                  title={toppic}
+                  key={index}
+                />
+              )
+            )}
+          </Anchor>
+        </Drawer>
+      </div>
+      <div className='mobileHidden'>
+        {getUser()}
+        <Anchor targetOffset='65'>
+          {toppics.map((toppic, index) =>
+            toppic == 'Inicio' ? (
+              <Link href={'/' + user.tipo + '/'} title={toppic} key={index} />
+            ) : (
+              <Link
+                href={'/' + user.tipo + '/' + useFormatToURL(toppic)}
+                title={toppic}
+                key={index}
+              />
+            )
+          )}
+        </Anchor>
+      </div>
+    </div>
+  );
+};
 
 export default HomeNavBar;
