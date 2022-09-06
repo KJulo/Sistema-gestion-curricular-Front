@@ -1,10 +1,11 @@
 import React from "react";
+import { Outlet } from "react-router-dom";
 
-const AdminLayout = ({ children }) => {
+const AdminLayout = () => {
   return (
     <>
-      <div>AdminLayout</div>
-      {children}
+      <div>Layout</div>
+      <Outlet></Outlet>
     </>
   );
 };

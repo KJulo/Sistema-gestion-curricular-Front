@@ -7,3 +7,9 @@ export { default as StudentMarks } from "@pages/student/Marks";
 export { default as TeacherHome } from "@pages/teacher/Home";
 export { default as TeacherAttendance } from "@pages/teacher/Attendance";
 export { default as TeacherMarks } from '@pages/teacher/Marks';
+
+// admin
+export { default as AdminHome } from "@pages/admin/Home";
+export { default as AdminStudents } from "@pages/admin/Students";
+export { default as AdminTeachers } from "@pages/admin/Teachers";
+export { default as AdminCourses } from "@pages/admin/Courses";

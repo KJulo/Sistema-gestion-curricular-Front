@@ -21,7 +21,6 @@ import {
   AdminStudents,
   AdminTeachers,
   AdminCourses,
-  AdminSubjects,
 } from '@pages/index';
 
 //antd
@@ -46,7 +45,6 @@ const App = () => {
                 <Route path="alumnos" element={<AdminStudents />} />
                 <Route path="profesores" element={<AdminTeachers />} />
                 <Route path="cursos" element={<AdminCourses />} />
-                <Route path="asignaturas" element={<AdminSubjects />} />
                 <Route path="*" element={<Navigate to="/administrador/home" />} />
               </Route>
               <Route path='/' element={<Navigate to='/estudiante' />} />
