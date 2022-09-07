@@ -1,22 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import '@styles/Marks.less';
 
 // antd
-import { Collapse, Typography, Button, Space, DatePicker } from 'antd';
-import moment from 'moment';
-const { Title } = Typography;
-const { Panel } = Collapse;
+import {Collapse, Typography, Button, Space} from 'antd';
+import {CalendarOutlined} from '@ant-design/icons';
+const {Title} = Typography;
+const {Panel} = Collapse;
 
 // hooks
-import { useGetCurrentDate } from '@hooks/useDate';
-import { getAverage } from '@hooks/useMath';
+import {useGetCurrentDate} from '@hooks/useDate';
+import {getAverage} from '@hooks/useMath';
 
 // components
 import HomeNavBar from '@components/HomeNavBar';
 
 // constants
-import { teacher } from '@constants/users';
-import { teacherMenu } from '@constants/menu.js';
+import {teacher} from '@constants/users';
+import {teacherMenu} from '@constants/menu.js';
 
 // Un profesor debería de poder seleccionar entre estos tipos de asignaturas al momento de añadir una nota
 // Las asignaturas disponibles son dependientes del curso en el que está
@@ -44,6 +44,10 @@ let courses = [
 // Los alumnos deben aparecer con sus notas dependiendo del día
 // en caso que se cambie la fecha donde no hay notas, habilitar campos en blanco
 // caso que ya existan notas, habilitar edicion
+
+// IMPORTANTE : el students.notas[].evaluacion deben ser los mismos por cursos
+// esto porque si un profe hace una prueba, la prueba debe aparecer para todos los alumnos del curso
+// no tiene sentido que un alumno tenga una prueba más o una prueba menos, así que evitar eso
 let students = [
   {
     id: '2k1928d9218',
@@ -75,36 +79,36 @@ let students = [
     ],
   },
   {
-    id: '2k1928d9218',
+    id: '2k14124214v218',
     nombres: 'Jose',
     apellidos: 'Lopez',
     idCurso: '12s21ksjh2j12k4',
     notas: [
       {
         fecha: '2022-09-02',
-        asignatura: 'Historia',
-        evaluacion: 'Prueba 1 Historia',
+        asignatura: 'Matemáticas',
+        evaluacion: 'Prueba 1 Matemáticas',
         nota: 7,
         total: 0.6,
       },
       {
         fecha: '2022-09-03',
-        asignatura: 'Historia',
-        evaluacion: 'Prueba 2 Historia',
+        asignatura: 'Matemáticas',
+        evaluacion: 'Prueba 2 Matemáticas',
         nota: 3.5,
         total: 0.4,
       },
       {
         fecha: '2022-09-06',
-        asignatura: 'Matemáticas',
-        evaluacion: 'Prueba 1 Matemáticas',
+        asignatura: 'Lenguaje',
+        evaluacion: 'Prueba 1 Lenguaje',
         nota: 6,
         total: 1,
       },
     ],
   },
   {
-    id: '2k1928d9218',
+    id: '2k142f14f12218',
     nombres: 'Juan',
     apellidos: 'Hernandez',
     idCurso: '12sf424f234fj12k4',
@@ -118,22 +122,22 @@ let students = [
       },
       {
         fecha: '2022-09-03',
-        asignatura: 'Matemáticas',
-        evaluacion: 'Prueba 2 Matemáticas',
+        asignatura: 'Historia',
+        evaluacion: 'Prueba 1 Historia',
         nota: 6.5,
         total: 0.4,
       },
       {
         fecha: '2022-09-06',
-        asignatura: 'Lenguaje',
-        evaluacion: 'Prueba 1 Lenguaje',
+        asignatura: 'Ed. Física',
+        evaluacion: 'Prueba 1 Ed. Física',
         nota: 5,
         total: 1,
       },
     ],
   },
   {
-    id: '2k1928d9218',
+    id: '2k15f3g23218',
     nombres: 'Marcos',
     apellidos: 'Velasquez',
     idCurso: '12sf234f23d4d12k4',
@@ -168,23 +172,67 @@ const Marks = () => {
   const [selectedDate, setSelectedDate] = useState(currentDate);
   const [userState, setUserState] = useState(students);
 
+  // Esta funcion obtiene un arreglo de alumnos del curso introducido
+  function getStudentsByCourse(course) {
+    let studentList = [];
+    userState.map((student) => {
+      if (course.id == student.idCurso) {
+        studentList.push(student);
+      }
+    });
+    return studentList;
+  }
+
+  // Esta funcion obtiene desde una lista de alumnos, sus evaluaciones y devuelve un arreglo con valores unicos
+  function getMarkList(studentsArray) {
+    let subjectsList = [];
+    studentsArray.map((student) =>
+      student.notas.map((mark) => {
+        subjectsList.push(mark.evaluacion);
+      })
+    );
+    return [...new Set(subjectsList)];
+  }
+
+  // Esta funcion combina las demás, devolviendo las asignaturas en columnas
+  function getSubjectskByCourseColumns(course) {
+    const subjectList = getMarkList(getStudentsByCourse(course));
+    return subjectList.map((subject) => <th>{subject}</th>);
+  }
+
+  // Esta funcion devuelve en varias filas los estudiantes y sus datos
+  function getStudentsRow(course) {
+    if (userState.length > 0) {
+      // Recorre cada estudiante para generar filas
+      return userState.map((student, key) => {
+        if (student.idCurso == course.id) {
+          return (
+            <tr className='trBody'>
+              <td>
+                {student.nombres} {student.apellidos}
+              </td>
+              {student.notas.map((mark) => (
+                <td>{mark.nota}</td>
+              ))}
+            </tr>
+          );
+        }
+      });
+    } else {
+      return (
+        <>
+          <td>Sin datos</td>
+        </>
+      );
+    }
+  }
+
   useEffect(() => {
     console.log(selectedDate);
   }, [selectedDate]);
 
   const onChange = (objDate, dateString) => {
     setSelectedDate(dateString);
-  };
-
-  const handleAdd = () => {
-    const newData = {
-      key: count,
-      name: `Edward King ${count}`,
-      age: '32',
-      address: `London, Park Lane no. ${count}`,
-    };
-    setDataSource([...dataSource, newData]);
-    setCount(count + 1);
   };
 
   const onClick = (course) => {
@@ -195,59 +243,37 @@ const Marks = () => {
   return (
     <div
       className='site-page-header-ghost-wrapper home-grid-layout all-height'
-      style={{ margin: '0 40px 0 0', padding: 0 }}>
+      style={{margin: '0 40px 0 0', padding: 0}}>
       <aside className='container-bg-mobile'>
         <HomeNavBar toppics={teacherMenu} user={teacher} className='NavBar' />
       </aside>
 
-      <div className='content' style={{ margin: '60px 10px 50px 10px', width: '95%' }}>
+      <div className='content' style={{margin: '60px 10px 50px 10px', width: '95%'}}>
         <div className='header-container'>
           <Title>Módulo Notas</Title>
           <Space direction='vertical'>
-            <DatePicker
-              defaultValue={moment(currentDate, 'DD/MM/YYYY')}
-              format='DD/MM/YYYY'
-              onChange={onChange}
-            />
+            <div className='date-container'>
+              <Title level={5} style={{marginBottom: 5}}>
+                {currentDate}
+              </Title>
+              <CalendarOutlined twoToneColor='#bfbfbf' style={{fontSize: 'large'}} />
+            </div>
           </Space>
         </div>
 
-        <Collapse>
-          {/*Recorre los cursos */}
+        <Collapse accordion>
           {courses.map((course, index) => (
             <Panel header={course.nombre} key={index}>
               <table className='table'>
                 <thead className='thead'>
                   <tr className='trHead'>
-                    <th>Alumno</th>
-                    <th>Fecha</th>
-                    <th>Evaluación</th>
-                    <th>Nota</th>
-                    <th>Total</th>
+                    <th>Nombre Alumno</th>
+                    {getSubjectskByCourseColumns(course)}
                   </tr>
                 </thead>
-                <tbody className='tbody'>
-                  {/* Recorre cada estudiante */}
-                  {userState.map((student) =>
-                    // Verifica que pertenezca al curso
-                    student.idCurso == course.id
-                      ? // Recorre sus notas
-                        student.notas.map((mark, index) => (
-                          <>
-                            <tr className='trBody' key={index}>
-                              <td>{student.nombres}</td>
-                              <td>{mark.fecha}</td>
-                              <td>{mark.evaluacion}</td>
-                              <td>{mark.nota}</td>
-                              <td>{mark.total * 100}%</td>
-                            </tr>
-                          </>
-                        ))
-                      : null
-                  )}
-                </tbody>
+                <tbody className='tbody'>{getStudentsRow(course)}</tbody>
               </table>
-              <Button type='primary' onClick={() => onClick(course)} style={{ marginTop: 10 }}>
+              <Button type='primary' onClick={() => onClick(course)} style={{marginTop: 10}}>
                 Guardar Cambios
               </Button>
             </Panel>
