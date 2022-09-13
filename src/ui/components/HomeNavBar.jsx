@@ -70,6 +70,12 @@ const HomeNavBar = ({ toppics, user }) => {
               />
             )
           )}
+          <br />
+          <br />
+          <Link 
+            href={'/' + user.tipo + '/' + useFormatToURL('#')}
+            title='Cerrar Sesión'
+          />
         </Anchor>
       </div>
     </div>
