@@ -14,9 +14,11 @@ import {
   StudentHome,
   StudentMarks,
   StudentAttendance,
+  StudentVirtualClassroom,
   TeacherAttendance,
   TeacherHome,
   TeacherMarks,
+  TeacherVirtualClassroom
 } from '@pages/index';
 
 //antd
@@ -37,9 +39,11 @@ const App = () => {
               <Route path='/estudiante' element={<StudentHome />} />
               <Route path='/estudiante/asistencia' element={<StudentAttendance />} />
               <Route path='/estudiante/notas' element={<StudentMarks />} />
+              <Route path='/estudiante/aula-virtual' element={<StudentVirtualClassroom />} />
               <Route path='/profesor' element={<TeacherHome />} />
               <Route path='/profesor/modulo-asistencia' element={<TeacherAttendance />} />
               <Route path='/profesor/modulo-notas' element={<TeacherMarks />} />
+              <Route path='/profesor/modulo-aulas' element={<TeacherVirtualClassroom />} />
             </Routes>
           </BrowserRouter>
         </ConfigProvider>
