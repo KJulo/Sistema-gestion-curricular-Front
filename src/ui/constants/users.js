@@ -36,6 +36,34 @@ export const student = {
 	contraseña: "hola123"
 }
 
+export const parents = {
+  idFamily: "2fj2fj98j3gjf",
+  parents: [
+    { id: "2910fj218jf2", tipo: "apoderado", nombres: "Emma", apellidos: "Tapia" },
+    { id: "j3fj9238j4gj9823", tipo: "apoderado",nombres: "Juan", apellidos: "Rojas" }
+  ],
+  students: [
+    {
+      id: "12412c1923m1928dj20d29",
+      id_colegio: "29183080jf102k9dk",
+      tipo: 'estudiante',
+      nombres: "Marcelo Jose",
+      apellidos: "Rojas Tapia",
+      rut: "20539858-5",
+      curso: "1ro Básico",
+    },
+    {
+      id: "12412c1923m1928dj20d29",
+      id_colegio: "29183080jf102k9dk",
+      tipo: 'estudiante',
+      nombres: "Marcelo Jose",
+      apellidos: "Rojas Tapia",
+      rut: "20539858-5",
+      curso: "2do Medio",
+    }
+  ]
+}
+
 export const teachers = [
 	{
 		id: "12412c1923m1928dj20d29",

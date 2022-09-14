@@ -1,3 +1,8 @@
+// parents
+export { default as ParentsHome } from "@pages/parents/Home";
+export { default as ParentsAttendance } from "@pages/parents/Attendance";
+export { default as ParentsMarks } from "@pages/parents/Marks";
+
 // student
 export { default as StudentHome } from "@pages/student/Home";
 export { default as StudentAttendance } from "@pages/student/Attendance";
