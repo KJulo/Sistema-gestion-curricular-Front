@@ -44,12 +44,12 @@ export const parents = {
   ],
   students: [
     {
-      id: "12412c1923m1928dj20d29",
+      id: "1892381293812",
       id_colegio: "29183080jf102k9dk",
       tipo: 'estudiante',
-      nombres: "Marcelo Jose",
-      apellidos: "Rojas Tapia",
-      rut: "20539858-5",
+      nombres: "Gonza Matias",
+      apellidos: "Donoso Días",
+		  rut: "19249858-5",
       curso: "1ro Básico",
     },
     {
