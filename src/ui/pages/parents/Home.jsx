@@ -23,15 +23,10 @@ const Home = () => {
     setParent(parents.parents[0])
   }, [])
 
-  useEffect(() => {
-    console.log(parent);
-  })
-
   return (
     parent ? (
       <HomeLayout
-        // content={<ParentsContent parent={parent} students={parents.students} />}
-        content={<ParentsContent user={parent} />}
+        content={<ParentsContent parent={parent} students={parents.students} />}
         navBarMenu={<HomeNavBar toppics={studentMenu} user={parent} className='NavBar' />}
       />
     ) : null

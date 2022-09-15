@@ -15,17 +15,20 @@ import '@styles/Home.less';
 import Notifications from '@components/Notifications';
 import Card from '@components/Card';
 
-const ParentsContent = ({ user }) => {
+const ParentsContent = ({ parent, students }) => {
 
-  // const studentsCards = (studentsList) => {
-  //   console.log(studentsList);
-  //   return studentsList.map((student) => (
-  //     <Card
-  //       title={student.nombres + ' ' + student.apellidos}
-  //       content={student.curso}
-  //     />
-  //   ))
-  // }
+  const studentsCards = (studentsList) => {
+    return (
+      <div className='card-container'>
+        {studentsList.map((student) => (
+          <Card
+            title={student.nombres + ' ' + student.apellidos}
+            content={student.curso}
+          />
+        ))}
+      </div>
+    )
+  }
 
   return (
     <div
@@ -36,15 +39,16 @@ const ParentsContent = ({ user }) => {
       }}>
       <Title>
         {' '}
-        Hola, {user.nombres} {user.apellidos} !
+        Hola, {parent.nombres} {parent.apellidos} !
       </Title>
-
-      <Card title="" content="" />
 
       <div
         className='container-bg flex-container'
         style={{ padding: '1rem', justifyContent: 'space-around' }}>
-        <img src={SchoolImg} alt='Logo Colegio' className='fit-image' />
+        <div style={ { display: 'contents' } }> 
+          <img src={SchoolImg} alt='Logo Colegio' className='fit-image' />
+          {studentsCards(students)}
+        </div>
         <Notifications />
       </div>
     </div>
