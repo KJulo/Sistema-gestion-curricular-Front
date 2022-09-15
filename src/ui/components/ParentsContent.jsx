@@ -15,7 +15,7 @@ import '@styles/Home.less';
 import Notifications from '@components/Notifications';
 import Card from '@components/Card';
 
-const ParentsContent = ({ parent, students }) => {
+const ParentsContent = ({ user }) => {
 
   // const studentsCards = (studentsList) => {
   //   console.log(studentsList);
@@ -36,7 +36,7 @@ const ParentsContent = ({ parent, students }) => {
       }}>
       <Title>
         {' '}
-        Hola, {parent.nombres} {parent.apellidos} !
+        Hola, {user.nombres} {user.apellidos} !
       </Title>
 
       <Card title="" content="" />
@@ -47,12 +47,12 @@ const ParentsContent = ({ parent, students }) => {
         <img src={SchoolImg} alt='Logo Colegio' className='fit-image' />
         <Notifications />
       </div>
-
-      {/* <div>
-        {studentsCards(students)}
-      </div> */}
     </div>
-  );
-};
+
+);
+// <div>
+//     {studentsCards(students)}
+//   </div>
+}
 
 export default ParentsContent;

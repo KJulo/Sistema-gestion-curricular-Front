@@ -1,8 +1,9 @@
 import React from 'react';
+import { Card as CardAntd } from 'antd';
 
 const Card = ({ title, content }) => {
   return (
-    <Card
+    <CardAntd
       size='small'
       title={title}
       // extra={<a href="#">More</a>}
@@ -10,7 +11,7 @@ const Card = ({ title, content }) => {
         width: 300,
       }}>
       <p>{content}</p>
-    </Card>
+    </CardAntd>
   );
 };
 

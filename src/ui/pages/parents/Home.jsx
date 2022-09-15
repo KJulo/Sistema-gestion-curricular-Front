@@ -6,16 +6,14 @@ import '@styles/Home.less';
 // layouts
 import HomeLayout from '@layouts/HomeLayout';
 
-// hooks
-import { randomNumberInRange } from '@hooks/useMath';
-
 // constants
-import { parents } from '@constants/users';
+import { parents, student } from '@constants/users';
 import { studentMenu } from '@constants/menu.js';
 
 // components
 import HomeNavBar from '@components/HomeNavBar';
 import ParentsContent from '@components/ParentsContent';
+import StudentContent from '@components/StudentContent';
 
 const Home = () => {
   const [parent, setParent] = useState(null);
@@ -25,13 +23,18 @@ const Home = () => {
     setParent(parents.parents[0])
   }, [])
 
+  useEffect(() => {
+    console.log(parent);
+  })
+
   return (
-    parent ? 
+    parent ? (
       <HomeLayout
-        content={<ParentsContent parent={parent} students={parents.students} />}
+        // content={<ParentsContent parent={parent} students={parents.students} />}
+        content={<ParentsContent user={parent} />}
         navBarMenu={<HomeNavBar toppics={studentMenu} user={parent} className='NavBar' />}
       />
-    : null
+    ) : null
   );
 };
 
