@@ -9,7 +9,7 @@ const {Panel} = Collapse;
 
 // hooks
 import {useGetCurrentDate} from '@hooks/useDate';
-import {getAverage} from '@hooks/useMath';
+import {useAverage} from '@hooks/useAverage';
 
 // components
 import HomeNavBar from '@components/HomeNavBar';
