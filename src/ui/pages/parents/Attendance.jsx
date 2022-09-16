@@ -21,7 +21,7 @@ import {
 import HomeNavBar from '@components/HomeNavBar';
 
 // constants
-import { studentMenu } from '@constants/menu.js';
+import { parentsMenu } from '@constants/menu.js';
 
 let course = {
   id: '12s21ksjh2j12k4',
@@ -149,7 +149,7 @@ const Attendance = () => {
       className='site-page-header-ghost-wrapper home-grid-layout all-height'
       style={{ margin: '0 40px 0 0', padding: 0 }}>
       <aside className='container-bg-mobile'>
-        <HomeNavBar toppics={studentMenu} user={familyState.parents[0]} className='NavBar' />
+        <HomeNavBar toppics={parentsMenu} user={familyState.parents[0]} className='NavBar' />
       </aside>
 
       <div className='content' style={{ margin: '60px 10px 50px 10px', width: '95%' }}>
