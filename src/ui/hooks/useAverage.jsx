@@ -20,7 +20,3 @@ export function useAverage(marks, decimals) {
 
   return (total / subjects).toFixed(decimals);
 }
-
-export function randomNumberInRange(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}

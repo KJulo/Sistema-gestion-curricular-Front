@@ -4,12 +4,17 @@ import '@styles/NavBar.less';
 // hooks
 import { useFormatToURL } from '@hooks/useFormatText';
 
+// utils
+import { randomNumberInRange } from '@utils/random';
+
 // antd
 import { Button, Drawer, Anchor, Avatar, Typography } from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 
 const { Link } = Anchor;
 const { Title } = Typography;
+
+const randomUser = ['profesor', 'estudiante', 'apoderado'];
 
 const HomeNavBar = ({ toppics, user }) => {
   const [visible, setVisible] = useState(false);
@@ -72,8 +77,12 @@ const HomeNavBar = ({ toppics, user }) => {
           )}
           <br />
           <br />
-          <Link 
+          {/* <Link 
             href={'/' + user.tipo + '/' + useFormatToURL('#')}
+            title='Cerrar Sesión'
+          /> */}
+          <Link 
+            href={'/' + randomUser[randomNumberInRange(0, 2)]  + '/'}
             title='Cerrar Sesión'
           />
         </Anchor>
