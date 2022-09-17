@@ -1,7 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
+
+// antd
+import { Checkbox, Collapse, Typography, Space, DatePicker, Button, Menu } from 'antd';
+import { MailOutlined, AppstoreOutlined, SettingOutlined, CalendarOutlined, ReconciliationFilled, CloseSquareFilled } from '@ant-design/icons';
+import moment from 'moment';
+const { Title } = Typography;
+const { Panel } = Collapse;
 
 // styles
 import '@styles/Home.less';
+
+// hooks
+import { useGetCurrentMonth, useGetCurrentYear, useGetCurrentDay } from '@hooks/useDate';
 
 // constants
 import {student} from '@constants/users';
@@ -9,8 +19,151 @@ import {studentMenu} from '@constants/menu.js';
 
 // components
 import HomeNavBar from '@components/HomeNavBar';
+  
+
+const Header = ({title, date}) => {
+  return (
+    <div className='header-container'>
+      <Title>{title}</Title>
+      <Space direction='vertical'>
+        <div className='date-container'>
+          <Title level={5} style={{ marginBottom: 5 }}>
+            {date}
+          </Title>
+          <CalendarOutlined twoToneColor='#bfbfbf' style={{ fontSize: 'large' }} />
+        </div>
+      </Space>
+    </div>
+  )
+}
+
+const defaultMenu = {
+  label: 'No disponible',
+  key: 'No disponible',
+  icon: <CloseSquareFilled />,
+}
+
+const course = {
+  id: '41kd2fj94fi32fui',
+  nombre: '1ro Básico',
+  materias: [
+    {
+      id: 'jd128d3912',
+      nombre: 'Lenguaje',
+      menus: [
+        { 
+          id: 'cwqiecejcjw',
+          nombre: 'Unidad 1',
+          contenido: [
+            {
+              titulo: 'Modulo 1',
+              cuerpo: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod'+'\n'+
+              'tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,'+'\n'+
+              'quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+            },{
+              titulo: 'Modulo 1',
+              cuerpo: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod'+'\n'+
+              'tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,'+'\n'+
+              'quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+            }
+          ]
+        },{ 
+          id: 'dj312938d12j83',
+          nombre: 'Unidad 2',
+          contenido: [
+            {
+              titulo: 'Tarea 1',
+              cuerpo: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod'+'\n'+
+              'tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,'+'\n'+
+              'quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+            }
+          ]
+        }
+      ]
+    },
+    {
+      id: 'ej21vn21ff',
+      nombre: 'Matemáticas',
+      menus: [
+        { 
+          id: '21duj3jd13d3d21',
+          nombre: 'Tarea 1',
+          contenido: [
+            {
+              titulo: 'Modulo 1',
+              cuerpo: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod'+'\n'+
+              'tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,'+'\n'+
+              'quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+            },{
+              titulo: 'Modulo 1',
+              cuerpo: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod'+'\n'+
+              'tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,'+'\n'+
+              'quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+            }
+          ]
+        }
+      ],
+    },
+    {
+      id: 'jf12f4124j',
+      nombre: 'Historia',
+      menus: [
+        { 
+          id: 'j3d12j3dj12j3',
+          nombre: 'Bievenida',
+          contenido: [
+            {
+              titulo: 'Modulo 1',
+              cuerpo: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod'+'\n'+
+              'tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,'+'\n'+
+              'quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+            },{
+              titulo: 'Modulo 1',
+              cuerpo: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod'+'\n'+
+              'tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,'+'\n'+
+              'quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+            }
+          ]
+        }
+      ],
+    },
+  ]
+}
 
 const VitualClassroom = () => {
+  const currentDate = useGetCurrentDay() + '-' + useGetCurrentMonth() + '-' + useGetCurrentYear();
+  const [currentMenu, setCurrentMenu] = useState(course.materias[0]);
+  const [currentSubMenu, setCurrentSubMenu] = useState(course.materias[0].menus[0])
+
+  // Materias del curso
+  const menuItems = course ? course.materias.map((materia) => ({
+    label: materia.nombre,
+    key: materia.id,
+    icon: <AppstoreOutlined />,
+  })) : defaultMenu;
+
+  // Unidades o Items de la materia
+  const subMenuItems = currentMenu ? currentMenu.menus.map((menu) => ({
+    label: menu.nombre,
+    key: menu.id,
+    icon: <AppstoreOutlined />,
+  })) : null
+
+  const onClickMenu = (e) => {
+    // buscar el materia del id y setearlo
+    let item = course.materias.find((materia) => materia.id == e.key)
+    setCurrentMenu(item);
+    console.log("item seleccionado: ",item);
+  };
+
+  const onClickSubMenu = (e) => {
+    console.log('click ', e.key);
+    // buscar el materia del id y setearlo
+    let item = currentMenu.menus.find((menu) => menu.id == e.key)
+    setCurrentSubMenu(item);
+    console.log("item seleccionado: ",item);
+  };
+
   return (
     <div
       className='site-page-header-ghost-wrapper home-grid-layout all-height'
@@ -18,10 +171,14 @@ const VitualClassroom = () => {
       <aside className='container-bg-mobile'>
         <HomeNavBar toppics={studentMenu} user={student} className='NavBar' />
       </aside>
+
+      <div className='content' style={{ margin: '60px 10px 50px 10px', width: '95%' }}>
+        <Header title='Aula Virtual' date={currentDate}/>
+        <Menu onClick={onClickMenu} selectedKeys={[currentMenu.id]} mode="horizontal" items={menuItems} defaultSelectedKeys={currentMenu.id} />
+        <Menu onClick={onClickSubMenu} selectedKeys={[currentSubMenu.id]} mode="horizontal" items={subMenuItems} defaultSelectedKeys={course.materias[0].menus[0].nombre} />
+      </div>
     </div>
-
-
-  );
-};
+  )
+}
 
 export default VitualClassroom;
