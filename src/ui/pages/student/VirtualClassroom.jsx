@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 
 // antd
 import { Checkbox, Collapse, Typography, Space, DatePicker, Button, Menu } from 'antd';
-import { MailOutlined, AppstoreOutlined, SettingOutlined, CalendarOutlined, ReconciliationFilled, CloseSquareFilled } from '@ant-design/icons';
+import { MailOutlined, AppstoreOutlined, SettingOutlined, CalendarOutlined, ReconciliationFilled, CloseSquareFilled, MoreOutlined } from '@ant-design/icons';
 import moment from 'moment';
 const { Title } = Typography;
 const { Panel } = Collapse;
 
 // styles
 import '@styles/Home.less';
+import '@styles/VirtualClass.less';
 
 // hooks
 import { useGetCurrentMonth, useGetCurrentYear, useGetCurrentDay } from '@hooks/useDate';
@@ -19,29 +20,8 @@ import {studentMenu} from '@constants/menu.js';
 
 // components
 import HomeNavBar from '@components/HomeNavBar';
-  
+import { useEffect } from 'react';
 
-const Header = ({title, date}) => {
-  return (
-    <div className='header-container'>
-      <Title>{title}</Title>
-      <Space direction='vertical'>
-        <div className='date-container'>
-          <Title level={5} style={{ marginBottom: 5 }}>
-            {date}
-          </Title>
-          <CalendarOutlined twoToneColor='#bfbfbf' style={{ fontSize: 'large' }} />
-        </div>
-      </Space>
-    </div>
-  )
-}
-
-const defaultMenu = {
-  label: 'No disponible',
-  key: 'No disponible',
-  icon: <CloseSquareFilled />,
-}
 
 const course = {
   id: '41kd2fj94fi32fui',
@@ -61,7 +41,7 @@ const course = {
               'tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,'+'\n'+
               'quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
             },{
-              titulo: 'Modulo 1',
+              titulo: 'Modulo 2',
               cuerpo: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod'+'\n'+
               'tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,'+'\n'+
               'quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
@@ -72,10 +52,8 @@ const course = {
           nombre: 'Unidad 2',
           contenido: [
             {
-              titulo: 'Tarea 1',
-              cuerpo: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod'+'\n'+
-              'tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,'+'\n'+
-              'quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+              titulo: 'Primera tarea lenguaje',
+              cuerpo: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod'
             }
           ]
         }
@@ -95,7 +73,7 @@ const course = {
               'tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,'+'\n'+
               'quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
             },{
-              titulo: 'Modulo 1',
+              titulo: 'Modulo 2',
               cuerpo: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod'+'\n'+
               'tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,'+'\n'+
               'quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
@@ -113,12 +91,11 @@ const course = {
           nombre: 'Bievenida',
           contenido: [
             {
-              titulo: 'Modulo 1',
+              titulo: 'Hola !',
               cuerpo: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod'+'\n'+
-              'tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,'+'\n'+
-              'quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+              'tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,'
             },{
-              titulo: 'Modulo 1',
+              titulo: 'Modulo 1 ',
               cuerpo: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod'+'\n'+
               'tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,'+'\n'+
               'quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
@@ -128,6 +105,41 @@ const course = {
       ],
     },
   ]
+}
+
+const defaultMenu = {
+  label: 'No disponible',
+  key: 'No disponible',
+  icon: <CloseSquareFilled />,
+}
+
+const Header = ({title, date}) => {
+  return (
+    <div className='header-container'>
+      <Title>{title}</Title>
+      <Space direction='vertical'>
+        <div className='date-container'>
+          <Title level={5} style={{ marginBottom: 5 }}>
+            {date}
+          </Title>
+          <CalendarOutlined twoToneColor='#bfbfbf' style={{ fontSize: 'large' }} />
+        </div>
+      </Space>
+    </div>
+  )
+}
+
+const MenuContent = ({content}) => {
+  return (
+    <div className='content-container'>
+        {content.map((item) => (
+          <div className='item-container'>
+          <h3>{'> ' + item.titulo}</h3>
+          <p>{item.cuerpo}</p>
+        </div>
+      ))}
+    </div>
+  )
 }
 
 const VitualClassroom = () => {
@@ -146,7 +158,7 @@ const VitualClassroom = () => {
   const subMenuItems = currentMenu ? currentMenu.menus.map((menu) => ({
     label: menu.nombre,
     key: menu.id,
-    icon: <AppstoreOutlined />,
+    icon: <MoreOutlined />,
   })) : null
 
   const onClickMenu = (e) => {
@@ -174,8 +186,11 @@ const VitualClassroom = () => {
 
       <div className='content' style={{ margin: '60px 10px 50px 10px', width: '95%' }}>
         <Header title='Aula Virtual' date={currentDate}/>
+
         <Menu onClick={onClickMenu} selectedKeys={[currentMenu.id]} mode="horizontal" items={menuItems} defaultSelectedKeys={currentMenu.id} />
-        <Menu onClick={onClickSubMenu} selectedKeys={[currentSubMenu.id]} mode="horizontal" items={subMenuItems} defaultSelectedKeys={course.materias[0].menus[0].nombre} />
+        <Menu onClick={onClickSubMenu} selectedKeys={[currentSubMenu.id]} mode="horizontal" items={subMenuItems} defaultSelectedKeys={currentMenu.menus[0].nombre} />
+
+        <MenuContent content={currentSubMenu.contenido} />
       </div>
     </div>
   )
