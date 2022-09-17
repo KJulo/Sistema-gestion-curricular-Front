@@ -7,22 +7,18 @@ import { Row, Col } from "antd";
 // import { ContentTable } from "@components/index";
 // import SkeletonTable from "../components/SkeletonTable";
 
-const AdminTableLayout = ({searchInput, selectFilter,tableContent}) => {
-  <>
-    <Row>
+const AdminTableLayout = ({ searchInput, selectFilter, tableContent }) => {
+  return (
+    <>
       <Row>
-        <Col>
-          {searchInput}
-        </Col>
-        <Col>
-          { selectFilter }
-        </Col>
+        <Row>
+          <Col>{searchInput}</Col>
+          <Col>{selectFilter}</Col>
+        </Row>
       </Row>
-    </Row>
-    <div>
-      {tableContent}
-    </div>
-  </>
+      <div>{tableContent}</div>
+    </>
+  );
 };
 
 export default AdminTableLayout;

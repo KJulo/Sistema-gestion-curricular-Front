@@ -2,8 +2,13 @@ import React from "react";
 
 import { TableLayout } from "@containers/index";
 
-//redux
-import { useDispatch, useSelector } from "@layouts/index";
+//components
+import { DefaultTitleContent, ContentTable, SearchContent, FilterCourse } from "@components/index";
+
+//containers
+import { AdminTableLayout } from "@containers/index";
+
+
 
 import { content, columns } from "@constants/admin/courses";
 
@@ -13,7 +18,7 @@ const Courses = () => {
       <DefaultTitleContent title={"Cursos"} />
       <div
         className="contacts__content-table"
-        style={isLoaded ? {} : { pointerEvents: "none" }}
+        style={true ? {} : { pointerEvents: "none" }}
       >
         <AdminTableLayout
           searchInput={<SearchContent placeHolder="Buscar curso" />}
