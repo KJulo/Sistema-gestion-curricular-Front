@@ -1,11 +1,9 @@
 import React, { useState } from 'react';
 
 // antd
-import { Checkbox, Collapse, Typography, Space, DatePicker, Button, Menu } from 'antd';
-import { MailOutlined, AppstoreOutlined, SettingOutlined, CalendarOutlined, ReconciliationFilled, CloseSquareFilled, MoreOutlined } from '@ant-design/icons';
-import moment from 'moment';
+import { Collapse, Typography, Space, Menu } from 'antd';
+import { AppstoreOutlined, CalendarOutlined, CloseSquareFilled, MoreOutlined } from '@ant-design/icons';
 const { Title } = Typography;
-const { Panel } = Collapse;
 
 // styles
 import '@styles/Home.less';
@@ -20,8 +18,6 @@ import {studentMenu} from '@constants/menu.js';
 
 // components
 import HomeNavBar from '@components/HomeNavBar';
-import { useEffect } from 'react';
-
 
 const course = {
   id: '41kd2fj94fi32fui',
