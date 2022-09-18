@@ -1,23 +1,21 @@
 import React from "react";
 
-import { TableLayout } from "@containers/index";
+
 
 //components
-import { DefaultTitleContent, ContentTable, SearchContent, FilterCourse } from "@components/index";
+import { DefaultTitleContent, ContentTable, SearchContent, FilterCourse, AddCourse } from "@components/index";
 
 //containers
 import { AdminTableLayout } from "@containers/index";
 
-
-
+//constants
 import { content, columns } from "@constants/admin/courses";
 
 const Courses = () => {
   return (
-    <div className="contacts">
-      <DefaultTitleContent title={"Cursos"} />
+    <div>
+      <DefaultTitleContent title={"Cursos"} action={<AddCourse />} />
       <div
-        className="contacts__content-table"
         style={true ? {} : { pointerEvents: "none" }}
       >
         <AdminTableLayout
@@ -26,7 +24,7 @@ const Courses = () => {
           tableContent={
             <ContentTable
               content={content}
-              column={columns}
+              columns={columns}
               type="course"
             />
           }

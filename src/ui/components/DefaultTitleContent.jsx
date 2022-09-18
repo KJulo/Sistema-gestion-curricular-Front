@@ -9,10 +9,12 @@ import { UsergroupAddOutlined } from "@ant-design/icons";
 const DefaultTitleContent = ({ title, action }) => {
   return (
     <div
-      className="display-flex"
       style={{
         justifyContent: "space-between",
         marginTop: "6px",
+        alignItems: "center",
+        display: "flex",
+        marginBottom: "20px"
       }}
     >
       <Title>{title}</Title>

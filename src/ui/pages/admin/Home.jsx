@@ -1,9 +1,13 @@
-import React from 'react'
+import React from "react";
+
+import { DefaultTitleContent } from "@components/index";
 
 const Home = () => {
   return (
-    <div>Home</div>
-  )
-}
+    <>
+      <DefaultTitleContent title={"Bienvenido Ignacio Silva."} />
+    </>
+  );
+};
 
-export default Home
+export default Home;

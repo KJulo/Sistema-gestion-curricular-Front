@@ -19,8 +19,10 @@ import {
   TeacherMarks,
   AdminHome,
   AdminStudents,
+  AdminParents,
   AdminTeachers,
   AdminCourses,
+  AdminViewCourse,
 } from '@pages/index';
 
 //antd
@@ -41,11 +43,13 @@ const App = () => {
           <BrowserRouter>
             <Routes>
               <Route path="administrador" element={<AdminLayout />}>
-                <Route path="home" element={<AdminHome />} />
+                <Route path="" element={<AdminHome />} />
                 <Route path="alumnos" element={<AdminStudents />} />
                 <Route path="profesores" element={<AdminTeachers />} />
+                <Route path="apoderados" element={<AdminParents />} />
                 <Route path="cursos" element={<AdminCourses />} />
-                <Route path="*" element={<Navigate to="/administrador/home" />} />
+                <Route path="cursos/:id" element={<AdminViewCourse />} />
+                <Route path="*" element={<Navigate to="/administrador" />} />
               </Route>
               <Route path='/' element={<Navigate to='/estudiante' />} />
               <Route path='/estudiante' element={<StudentHome />} />

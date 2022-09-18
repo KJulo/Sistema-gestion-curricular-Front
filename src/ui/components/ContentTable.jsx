@@ -1,8 +1,17 @@
+//react
 import React from 'react'
 
-const ContentTable = () => {
+//antd
+import { Table } from 'antd'
+
+const ContentTable = ({ content, columns, type }) => {
+  console.log("columnas", columns);
+  console.log("datos", content);
   return (
-    <div>ContentTable</div>
+    <Table
+      columns={columns}
+      dataSource={content}
+    />
   )
 }
 
