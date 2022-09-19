@@ -15,10 +15,10 @@ const SearchContent = ({ placeHolder }) => {
   return (
     <Search
       placeholder={placeHolder}
-      className="search-conversations"
       onSearch={manageInput}
       onChange={(e) => manageInput(e.target.value)}
       enterButton
+      size="large"
     />
 
   );

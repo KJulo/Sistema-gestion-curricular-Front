@@ -3,13 +3,9 @@ import React from "react";
 //antd
 import { Row, Col } from "antd";
 
-//components
-// import { ContentTable } from "@components/index";
-// import SkeletonTable from "../components/SkeletonTable";
-
 const AdminTableLayout = ({ searchInput, selectFilter, tableContent }) => {
   return (
-    <>
+    <div>
       <Row style={{ display: "flex", justifyContent:"space-between" }}>
         <Col span={8} >{searchInput}</Col>
         <Col span={14} >{selectFilter}</Col>
@@ -25,7 +21,7 @@ const AdminTableLayout = ({ searchInput, selectFilter, tableContent }) => {
       >
         {tableContent}
       </div>
-    </>
+    </div>
   );
 };
 

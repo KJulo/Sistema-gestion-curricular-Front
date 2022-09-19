@@ -6,25 +6,31 @@ import { Menu } from "antd";
 
 const NavigationMenu = () => {
   const { pathname } = useLocation();
-  console.log(pathname);
+  const menuItems = [
+    {
+      key: "/administrador", 
+      icon: <BiHomeAlt />,
+      label: <Link to="/administrador">Inicio</Link>,
+    }, {
+      key: "/administrador/cursos",
+      icon: <BiBookAdd />,
+      label: <Link to="cursos">Cursos</Link>,
+    }, {
+      key: "/administrador/profesores",
+      icon: <BiUserPlus />,
+      label: <Link to="profesores">Profesores</Link>,
+    }, {
+      key: "/administrador/alumnos",
+      icon: <BiGroup />,
+      label: <Link to="alumnos">Alumnos</Link>,
+    }, {
+      key: "/administrador/apoderados",
+      icon: <BiGroup />,
+      label: <Link to="apoderados">Apoderados</Link>,
+    }
+  ]
   return (
-    <Menu defaultSelectedKeys={pathname} selectedKeys={pathname}>
-      <Menu.Item key="/administrador" icon={<BiHomeAlt />}>
-        <Link to="/administrador">Inicio</Link>
-      </Menu.Item>
-      <Menu.Item key="/administrador/cursos" icon={<BiBookAdd />}>
-        <Link to="cursos">Cursos</Link>
-      </Menu.Item>
-      <Menu.Item key="/administrador/profesores" icon={<BiUserPlus />}>
-        <Link to="profesores">Profesores</Link>
-      </Menu.Item>
-      <Menu.Item key="/administrador/alumnos" icon={<BiGroup />}>
-        <Link to="alumnos">Alumnos</Link>
-      </Menu.Item>
-      <Menu.Item key="/administrador/apoderados" icon={<BiGroup />}>
-        <Link to="apoderados">Apoderados</Link>
-      </Menu.Item>
-    </Menu>
+    <Menu defaultSelectedKeys={pathname} selectedKeys={pathname} items={menuItems} />
   );
 };
 
