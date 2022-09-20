@@ -10,7 +10,7 @@ const { Panel } = Collapse;
 
 // hooks
 import { useGetCurrentMonth, useGetCurrentYear, useGetCurrentDay } from '@hooks/useDate';
-import { getAverage } from '@hooks/useMath';
+import { useAverage } from '@hooks/useAverage';
 
 // components
 import HomeNavBar from '@components/HomeNavBar';
@@ -156,7 +156,7 @@ const Marks = () => {
             </div>
             <div className='average-container'>
               <Title level={5} style={{ marginBottom: 5 }}>
-                Promedio {getAverage(userState.notas, 2)}
+                Promedio {useAverage(userState.notas, 2)}
               </Title>
               <ReconciliationFilled style={{ fontSize: 'large' }} />
             </div>
@@ -187,7 +187,7 @@ const Marks = () => {
             <tr className='trBody'>
               <td>-</td>
               <td>-</td>
-              <td>Promedio: {getAverage(userState.notas, 2)}</td>
+              <td>Promedio: {useAverage(userState.notas, 2)}</td>
             </tr>
           </tbody>
         </table>

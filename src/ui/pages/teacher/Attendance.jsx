@@ -1,21 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import '@styles/Attendance.less';
 
 // antd
-import { Checkbox, Collapse, Typography, Space, DatePicker, Button } from 'antd';
+import {Checkbox, Collapse, Typography, Space, DatePicker, Button} from 'antd';
 import moment from 'moment';
-const { Title } = Typography;
-const { Panel } = Collapse;
+const {Title} = Typography;
+const {Panel} = Collapse;
 
 // hooks
-import { useGetCurrentDate } from '@hooks/useDate';
+import {useGetCurrentDate} from '@hooks/useDate';
 
 // components
 import HomeNavBar from '@components/HomeNavBar';
 
 // constants
-import { teacher } from '@constants/users';
-import { teacherMenu } from '@constants/menu.js';
+import {teacher} from '@constants/users';
+import {teacherMenu} from '@constants/menu.js';
 
 let courses = [
   {
@@ -86,7 +86,7 @@ const Attendance = () => {
   useEffect(() => {
     setUserState(
       data.map((element) => {
-        return { ...element, checked: false };
+        return {...element, checked: false};
       })
     );
   }, []);
@@ -102,7 +102,7 @@ const Attendance = () => {
   const onClick = (course) => {
     let studentClass = userState.filter((student) => student.idCurso == course.id);
     // Cambio de nombre de la propiedad checked por la de presente
-    const studentClassRenamed = studentClass.map(({ checked: presente, ...rest }) => ({
+    const studentClassRenamed = studentClass.map(({checked: presente, ...rest}) => ({
       presente,
       ...rest,
     })); // Datos finales a enviar a endpoint
@@ -111,12 +111,12 @@ const Attendance = () => {
   return (
     <div
       className='site-page-header-ghost-wrapper home-grid-layout all-height'
-      style={{ margin: '0 40px 0 0', padding: 0 }}>
+      style={{margin: '0 40px 0 0', padding: 0}}>
       <aside className='container-bg-mobile'>
         <HomeNavBar toppics={teacherMenu} user={teacher} className='NavBar' />
       </aside>
 
-      <div className='content' style={{ margin: '60px 10px 50px 10px', width: '95%' }}>
+      <div className='content' style={{margin: '60px 10px 50px 10px', width: '95%'}}>
         <div className='header-container'>
           <Title>Módulo Asistencia</Title>
           <Space direction='vertical'>
@@ -127,7 +127,7 @@ const Attendance = () => {
             />
           </Space>
         </div>
-        <Collapse>
+        <Collapse accordion>
           {courses.map((course, index) => (
             <Panel header={course.nombre} key={index}>
               <table className='table'>
@@ -163,7 +163,7 @@ const Attendance = () => {
                   )}
                 </tbody>
               </table>
-              <Button type='primary' onClick={() => onClick(course)} style={{ marginTop: 10 }}>
+              <Button type='primary' onClick={() => onClick(course)} style={{marginTop: 10}}>
                 Guardar Cambios
               </Button>
             </Panel>

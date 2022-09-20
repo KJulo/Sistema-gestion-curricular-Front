@@ -1,4 +1,4 @@
-export function getAverage(marks, decimals) {
+export function useAverage(marks, decimals) {
   let total = 0;
   let subjects = 0;
   let sumBySubjects = {};
@@ -9,7 +9,7 @@ export function getAverage(marks, decimals) {
       subjects += 1;
       sumBySubjects[mark.asignatura] = 0;
     }
-    sumBySubjects[mark.asignatura] += mark.nota * mark.total;
+    sumBySubjects[mark.asignatura] += mark.nota * mark.ponderacion;
   });
 
   // Promediar las asignaturas
