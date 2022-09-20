@@ -1,0 +1,1 @@
+export { default as AdminTableLayout } from "@containers/AdminTableLayout";
