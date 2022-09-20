@@ -5,7 +5,6 @@ const Card = ({ title, content }) => {
     <Card
       size='small'
       title={title}
-      // extra={<a href="#">More</a>}
       style={{
         width: 300,
       }}>

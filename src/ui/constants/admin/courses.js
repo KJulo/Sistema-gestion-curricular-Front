@@ -180,8 +180,10 @@ export const columns = [
             console.log(record);
           }}
         >
-          <EyeOutlined style={{ marginRight: "6px" }} />
-          <Link to={`${record.key}`}>Ver</Link>
+          <Link to={`${record.key}`}>
+            <EyeOutlined style={{ marginRight: "6px" }} />
+            Ver
+          </Link>
         </div>
       );
     },

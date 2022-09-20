@@ -17,11 +17,16 @@ import {
   TeacherAttendance,
   TeacherHome,
   TeacherMarks,
+
   AdminHome,
   AdminStudents,
   AdminParents,
   AdminTeachers,
   AdminCourses,
+
+  AdminViewStudent,
+  AdminViewParent,
+  AdminViewTeacher,
   AdminViewCourse,
 } from '@pages/index';
 
@@ -44,11 +49,19 @@ const App = () => {
             <Routes>
               <Route path="administrador" element={<AdminLayout />}>
                 <Route path="" element={<AdminHome />} />
+
                 <Route path="alumnos" element={<AdminStudents />} />
+                <Route path="alumnos/:id" element={<AdminViewStudent />} />
+
                 <Route path="profesores" element={<AdminTeachers />} />
+                <Route path="profesores/:id" element={<AdminViewTeacher />} />
+
                 <Route path="apoderados" element={<AdminParents />} />
+                <Route path="apoderados/:id" element={<AdminViewParent />} />
+
                 <Route path="cursos" element={<AdminCourses />} />
                 <Route path="cursos/:id" element={<AdminViewCourse />} />
+                
                 <Route path="*" element={<Navigate to="/administrador" />} />
               </Route>
               <Route path='/' element={<Navigate to='/estudiante' />} />

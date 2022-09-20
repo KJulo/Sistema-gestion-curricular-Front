@@ -1,5 +1,5 @@
 import React from "react";
-import { EyeOutlined, DeleteOutlined } from "@ant-design/icons";
+import { EyeOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 
 export const content = [
@@ -34,8 +34,8 @@ export const content = [
     rut: "12345678-9",
     correo: "example@example.com",
     anho: "1/2/1962",
-  },
-];
+  }
+]
 
 export const columns = [
   {
@@ -52,11 +52,7 @@ export const columns = [
     title: "Rut",
     dataIndex: "rut",
     key: "rut",
-    render: (text) => (
-      <div style={{ textOverflow: "clip !important", whiteSpace: "nowrap" }}>
-        {text}
-      </div>
-    ),
+    render: (text) => (<div style={{textOverflow:"clip !important", whiteSpace:"nowrap"}} >{text}</div>),
   },
   {
     title: "Correo",
@@ -72,7 +68,7 @@ export const columns = [
     title: "Acciones",
     render: (record) => (
       <span>
-        <Link to={`/administrador/profesores/${record.key}`}>
+        <Link to={`/administrador/apoderados/${record.key}`}>
           <EyeOutlined style={{ marginRight: "8px" }} /> Ver
         </Link>
       </span>
@@ -80,48 +76,3 @@ export const columns = [
   },
 ];
 
-export const columnsCourse = [
-  {
-    title: "Nombres",
-    dataIndex: "name",
-    key: "name",
-  },
-  {
-    title: "Apellidos",
-    dataIndex: "surname",
-    key: "surname",
-  },
-  {
-    title: "Rut",
-    dataIndex: "rut",
-    key: "rut",
-    render: (text) => (
-      <div style={{ textOverflow: "clip !important", whiteSpace: "nowrap" }}>
-        {text}
-      </div>
-    ),
-  },
-  {
-    title: "Correo",
-    dataIndex: "correo",
-    key: "correo",
-  },
-  {
-    title: "Fecha de nacimiento",
-    dataIndex: "anho",
-    key: "anho",
-  },
-  {
-    title: "Acciones",
-    render: (record) => (
-      <span>
-        <Link to={`/administrador/alumnos/${record.key}`}>
-          <EyeOutlined style={{ marginRight: "8px" }} />
-        </Link>
-        <a>
-          <DeleteOutlined />
-        </a>
-      </span>
-    ),
-  },
-];

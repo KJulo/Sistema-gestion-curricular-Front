@@ -7,7 +7,7 @@ import { DefaultTitleContent, ContentTable, SearchContent, AddParent } from '@co
 import { AdminTableLayout } from '@containers/index'
 
 //constants
-import { content, columns } from '@constants/admin/teachers'
+import { content, columns } from '@constants/admin/parents'
 
 const Parents = () => {
   return (

@@ -15,4 +15,7 @@ export { default as AdminTeachers } from "@pages/admin/Teachers";
 export { default as AdminCourses } from "@pages/admin/Courses";
 export { default as AdminParents } from "@pages/admin/Parents";
 //admin view information
-export {default as AdminViewCourse } from "@pages/admin/ViewInfo/ViewCourse";
+export { default as AdminViewCourse } from "@pages/admin/ViewInfo/ViewCourse";
+export { default as AdminViewParent } from "@pages/admin/ViewInfo/ViewParent";
+export { default as AdminViewStudent } from "@pages/admin/ViewInfo/ViewStudent";
+export { default as AdminViewTeacher } from "@pages/admin/ViewInfo/ViewTeacher";

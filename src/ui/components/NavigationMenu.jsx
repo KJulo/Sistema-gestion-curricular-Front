@@ -1,11 +1,15 @@
 import React from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useMatch, useResolvedPath } from "react-router-dom";
 
 import { BiBookAdd, BiUserPlus, BiGroup, BiHomeAlt } from "react-icons/bi";
 import { Menu } from "antd";
 
 const NavigationMenu = () => {
   const { pathname } = useLocation();
+  const resolver = useResolvedPath(pathname);
+  const match = useMatch(resolver.pathname);
+  console.log(match);
+  
   const menuItems = [
     {
       key: "/administrador", 

@@ -27,10 +27,10 @@ const AdminLayout = () => {
           background: "white",
         }}
         onBreakpoint={(broken) => {
-          console.log(broken);
+          //todo
         }}
         onCollapse={(collapsed, type) => {
-          console.log(collapsed, type);
+          //todo
         }}
       >
         <div style={{ display: "flex", alignItems: "center" }}>
