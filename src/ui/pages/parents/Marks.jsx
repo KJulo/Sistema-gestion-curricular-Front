@@ -12,11 +12,7 @@ const { Panel } = Collapse;
 import { useGetCurrentMonth, useGetCurrentYear, useGetCurrentDay } from '@hooks/useDate';
 import { useAverage } from '@hooks/useAverage';
 
-// components
-import HomeNavBar from '@components/HomeNavBar';
-
 // constants
-import { parentsMenu } from '@constants/menu.js';
 import { family } from '@constants/familyMarks.js';
 
 const courses = [
@@ -89,42 +85,34 @@ const Marks = () => {
 
 
   return (
-    <div
-      className='site-page-header-ghost-wrapper home-grid-layout all-height'
-      style={{ margin: '0 40px 0 0', padding: 0 }}>
-      <aside className='container-bg-mobile'>
-        <HomeNavBar toppics={parentsMenu} user={parents[0]} className='NavBar' />
-      </aside>
-
-      <div className='content' style={{ margin: '60px 10px 50px 10px', width: '95%' }}>
-        <div className='header-container'>
-          <Title>Notas</Title>
-          <Space direction='vertical'>
-            <div className='date-container'>
-              <Title level={5} style={{ marginBottom: 5 }}>
-                {currentDate}
-              </Title>
-              <CalendarOutlined twoToneColor='#bfbfbf' style={{ fontSize: 'large' }} />
-            </div>
-            {getAverageHeader(students)}
-          </Space>
-        </div>
-
-        <Title level={3}>
-          {getNames(students)}
-        </Title>
-
-        <Collapse accordion>
-          {familyState.students.map((student, index) => (
-            <Panel header={student.nombres +" "+ student.apellidos} key={index}>
-              <table className='table'>
-                {getMarksColumns()}
-                {getMarksRows(student)}
-              </table>
-            </Panel>
-          ))}
-        </Collapse>
+    <div className='content' style={{ margin: '60px 10px 50px 10px', width: '95%' }}>
+      <div className='header-container'>
+        <Title>Notas</Title>
+        <Space direction='vertical'>
+          <div className='date-container'>
+            <Title level={5} style={{ marginBottom: 5 }}>
+              {currentDate}
+            </Title>
+            <CalendarOutlined twoToneColor='#bfbfbf' style={{ fontSize: 'large' }} />
+          </div>
+          {getAverageHeader(students)}
+        </Space>
       </div>
+
+      <Title level={3}>
+        {getNames(students)}
+      </Title>
+
+      <Collapse accordion>
+        {familyState.students.map((student, index) => (
+          <Panel header={student.nombres +" "+ student.apellidos} key={index}>
+            <table className='table'>
+              {getMarksColumns()}
+              {getMarksRows(student)}
+            </table>
+          </Panel>
+        ))}
+      </Collapse>
     </div>
   );
 };

@@ -10,13 +10,6 @@ const {Panel} = Collapse;
 // hooks
 import {useGetCurrentDate} from '@hooks/useDate';
 
-// components
-import HomeNavBar from '@components/HomeNavBar';
-
-// constants
-import {teacher} from '@constants/users';
-import {teacherMenu} from '@constants/menu.js';
-
 let courses = [
   {
     id: '12s21ksjh2j12k4',
@@ -109,67 +102,59 @@ const Attendance = () => {
   };
 
   return (
-    <div
-      className='site-page-header-ghost-wrapper home-grid-layout all-height'
-      style={{margin: '0 40px 0 0', padding: 0}}>
-      <aside className='container-bg-mobile'>
-        <HomeNavBar toppics={teacherMenu} user={teacher} className='NavBar' />
-      </aside>
-
-      <div className='content' style={{margin: '60px 10px 50px 10px', width: '95%'}}>
-        <div className='header-container'>
-          <Title>Módulo Asistencia</Title>
-          <Space direction='vertical'>
-            <DatePicker
-              defaultValue={moment(currentDate, 'DD/MM/YYYY')}
-              format='DD/MM/YYYY'
-              onChange={onChange}
-            />
-          </Space>
-        </div>
-        <Collapse accordion>
-          {courses.map((course, index) => (
-            <Panel header={course.nombre} key={index}>
-              <table className='table'>
-                <thead className='thead'>
-                  <tr className='trHead'>
-                    <th>Presente/Ausente</th>
-                    <th>Presente</th>
-                  </tr>
-                </thead>
-                <tbody className='tbody'>
-                  {userState.map((student) =>
-                    student.idCurso == course.id ? (
-                      <tr className='trBody'>
-                        <td>{student.nombre}</td>
-                        <td>
-                          <Checkbox
-                            type='checkbox'
-                            checked={student.checked}
-                            onChange={(event) => {
-                              setUserState(
-                                userState.map((element) => {
-                                  if (student.id == element.id) {
-                                    element.checked = event.target.checked;
-                                  }
-                                  return element;
-                                })
-                              );
-                            }}
-                          />
-                        </td>
-                      </tr>
-                    ) : null
-                  )}
-                </tbody>
-              </table>
-              <Button type='primary' onClick={() => onClick(course)} style={{marginTop: 10}}>
-                Guardar Cambios
-              </Button>
-            </Panel>
-          ))}
-        </Collapse>
+    <div className='content' style={{margin: '60px 10px 50px 10px', width: '95%'}}>
+      <div className='header-container'>
+        <Title>Módulo Asistencia</Title>
+        <Space direction='vertical'>
+          <DatePicker
+            defaultValue={moment(currentDate, 'DD/MM/YYYY')}
+            format='DD/MM/YYYY'
+            onChange={onChange}
+          />
+        </Space>
       </div>
+      <Collapse accordion>
+        {courses.map((course, index) => (
+          <Panel header={course.nombre} key={index}>
+            <table className='table'>
+              <thead className='thead'>
+                <tr className='trHead'>
+                  <th>Presente/Ausente</th>
+                  <th>Presente</th>
+                </tr>
+              </thead>
+              <tbody className='tbody'>
+                {userState.map((student) =>
+                  student.idCurso == course.id ? (
+                    <tr className='trBody'>
+                      <td>{student.nombre}</td>
+                      <td>
+                        <Checkbox
+                          type='checkbox'
+                          checked={student.checked}
+                          onChange={(event) => {
+                            setUserState(
+                              userState.map((element) => {
+                                if (student.id == element.id) {
+                                  element.checked = event.target.checked;
+                                }
+                                return element;
+                              })
+                            );
+                          }}
+                        />
+                      </td>
+                    </tr>
+                  ) : null
+                )}
+              </tbody>
+            </table>
+            <Button type='primary' onClick={() => onClick(course)} style={{marginTop: 10}}>
+              Guardar Cambios
+            </Button>
+          </Panel>
+        ))}
+      </Collapse>
     </div>
   );
 };
