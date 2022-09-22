@@ -1,0 +1,26 @@
+@import 'App.less';
+
+@media only screen and (min-width: 900px) {
+  .container-bg-mobile {
+    border-right: 4px solid @container-bg;
+  }
+}
+
+@media only screen and (max-width: 900px) {
+  .container-bg-mobile {
+    border-right: 4px solid @container-bg;
+  }
+}
+
+.home-grid-layout {
+  display: grid;
+  grid-gap: 20px;
+  grid-template-columns: 1fr 6fr;
+}
+
+.all-height {
+  height: 100vh;
+  max-height: 100vh;
+  min-height: 100vh;
+  overflow: auto;
+}

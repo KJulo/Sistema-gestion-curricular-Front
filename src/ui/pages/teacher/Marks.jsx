@@ -11,13 +11,6 @@ const {Panel} = Collapse;
 import {useGetCurrentDate} from '@hooks/useDate';
 import {useAverage} from '@hooks/useAverage';
 
-// components
-import HomeNavBar from '@components/HomeNavBar';
-
-// constants
-import {teacher} from '@constants/users';
-import {teacherMenu} from '@constants/menu.js';
-
 // Un profesor debería de poder seleccionar entre estos tipos de asignaturas al momento de añadir una nota
 // Las asignaturas disponibles son dependientes del curso en el que está
 let courses = [
@@ -241,45 +234,37 @@ const Marks = () => {
   };
 
   return (
-    <div
-      className='site-page-header-ghost-wrapper home-grid-layout all-height'
-      style={{margin: '0 40px 0 0', padding: 0}}>
-      <aside className='container-bg-mobile'>
-        <HomeNavBar toppics={teacherMenu} user={teacher} className='NavBar' />
-      </aside>
-
-      <div className='content' style={{margin: '60px 10px 50px 10px', width: '95%'}}>
-        <div className='header-container'>
-          <Title>Módulo Notas</Title>
-          <Space direction='vertical'>
-            <div className='date-container'>
-              <Title level={5} style={{marginBottom: 5}}>
-                {currentDate}
-              </Title>
-              <CalendarOutlined twoToneColor='#bfbfbf' style={{fontSize: 'large'}} />
-            </div>
-          </Space>
-        </div>
-
-        <Collapse accordion>
-          {courses.map((course, index) => (
-            <Panel header={course.nombre} key={index}>
-              <table className='table'>
-                <thead className='thead'>
-                  <tr className='trHead'>
-                    <th>Nombre Alumno</th>
-                    {getSubjectskByCourseColumns(course)}
-                  </tr>
-                </thead>
-                <tbody className='tbody'>{getStudentsRow(course)}</tbody>
-              </table>
-              <Button type='primary' onClick={() => onClick(course)} style={{marginTop: 10}}>
-                Guardar Cambios
-              </Button>
-            </Panel>
-          ))}
-        </Collapse>
+    <div className='content' style={{margin: '60px 10px 50px 10px', width: '95%'}}>
+      <div className='header-container'>
+        <Title>Módulo Notas</Title>
+        <Space direction='vertical'>
+          <div className='date-container'>
+            <Title level={5} style={{marginBottom: 5}}>
+              {currentDate}
+            </Title>
+            <CalendarOutlined twoToneColor='#bfbfbf' style={{fontSize: 'large'}} />
+          </div>
+        </Space>
       </div>
+
+      <Collapse accordion>
+        {courses.map((course, index) => (
+          <Panel header={course.nombre} key={index}>
+            <table className='table'>
+              <thead className='thead'>
+                <tr className='trHead'>
+                  <th>Nombre Alumno</th>
+                  {getSubjectskByCourseColumns(course)}
+                </tr>
+              </thead>
+              <tbody className='tbody'>{getStudentsRow(course)}</tbody>
+            </table>
+            <Button type='primary' onClick={() => onClick(course)} style={{marginTop: 10}}>
+              Guardar Cambios
+            </Button>
+          </Panel>
+        ))}
+      </Collapse>
     </div>
   );
 };

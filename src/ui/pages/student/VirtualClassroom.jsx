@@ -12,13 +12,6 @@ import '@styles/VirtualClass.less';
 // hooks
 import { useGetCurrentMonth, useGetCurrentYear, useGetCurrentDay } from '@hooks/useDate';
 
-// constants
-import {student} from '@constants/users';
-import {studentMenu} from '@constants/menu.js';
-
-// components
-import HomeNavBar from '@components/HomeNavBar';
-
 const course = {
   id: '41kd2fj94fi32fui',
   nombre: '1ro Básico',
@@ -173,21 +166,13 @@ const VitualClassroom = () => {
   };
 
   return (
-    <div
-      className='site-page-header-ghost-wrapper home-grid-layout all-height'
-      style={{margin: '0 40px 0 0', padding: 0}}>
-      <aside className='container-bg-mobile'>
-        <HomeNavBar toppics={studentMenu} user={student} className='NavBar' />
-      </aside>
+    <div className='content' style={{ margin: '60px 10px 50px 10px', width: '95%' }}>
+      <Header title='Aula Virtual' date={currentDate}/>
 
-      <div className='content' style={{ margin: '60px 10px 50px 10px', width: '95%' }}>
-        <Header title='Aula Virtual' date={currentDate}/>
+      <Menu onClick={onClickMenu} selectedKeys={[currentMenu.id]} mode="horizontal" items={menuItems} defaultSelectedKeys={currentMenu.id} />
+      <Menu onClick={onClickSubMenu} selectedKeys={[currentSubMenu.id]} mode="horizontal" items={subMenuItems} defaultSelectedKeys={currentMenu.menus[0].nombre} />
 
-        <Menu onClick={onClickMenu} selectedKeys={[currentMenu.id]} mode="horizontal" items={menuItems} defaultSelectedKeys={currentMenu.id} />
-        <Menu onClick={onClickSubMenu} selectedKeys={[currentSubMenu.id]} mode="horizontal" items={subMenuItems} defaultSelectedKeys={currentMenu.menus[0].nombre} />
-
-        <MenuContent content={currentSubMenu.contenido} />
-      </div>
+      <MenuContent content={currentSubMenu.contenido} />
     </div>
   )
 }

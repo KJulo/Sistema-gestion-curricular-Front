@@ -39,7 +39,11 @@ import {
 import { ConfigProvider } from 'antd';
 
 //layout
-import { AdminLayout } from "@layouts/index";
+import { AdminLayout, MainLayout } from "@layouts/index";
+
+// constants
+import { parentsMenu, teacherMenu, studentMenu } from '@constants/menu';
+import { student, teacher, parents } from '@constants/users';
 
 //locale
 import 'moment/locale/es-us';
@@ -69,20 +73,29 @@ const App = () => {
                 
                 <Route path="*" element={<Navigate to="/administrador" />} />
               </Route>
-              <Route path='/' element={<Navigate to='/estudiante' />} />
-              <Route path='/estudiante' element={<StudentHome />} />
-              <Route path='/estudiante/asistencia' element={<StudentAttendance />} />
-              <Route path='/estudiante/notas' element={<StudentMarks />} />
-              <Route path='/estudiante/aula-virtual' element={<StudentVirtualClassroom />} />
 
-              <Route path='/apoderado' element={<ParentsHome />} />
-              <Route path='/apoderado/asistencia' element={<ParentsAttendance />} />
-              <Route path='/apoderado/notas' element={<ParentsMarks />} />
+              <Route path="estudiante" element={<MainLayout user={student} menuToppics={studentMenu} />}>
+                <Route path='' element={<StudentHome />} />
+                <Route path='asistencia' element={<StudentAttendance />} />
+                <Route path='notas' element={<StudentMarks />} />
+                <Route path='aula-virtual' element={<StudentVirtualClassroom />} />
+                <Route path='*' element={<Navigate to='/estudiante' />} />
+              </Route>
 
-              <Route path='/profesor' element={<TeacherHome />} />
-              <Route path='/profesor/modulo-asistencia' element={<TeacherAttendance />} />
-              <Route path='/profesor/modulo-notas' element={<TeacherMarks />} />
-              <Route path='/profesor/modulo-aulas' element={<TeacherVirtualClassroom />} />
+              <Route path='apoderado' element={<MainLayout user={parents.parents[0]} menuToppics={parentsMenu} />}>
+                <Route path='' element={<ParentsHome />} />
+                <Route path='asistencia' element={<ParentsAttendance />} />
+                <Route path='notas' element={<ParentsMarks />} />
+                <Route path='*' element={<Navigate to='/apoderado' />} />
+              </Route>
+
+              <Route path='profesor' element={<MainLayout user={teacher} menuToppics={teacherMenu} />}>
+                <Route path='' element={<TeacherHome />} />
+                <Route path='modulo-asistencia' element={<TeacherAttendance />} />
+                <Route path='modulo-notas' element={<TeacherMarks />} />
+                <Route path='modulo-aulas' element={<TeacherVirtualClassroom />} />
+                <Route path='*' element={<Navigate to='/profesor' />} />
+              </Route>
             </Routes>
           </BrowserRouter>
         </ConfigProvider>

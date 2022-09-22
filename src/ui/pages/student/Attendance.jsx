@@ -71,46 +71,38 @@ const Attendance = () => {
   };
 
   return (
-    <div
-      className='site-page-header-ghost-wrapper home-grid-layout all-height'
-      style={{ margin: '0 40px 0 0', padding: 0 }}>
-      <aside className='container-bg-mobile'>
-        <HomeNavBar toppics={studentMenu} user={student} className='NavBar' />
-      </aside>
-
-      <div className='content' style={{ margin: '60px 10px 50px 10px', width: '95%' }}>
-        <div className='header-container'>
-          <Title>Asistencia</Title>
-          <Space direction='vertical'>
-            <DatePicker
-              defaultValue={moment(currentDate, 'MM-YYYY')}
-              picker='month'
-              onChange={onChange}
-            />
-          </Space>
-        </div>
-        <Title level={3}>
-          {student.nombres} {student.apellidos}
-        </Title>
-        <table className='table'>
-          <thead className='thead'>
-            <tr className='trHead'>
-              <th>Fecha</th>
-              <th>Asiste</th>
-            </tr>
-          </thead>
-          <tbody className='tbody'>
-            {userState.asistencia.map((date) =>
-              useIsSameMonth(selectedDate, date) ? (
-                <tr className='trBody'>
-                  <td>{useGetDateDaysFirst(date.fecha)}</td>
-                  <td>{date.presente ? 'Si' : 'No'}</td>
-                </tr>
-              ) : null
-            )}
-          </tbody>
-        </table>
+    <div className='content' style={{ margin: '60px 10px 50px 10px', width: '95%' }}>
+      <div className='header-container'>
+        <Title>Asistencia</Title>
+        <Space direction='vertical'>
+          <DatePicker
+            defaultValue={moment(currentDate, 'MM-YYYY')}
+            picker='month'
+            onChange={onChange}
+          />
+        </Space>
       </div>
+      <Title level={3}>
+        {student.nombres} {student.apellidos}
+      </Title>
+      <table className='table'>
+        <thead className='thead'>
+          <tr className='trHead'>
+            <th>Fecha</th>
+            <th>Asiste</th>
+          </tr>
+        </thead>
+        <tbody className='tbody'>
+          {userState.asistencia.map((date) =>
+            useIsSameMonth(selectedDate, date) ? (
+              <tr className='trBody'>
+                <td>{useGetDateDaysFirst(date.fecha)}</td>
+                <td>{date.presente ? 'Si' : 'No'}</td>
+              </tr>
+            ) : null
+          )}
+        </tbody>
+      </table>
     </div>
   );
 };

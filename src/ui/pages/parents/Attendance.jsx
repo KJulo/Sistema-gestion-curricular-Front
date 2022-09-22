@@ -17,18 +17,6 @@ import {
   useIsSameMonth
 } from '@hooks/useDate';
 
-// components
-import HomeNavBar from '@components/HomeNavBar';
-
-// constants
-import { parentsMenu } from '@constants/menu.js';
-
-let course = {
-  id: '12s21ksjh2j12k4',
-  nombre: '1ro Básico',
-  año: '2022',
-};
-
 const family = {
   idFamily: "2fj2fj98j3gjf",
   parents: [
@@ -145,42 +133,34 @@ const Attendance = () => {
   };
 
   return familyState ? (
-    <div
-      className='site-page-header-ghost-wrapper home-grid-layout all-height'
-      style={{ margin: '0 40px 0 0', padding: 0 }}>
-      <aside className='container-bg-mobile'>
-        <HomeNavBar toppics={parentsMenu} user={familyState.parents[0]} className='NavBar' />
-      </aside>
-
-      <div className='content' style={{ margin: '60px 10px 50px 10px', width: '95%' }}>
-        <div className='header-container'>
-          <Title>Asistencia</Title>
-          <Space direction='vertical'>
-            <DatePicker
-              defaultValue={moment(currentDate, 'MM-YYYY')}
-              picker='month'
-              onChange={onChange}
-            />
-          </Space>
-        </div>
-        <Collapse accordion>
-          {familyState.students.map((student, index) => (
-            <Panel header={student.nombres +" "+ student.apellidos} key={index}>
-              <table className='table'>
-                <thead className='thead'>
-                  <tr className='trHead'>
-                    <th>{selectedDate}</th>
-                    <th>Asiste</th>
-                  </tr>
-                </thead>
-                <tbody className='tbody'>
-                  {getAsistanceRow(student, selectedDate)}
-                </tbody>
-              </table>
-            </Panel>
-          ))}
-        </Collapse>
+    <div className='content' style={{ margin: '60px 10px 50px 10px', width: '95%' }}>
+      <div className='header-container'>
+        <Title>Asistencia</Title>
+        <Space direction='vertical'>
+          <DatePicker
+            defaultValue={moment(currentDate, 'MM-YYYY')}
+            picker='month'
+            onChange={onChange}
+          />
+        </Space>
       </div>
+      <Collapse accordion>
+        {familyState.students.map((student, index) => (
+          <Panel header={student.nombres +" "+ student.apellidos} key={index}>
+            <table className='table'>
+              <thead className='thead'>
+                <tr className='trHead'>
+                  <th>{selectedDate}</th>
+                  <th>Asiste</th>
+                </tr>
+              </thead>
+              <tbody className='tbody'>
+                {getAsistanceRow(student, selectedDate)}
+              </tbody>
+            </table>
+          </Panel>
+        ))}
+      </Collapse>
     </div>
   ) : null;
 };
