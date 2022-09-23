@@ -6,11 +6,13 @@ import { Layout } from 'antd';
 
 // cs
 import '@styles/MainLayout.less';
+import '@styles/Home.less';
 
 const { Content } = Layout;
 
 // components
 import HomeNavBar from '@components/HomeNavBar';
+import HandleError from '@components/Error/HandleError';
 
 const MainLayout = ({ user, menuToppics }) => {
   return (
@@ -22,7 +24,9 @@ const MainLayout = ({ user, menuToppics }) => {
       </aside>
 
       <Content>
-        <Outlet />
+        <HandleError>
+          <Outlet />
+        </HandleError>
       </Content>
     </div>
   );
