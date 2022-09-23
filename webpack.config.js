@@ -25,6 +25,7 @@ module.exports = {
       "@routes": path.resolve(__dirname, "src/ui/routes/"),
       "@styles": path.resolve(__dirname, "src/ui/styles/"),
       "@icons": path.resolve(__dirname, "src/ui/assets/icons/"),
+      "@img": path.resolve(__dirname, "src/ui/assets/img/"),
       "@logos": path.resolve(__dirname, "src/ui/assets/logos/"),
       "@hooks": path.resolve(__dirname, "src/ui/hooks/"),
 

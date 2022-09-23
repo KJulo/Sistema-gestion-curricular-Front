@@ -30,5 +30,6 @@ export const studentSlice = createSlice({
 // exportar funciones individuales
 export const { setStudentList } = studentSlice.actions;
 
+
 // exportar reducer del slice para mandarlo a la store
 export default studentSlice.reducer;
