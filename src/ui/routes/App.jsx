@@ -11,6 +11,8 @@ import store from '@redux';
 
 //pages
 import {
+  Login,
+
   ParentsHome,
   ParentsAttendance,
   ParentsMarks,
@@ -56,6 +58,9 @@ const App = () => {
         <ConfigProvider locale={locale}>
           <BrowserRouter>
             <Routes>
+              <Route path='/' element={<Navigate to='/login' />} />
+              <Route path='login' element={<Login />} />
+
               <Route path="administrador" element={<AdminLayout />}>
                 <Route path="" element={<AdminHome />} />
 

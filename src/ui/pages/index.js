@@ -1,3 +1,6 @@
+// Main
+export { default as Login } from '@pages/login/Login';
+
 // parents
 export { default as ParentsHome } from "@pages/parents/Home";
 export { default as ParentsAttendance } from "@pages/parents/Attendance";
