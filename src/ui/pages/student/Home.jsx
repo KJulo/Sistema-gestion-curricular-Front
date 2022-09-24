@@ -22,6 +22,7 @@ const Home = () => {
     <div
       className='body-bg'
       style={{
+        padding: 30,
         margin: '24px 16px',
         minHeight: 280,
       }}>
@@ -32,9 +33,10 @@ const Home = () => {
       </Title>
 
       <div
-        className='container-bg flex-container'
-        style={{ padding: '1rem', justifyContent: 'space-around' }}>
+        className='flex-container'
+        style={{ padding: 10, justifyContent: 'space-around' }}>
         <img src={SchoolImg} alt='Logo Colegio' style={{ margin: 10 }} />
+
         <Notifications />
       </div>
     </div>

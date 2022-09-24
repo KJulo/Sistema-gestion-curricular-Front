@@ -14,7 +14,7 @@ import '@styles/Home.less';
 // assets
 import SchoolImg from '@logos/school-img.png';
 
-const StudentContent = ({ user }) => {
+const HomeContent = ({ user }) => {
   return (
     <div
       className='site-layout-background'
@@ -37,4 +37,4 @@ const StudentContent = ({ user }) => {
   );
 };
 
-export default StudentContent;
+export default HomeContent;

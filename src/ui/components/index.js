@@ -5,15 +5,22 @@ export { default as DefaultTitleContent } from "@components/DefaultTitleContent"
 export { default as SearchContent } from "@components/SearchContent";
 export { default as FilterCourse } from "@components/FilterCourse";
 export { default as AddCourse } from "@components/AddCourse";
-export { default as NavigationMenu } from "@components/NavigationMenu";
 export { default as SubTitleContent } from "@components/SubTitleContent";
+export { default as HandleError } from '@components/Error/HandleError';
+
+//admin
+export { default as AdminMenu } from "@components/Admin/NavigationMenu";
 
 //teachers
+export { default as TeacherMenu } from "@components/Teachers/NavigationMenu.jsx";
 export { default as AddTeacher } from "@components/Teachers/AddTeacher";
 
 //students
+export { default as StudentContent } from "@components/Students/HomeContent.jsx";
+export { default as StudentMenu } from "@components/Students/NavigationMenu.jsx";
 export { default as AddStudent } from "@components/Students/AddStudent";
 export { default as AddPupilo } from "@components/Students/AddPupilo";
 
 //Parents
+export { default as ParentsMenu } from "@components/Parents/NavigationMenu.jsx";
 export { default as AddParent } from "@components/Parents/AddParent";

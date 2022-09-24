@@ -41,7 +41,7 @@ import {
 import { ConfigProvider } from 'antd';
 
 //layout
-import { AdminLayout, MainLayout } from "@layouts/index";
+import { MainLayout } from "@layouts/index";
 
 // constants
 import { parentsMenu, teacherMenu, studentMenu } from '@constants/menu';
@@ -61,7 +61,7 @@ const App = () => {
               <Route path='/' element={<Navigate to='/login' />} />
               <Route path='login' element={<Login />} />
 
-              <Route path="administrador" element={<AdminLayout />}>
+              <Route path="administrador" element={<MainLayout userType='admin' />}>
                 <Route path="" element={<AdminHome />} />
 
                 <Route path="alumnos" element={<AdminStudents />} />
@@ -79,7 +79,7 @@ const App = () => {
                 <Route path="*" element={<Navigate to="/administrador" />} />
               </Route>
 
-              <Route path="estudiante" element={<MainLayout user={student} menuToppics={studentMenu} />}>
+              <Route path="estudiante" element={<MainLayout userType='student' />}>
                 <Route path='' element={<StudentHome />} />
                 <Route path='asistencia' element={<StudentAttendance />} />
                 <Route path='notas' element={<StudentMarks />} />
@@ -87,14 +87,14 @@ const App = () => {
                 <Route path='*' element={<Navigate to='/estudiante' />} />
               </Route>
 
-              <Route path='apoderado' element={<MainLayout user={parents.parents[0]} menuToppics={parentsMenu} />}>
+              <Route path='apoderado' element={<MainLayout userType='parent' />}>
                 <Route path='' element={<ParentsHome />} />
                 <Route path='asistencia' element={<ParentsAttendance />} />
                 <Route path='notas' element={<ParentsMarks />} />
                 <Route path='*' element={<Navigate to='/apoderado' />} />
               </Route>
 
-              <Route path='profesor' element={<MainLayout user={teacher} menuToppics={teacherMenu} />}>
+              <Route path='profesor' element={<MainLayout userType='teacher' />}>
                 <Route path='' element={<TeacherHome />} />
                 <Route path='modulo-asistencia' element={<TeacherAttendance />} />
                 <Route path='modulo-notas' element={<TeacherMarks />} />
