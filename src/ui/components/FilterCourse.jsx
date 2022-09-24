@@ -1,10 +1,25 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useSelector } from "react-redux";
 import moment from "moment";
 import { DatePicker, Select } from "antd";
 const { Option } = Select;
 
 
+const Options = ({ options }) => {
+  return (
+    <Select size="large" defaultValue={options[0]}>
+      {options.map((filter, index) => (
+        <Option value={index}>{filter}</Option>
+      ))}
+    </Select>
+  )
+}
+
 const FilterCourse = () => {
+  const courses = useSelector((store) => store.admin.courses);
+  const courseFilters = courses.filters.courses;
+  const subjectFilters = courses.filters.subjects;
+
   return (
     <div style={{ display: "flex", flexDirection: "row-reverse",flexWrap:"wrap", gap: "12px" }}>
       <DatePicker
@@ -13,22 +28,8 @@ const FilterCourse = () => {
         size="large"
         defaultValue={moment("2022", "YYYY")}
       />
-      <Select size="large" defaultValue="1">
-        <Option value="1">Primero Básico</Option>
-        <Option value="2">Segundo Básico</Option>
-        <Option value="3">Tercero Básico</Option>
-        <Option value="4">Cuarto Básico</Option>
-        <Option value="5">Quinto Básico</Option>
-        <Option value="6">Sexto Básico</Option>
-        <Option value="7">Septimo Básico</Option>
-        <Option value="8">Octavo Básico</Option>
-      </Select>
-      <Select size="large" defaultValue="1">
-        <Option value="1">Matematicas</Option>
-        <Option value="2">Fisica</Option>
-        <Option value="3">Quimica</Option>
-        <Option value="4">Biologia</Option>
-      </Select>
+      <Options options={courseFilters} />
+      <Options options={subjectFilters} />
     </div>
   );
 };
