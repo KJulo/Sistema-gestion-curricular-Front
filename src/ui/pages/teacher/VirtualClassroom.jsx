@@ -166,7 +166,7 @@ const VitualClassroom = () => {
   };
 
   return (
-    <div className='content' style={{ margin: '60px 10px 50px 10px', width: '95%' }}>
+    <div>
       <Header title='Aula Virtual' date={currentDate}/>
 
       <Menu onClick={onClickMenu} selectedKeys={[currentMenu.id]} mode="horizontal" items={menuItems} defaultSelectedKeys={currentMenu.id} />

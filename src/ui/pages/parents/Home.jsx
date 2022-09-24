@@ -52,7 +52,7 @@ const Home = () => {
       </Title>
 
       <div
-        className='container-bg flex-container'
+        className='flex-container'
         style={{ padding: '1rem', justifyContent: 'space-around' }}>
         <div style={ { display: 'contents' } }> 
           <img src={SchoolImg} alt='Logo Colegio' className='fit-image' />

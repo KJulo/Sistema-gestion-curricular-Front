@@ -15,12 +15,13 @@ const Home = () => {
     <div
       className='body-bg'
       style={{
-        margin: '24px 16px',
+        padding: 30,
+        margin: '24px 16px 20px',
         minHeight: 280,
       }}>
       <Title> Mis Cursos</Title>
 
-      <div className='container-bg flex-container'>
+      <div className='flex-container'>
         {courses.map((course) => {
           return (
             <div className='course-container'>

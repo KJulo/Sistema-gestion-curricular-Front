@@ -18,11 +18,11 @@ const NavigationMenu = () => {
     }, {
       key: "/apoderado/notas",
       icon: <BiBookAdd />,
-      label: <Link to="modulo-notas">Notas</Link>,
+      label: <Link to="notas">Notas</Link>,
     }, {
       key: "/apoderado/asistencia",
       icon: <BiUserPlus />,
-      label: <Link to="modulo-asistencia">Asistencia</Link>,
+      label: <Link to="asistencia">Asistencia</Link>,
     }
   ]
   return (

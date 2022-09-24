@@ -20,14 +20,14 @@ import { student } from '@constants/users';
 const Home = () => {
   return (
     <div
-      className='body-bg'
+      className='container-bg'
       style={{
         padding: 30,
         margin: '24px 16px',
         minHeight: 280,
       }}>
 
-      <Title>
+      <Title style={{ padding: 20 }}>
         {' '}
         Hola, {student.nombres} {student.apellidos} !
       </Title>
