@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 // antd
-import { Collapse, Typography, Space, Menu } from 'antd';
+import { Typography, Space, Menu, Select } from 'antd';
 import { AppstoreOutlined, CalendarOutlined, CloseSquareFilled, MoreOutlined } from '@ant-design/icons';
-const { Title } = Typography;
 
 // styles
 import '@styles/Home.less';
@@ -11,90 +11,11 @@ import '@styles/VirtualClass.less';
 
 // hooks
 import { useGetCurrentMonth, useGetCurrentYear, useGetCurrentDay } from '@hooks/useDate';
+import { useEffect } from 'react';
 
-const course = {
-  id: '41kd2fj94fi32fui',
-  nombre: '1ro Básico',
-  materias: [
-    {
-      id: 'jd128d3912',
-      nombre: 'Lenguaje',
-      menus: [
-        { 
-          id: 'cwqiecejcjw',
-          nombre: 'Unidad 1',
-          contenido: [
-            {
-              titulo: 'Modulo 1',
-              cuerpo: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod'+'\n'+
-              'tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,'+'\n'+
-              'quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
-            },{
-              titulo: 'Modulo 2',
-              cuerpo: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod'+'\n'+
-              'tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,'+'\n'+
-              'quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
-            }
-          ]
-        },{ 
-          id: 'dj312938d12j83',
-          nombre: 'Unidad 2',
-          contenido: [
-            {
-              titulo: 'Primera tarea lenguaje',
-              cuerpo: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod'
-            }
-          ]
-        }
-      ]
-    },
-    {
-      id: 'ej21vn21ff',
-      nombre: 'Matemáticas',
-      menus: [
-        { 
-          id: '21duj3jd13d3d21',
-          nombre: 'Tarea 1',
-          contenido: [
-            {
-              titulo: 'Modulo 1',
-              cuerpo: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod'+'\n'+
-              'tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,'+'\n'+
-              'quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
-            },{
-              titulo: 'Modulo 2',
-              cuerpo: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod'+'\n'+
-              'tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,'+'\n'+
-              'quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
-            }
-          ]
-        }
-      ],
-    },
-    {
-      id: 'jf12f4124j',
-      nombre: 'Historia',
-      menus: [
-        { 
-          id: 'j3d12j3dj12j3',
-          nombre: 'Bievenida',
-          contenido: [
-            {
-              titulo: 'Hola !',
-              cuerpo: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod'+'\n'+
-              'tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,'
-            },{
-              titulo: 'Modulo 1 ',
-              cuerpo: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod'+'\n'+
-              'tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,'+'\n'+
-              'quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
-            }
-          ]
-        }
-      ],
-    },
-  ]
-}
+//constants
+const { Title } = Typography;
+const { Option } = Select;
 
 const defaultMenu = {
   label: 'No disponible',
@@ -102,17 +23,12 @@ const defaultMenu = {
   icon: <CloseSquareFilled />,
 }
 
-const Header = ({title, date}) => {
+const Header = ({title, filterOptions}) => {
   return (
     <div className='header-container'>
       <Title>{title}</Title>
       <Space direction='vertical'>
-        <div className='date-container'>
-          <Title level={5} style={{ marginBottom: 5 }}>
-            {date}
-          </Title>
-          <CalendarOutlined twoToneColor='#bfbfbf' style={{ fontSize: 'large' }} />
-        </div>
+        {filterOptions}
       </Space>
     </div>
   )
@@ -133,11 +49,25 @@ const MenuContent = ({content}) => {
 
 const VitualClassroom = () => {
   const currentDate = useGetCurrentDay() + '-' + useGetCurrentMonth() + '-' + useGetCurrentYear();
-  const [currentMenu, setCurrentMenu] = useState(course.materias[0]);
-  const [currentSubMenu, setCurrentSubMenu] = useState(course.materias[0].menus[0])
+
+  const courses = useSelector((store) => store.teacher.courses);
+  const [currentCourse, setCurrentCourse] = useState(courses[0]);
+  const [currentMenu, setCurrentMenu] = useState(null);
+  const [currentSubMenu, setCurrentSubMenu] = useState(null);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  // El hook useState se actualiza al siguiente render, por ello, utilizar useEffect
+  useEffect(() => {
+    setCurrentMenu(currentCourse.materias[0]);
+    setCurrentSubMenu(currentCourse.materias[0].menus[0]);
+    setIsLoaded(true);
+  }, [currentCourse])
+
+  // Optiones
+  const courseNames = courses.map((course) => course.nombre);
 
   // Materias del curso
-  const menuItems = course ? course.materias.map((materia) => ({
+  const subjects = currentCourse ? currentCourse.materias.map((materia) => ({
     label: materia.nombre,
     key: materia.id,
     icon: <AppstoreOutlined />,
@@ -150,9 +80,26 @@ const VitualClassroom = () => {
     icon: <MoreOutlined />,
   })) : null
 
+  const handleChange = (value) => {
+    console.log(value);
+    let newCourse = courses[value];
+    console.log(newCourse);
+    setCurrentCourse(newCourse)
+  }
+
+  const courseFilter = () => {
+    return (
+      <Select size="large" defaultValue={courseNames[0]} onChange={handleChange}>
+        {courseNames.map((filter, index) => (
+          <Option value={index}>{filter}</Option>
+        ))}
+      </Select>
+    )
+  }
+
   const onClickMenu = (e) => {
     // buscar el materia del id y setearlo
-    let item = course.materias.find((materia) => materia.id == e.key)
+    let item = currentCourse.materias.find((materia) => materia.id == e.key)
     setCurrentMenu(item);
     console.log("item seleccionado: ",item);
   };
@@ -165,16 +112,28 @@ const VitualClassroom = () => {
     console.log("item seleccionado: ",item);
   };
 
-  return (
+  return isLoaded ? (
     <div>
-      <Header title='Aula Virtual' date={currentDate}/>
+      <Header title='Aula Virtual' date={currentDate} filterOptions={courseFilter()} />
 
-      <Menu onClick={onClickMenu} selectedKeys={[currentMenu.id]} mode="horizontal" items={menuItems} defaultSelectedKeys={currentMenu.id} />
-      <Menu onClick={onClickSubMenu} selectedKeys={[currentSubMenu.id]} mode="horizontal" items={subMenuItems} defaultSelectedKeys={currentMenu.menus[0].nombre} />
+      <Menu
+        onClick={onClickMenu}
+        selectedKeys={[currentMenu.id]}
+        mode='horizontal'
+        items={subjects}
+        defaultSelectedKeys={currentMenu.id}
+      />
+      <Menu
+        onClick={onClickSubMenu}
+        selectedKeys={[currentSubMenu.id]}
+        mode='horizontal'
+        items={subMenuItems}
+        defaultSelectedKeys={currentMenu.menus[0].nombre}
+      />
 
       <MenuContent content={currentSubMenu.contenido} />
     </div>
-  )
+  ) : <></>;
 }
 
 export default VitualClassroom;

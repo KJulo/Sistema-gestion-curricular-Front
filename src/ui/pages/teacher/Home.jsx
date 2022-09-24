@@ -16,7 +16,8 @@ const Home = () => {
       className='body-bg'
       style={{
         padding: 30,
-        margin: '24px 16px 20px',
+        paddingTop: 0,
+        margin: '0px 16px 20px',
         minHeight: 280,
       }}>
       <Title> Mis Cursos</Title>
