@@ -9,6 +9,7 @@ const { Title, Text } = Typography;
 import Error400 from "@img/404error.jpg";
 
 const ErrorServer = ({ error }) => {
+  console.log(error);
   return (
     <div className="display-flex flex-column" style={{ margin: "100px" }}>
       <div
@@ -32,7 +33,7 @@ const ErrorServer = ({ error }) => {
         <div style={{ marginTop: "22px" }}>
           <Button
             className="button-tertiary"
-            onClick={() => location.reload()}
+            onClick={() => error.code === 404 ? location.assign('/') : location.reload()}
             style={{ width: "128px" }}
           >
             Actualizar

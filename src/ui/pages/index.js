@@ -29,3 +29,6 @@ export { default as AdminViewParent } from "@pages/admin/ViewInfo/ViewParent";
 export { default as AdminViewStudent } from "@pages/admin/ViewInfo/ViewStudent";
 export { default as AdminViewTeacher } from "@pages/admin/ViewInfo/ViewTeacher";
 export { default as TeacherVirtualClassroom } from "@pages/teacher/VirtualClassroom";
+
+// Not Found
+export { default as NotFound } from "@pages/NotFound";
