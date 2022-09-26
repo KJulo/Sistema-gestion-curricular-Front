@@ -12,6 +12,9 @@ const ContentTable = ({ content, columns, type }) => {
       columns={columns}
       dataSource={content}
       style={{tableLayout:"fixed"}}
+      pagination={{
+        position: ['none'],
+      }}
     />
   )
 }

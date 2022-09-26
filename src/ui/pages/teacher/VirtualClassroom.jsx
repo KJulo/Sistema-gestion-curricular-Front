@@ -50,7 +50,7 @@ const MenuContent = ({content}) => {
 const VitualClassroom = () => {
   const currentDate = useGetCurrentDay() + '-' + useGetCurrentMonth() + '-' + useGetCurrentYear();
 
-  const courses = useSelector((store) => store.teacher.courses);
+  const courses = useSelector((store) => store.teacher.courses.virtualClasses);
   const [currentCourse, setCurrentCourse] = useState(courses[0]);
   const [currentMenu, setCurrentMenu] = useState(null);
   const [currentSubMenu, setCurrentSubMenu] = useState(null);
