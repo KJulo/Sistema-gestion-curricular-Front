@@ -4,11 +4,14 @@ import React from "react";
 import { Row, Col } from "antd";
 
 const AdminTableLayout = ({ searchInput, selectFilter, tableContent }) => {
+
+  const allSpan2 = searchInput === '' ? 18 : 14;
+
   return (
     <div>
       <Row style={{ display: "flex", justifyContent:"space-between" }}>
         <Col span={8} >{searchInput}</Col>
-        <Col span={14} >{selectFilter}</Col>
+        <Col span={allSpan2} >{selectFilter}</Col>
       </Row>
 
       <div

@@ -1,3 +1,4 @@
+// Global
 export { default as Card } from "@components/Card";
 export { default as ContentTable } from "@components/ContentTable";
 export { default as HomeNavBar } from "@components/HomeNavBar";
@@ -14,6 +15,7 @@ export { default as AdminMenu } from "@components/Admin/NavigationMenu";
 //teachers
 export { default as TeacherMenu } from "@components/Teachers/NavigationMenu.jsx";
 export { default as AddTeacher } from "@components/Teachers/AddTeacher";
+export { default as TeacherFilterCourse } from "@components/Teachers/FilterCourse";
 
 //students
 export { default as StudentContent } from "@components/Students/HomeContent.jsx";

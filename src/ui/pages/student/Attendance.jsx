@@ -71,7 +71,7 @@ const Attendance = () => {
   };
 
   return (
-    <div className='content' style={{ margin: '60px 10px 50px 10px', width: '95%' }}>
+    <div>
       <div className='header-container'>
         <Title>Asistencia</Title>
         <Space direction='vertical'>
