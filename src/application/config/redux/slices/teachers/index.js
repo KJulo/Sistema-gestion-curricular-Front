@@ -4,6 +4,7 @@ import { createSlice } from '@reduxjs/toolkit';
 import { courses } from '@constants/teacher/virtualClass.js';
 import { courseNames } from '@constants/teacher/coursesNames';
 import { students } from '@constants/teacher/students';
+import { studentsMarks } from '@constants/teacher/studentsMarks';
 
 export const teacherSlice = createSlice({
     name: 'teacher',
@@ -15,11 +16,12 @@ export const teacherSlice = createSlice({
       },
       students: {
         attendance: students.map((student) => ({ ...student, asistencia: false })),
+        marks: studentsMarks,
       }
     },
     reducers: {
       updateStudents: (state, action) => {
-        state.students = action;
+        state.students = action.payload;
       },
       updateStudentAttendance: (state, action) => {
         const payload = action.payload;

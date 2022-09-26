@@ -19,41 +19,52 @@ import {
 import { AdminTableLayout } from "@containers/index";
 
 //constants
-import { columns } from "@constants/teacher/attendanceTable";
+import { columns } from "@constants/teacher/marksTable";
+
+const getMarkTest = (allMarks, test) => {
+  return allMarks.notas.map((marks) => marks.evaluacion === test ? marks.nota : null ) // devuelve un arreglo con muchos null y una nota
+  .find(nota => nota !== null ) // devuelve solo la nota
+}
 
 const Marks = () => {
   const dispatch = useDispatch();
-  const content = useSelector((store) => store.teacher.students.attendance);
+  const content = useSelector((store) => store.teacher.students.marks);
   
   // Al hacer click en el icono de switch, cambiar estado de asiste
   const handleClick = (record) => {
-    const cambio = record.asistencia ? false : true;
-    dispatch(updateStudentAttendance({ id: record.id, asistencia: cambio }));
+    console.log(record);
   }
 
-  // Columna de edición, se agrega ahora con un concat
-  const editColumn = [{
-    title: "Editar",
-    key: "action",
+  // Obtener nombres de los test para las columnas
+  const testNames = new Set();
+  content.map((student) =>
+    student.notas.map((test) =>
+      testNames.add(test.evaluacion)
+  ));
+
+  // Columnas adicionales por cada prueba del curso
+  const testColums = Array.from(testNames).map((test) => ({
+    title: test,
+    key: test.toLowerCase(),
     render: (record) => {
       return (
         <div
-        style={{ cursor: 'pointer' }}
+        style={getMarkTest(record, test) >= 4 ? { color: 'blue' } : { color: 'red' } }
         onClick={() => {
           handleClick(record)
         }}
         >
-          <a>
-            <SwapOutlined style={{ marginRight: "6px" }} /> Editar
-          </a>
+          { getMarkTest(record, test) }
         </div>
       );
     },
-  }]
+  }))
+
+  console.log("testColumns: ", testColums);
   
   return (
     <div>
-      <DefaultTitleContent title={"Módulo Asistencia"} action="" />
+      <DefaultTitleContent title={"Módulo Notas"} action="" />
       <div
         style={true ? {} : { pointerEvents: "none" }}
       >
@@ -63,8 +74,8 @@ const Marks = () => {
           tableContent={
             <ContentTable
               content={content}
-              columns={columns.concat(editColumn)}
-              type="course"
+              columns={columns.concat(testColums)}
+              type="scroll"
             />
           }
         />
