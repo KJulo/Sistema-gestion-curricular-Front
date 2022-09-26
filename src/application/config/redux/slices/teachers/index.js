@@ -34,7 +34,7 @@ export const teacherSlice = createSlice({
         });
         return {
           ...state,
-          student: {
+          students: {
               ...state.students,
               attendance: studentList
           }
