@@ -1,0 +1,118 @@
+export const studentsMarks = [
+  {
+    id: '2k1928d9218',
+    nombres: 'John',
+    apellidos: 'Brown',
+    idCurso: '12s21ksjh2j12k4',
+    notas: [
+      {
+        fecha: '2022-09-02',
+        asignatura: 'Matemáticas',
+        evaluacion: 'Prueba 1 Matemáticas',
+        nota: 5.5,
+        total: 0.6,
+      },
+      {
+        fecha: '2022-09-03',
+        asignatura: 'Matemáticas',
+        evaluacion: 'Prueba 2 Matemáticas',
+        nota: 6.5,
+        total: 0.4,
+      },
+      {
+        fecha: '2022-09-06',
+        asignatura: 'Lenguaje',
+        evaluacion: 'Prueba 1 Lenguaje',
+        nota: 5,
+        total: 1,
+      },
+    ],
+  },
+  {
+    id: '2k14124214v218',
+    nombres: 'Jose',
+    apellidos: 'Lopez',
+    idCurso: '12s21ksjh2j12k4',
+    notas: [
+      {
+        fecha: '2022-09-02',
+        asignatura: 'Matemáticas',
+        evaluacion: 'Prueba 1 Matemáticas',
+        nota: 7,
+        total: 0.6,
+      },
+      {
+        fecha: '2022-09-03',
+        asignatura: 'Matemáticas',
+        evaluacion: 'Prueba 2 Matemáticas',
+        nota: 3.5,
+        total: 0.4,
+      },
+      {
+        fecha: '2022-09-06',
+        asignatura: 'Lenguaje',
+        evaluacion: 'Prueba 1 Lenguaje',
+        nota: 6,
+        total: 1,
+      },
+    ],
+  },
+  {
+    id: '2k142f14f12218',
+    nombres: 'Juan',
+    apellidos: 'Hernandez',
+    idCurso: '12sf424f234fj12k4',
+    notas: [
+      {
+        fecha: '2022-09-02',
+        asignatura: 'Matemáticas',
+        evaluacion: 'Prueba 1 Matemáticas',
+        nota: 5.5,
+        total: 0.6,
+      },
+      {
+        fecha: '2022-09-03',
+        asignatura: 'Historia',
+        evaluacion: 'Prueba 1 Historia',
+        nota: 6.5,
+        total: 0.4,
+      },
+      {
+        fecha: '2022-09-06',
+        asignatura: 'Ed. Física',
+        evaluacion: 'Prueba 1 Ed. Física',
+        nota: 5,
+        total: 1,
+      },
+    ],
+  },
+  {
+    id: '2k15f3g23218',
+    nombres: 'Marcos',
+    apellidos: 'Velasquez',
+    idCurso: '12sf234f23d4d12k4',
+    notas: [
+      {
+        fecha: '2022-09-02',
+        asignatura: 'Matemáticas',
+        evaluacion: 'Prueba 1 Matemáticas',
+        nota: 5.5,
+        total: 0.6,
+      },
+      {
+        fecha: '2022-09-03',
+        asignatura: 'Matemáticas',
+        evaluacion: 'Prueba 2 Matemáticas',
+        nota: 6.5,
+        total: 0.4,
+      },
+      {
+        fecha: '2022-09-06',
+        asignatura: 'Ciencias',
+        evaluacion: 'Prueba 1 Ciencias',
+        nota: 5,
+        total: 1,
+      },
+    ],
+  },
+];

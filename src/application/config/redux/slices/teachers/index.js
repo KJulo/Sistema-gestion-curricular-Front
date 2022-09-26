@@ -13,17 +13,17 @@ export const teacherSlice = createSlice({
         attendance: courseNames,
         courseFilters: courseNames.map((course) => course.nombre),
       },
-      student: {
+      students: {
         attendance: students.map((student) => ({ ...student, asistencia: false })),
       }
     },
     reducers: {
       updateStudents: (state, action) => {
-        state.student = action;
+        state.students = action;
       },
       updateStudentAttendance: (state, action) => {
         const payload = action.payload;
-        const studentList = state.student.attendance.map((student) => {
+        const studentList = state.students.attendance.map((student) => {
           if (payload.id === student.id) return {
             ...student,
             asistencia: payload.asistencia
@@ -33,7 +33,7 @@ export const teacherSlice = createSlice({
         return {
           ...state,
           student: {
-              ...state.student,
+              ...state.students,
               attendance: studentList
           }
         }

@@ -25,7 +25,7 @@ import { columns } from "@constants/teacher/attendanceTable";
 
 const Attendance = () => {
   const dispatch = useDispatch();
-  const content = useSelector((store) => store.teacher.student.attendance);
+  const content = useSelector((store) => store.teacher.students.attendance);
   
   // Al hacer click en el icono de switch, cambiar estado de asiste
   const handleClick = (record) => {
