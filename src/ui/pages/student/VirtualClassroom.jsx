@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 // antd
-import { Collapse, Typography, Space, Menu } from 'antd';
+import { Typography, Space, Menu } from 'antd';
 import { AppstoreOutlined, CalendarOutlined, CloseSquareFilled, MoreOutlined } from '@ant-design/icons';
 const { Title } = Typography;
 
@@ -167,7 +167,17 @@ const VitualClassroom = () => {
 
   return (
     <div>
-      <Header title='Aula Virtual' date={currentDate}/>
+      <div
+        style={{
+          justifyContent: "space-between",
+          marginTop: "6px",
+          alignItems: "flex-start",
+          display: "flex",
+          marginBottom: "10px",
+          flexDirection: 'column',
+      }}>
+        <Title>Aula Virtual</Title>
+      </div>
 
       <Menu onClick={onClickMenu} selectedKeys={[currentMenu.id]} mode="horizontal" items={menuItems} defaultSelectedKeys={currentMenu.id} />
       <Menu onClick={onClickSubMenu} selectedKeys={[currentSubMenu.id]} mode="horizontal" items={subMenuItems} defaultSelectedKeys={currentMenu.menus[0].nombre} />

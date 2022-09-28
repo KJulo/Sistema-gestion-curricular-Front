@@ -20,17 +20,9 @@ import { student } from '@constants/users';
 const Home = () => {
   return (
     <div
-      className='container-bg'
-      style={{
-        padding: 30,
-        margin: '24px 16px',
-        minHeight: 280,
-      }}>
+      style={{ minHeight: 280 }}>
 
-      <Title style={{ padding: 20 }}>
-        {' '}
-        Hola, {student.nombres} {student.apellidos} !
-      </Title>
+      <Title> Hola, {student.nombres} {student.apellidos} ! </Title>
 
       <div
         className='flex-container'
