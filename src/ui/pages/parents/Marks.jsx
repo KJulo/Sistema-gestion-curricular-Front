@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import '@styles/Marks.less';
 
 // antd
-import { Checkbox, Collapse, Typography, Space, DatePicker, Button } from 'antd';
+import { Checkbox, Collapse, Typography, Statistic, DatePicker, Button } from 'antd';
 import { CalendarOutlined, ReconciliationFilled } from '@ant-design/icons';
 import moment from 'moment';
 const { Title } = Typography;
@@ -27,14 +27,13 @@ const courses = [
   }
 ];
 
-const getAverageHeader = (studentsArray) => {
+const StudentsAverage = ({ students }) => {
   return (
-    studentsArray.map((student) => (
-      <div className='average-container'>
-        <Title level={5} style={{ marginBottom: 5 }}>
-          {student.nombres.split(' ')[0]} {student.apellidos[0]} - Promedio {useAverage(student.notas, 2)}
-        </Title>
-        <ReconciliationFilled style={{ fontSize: 'large' }} />
+    students.map((student) => (
+      <div>
+        <Statistic
+        title={student.nombres.split(' ')[0] + ' ' + student.apellidos[0]}
+        value={'Promedio: ' + useAverage(student.notas, 2)} />
       </div>
     )))
 }
@@ -86,17 +85,9 @@ const Marks = () => {
 
   return (
     <div>
-      <div className='header-container'>
+      <div style={{ marginBottom: 20 }}>
         <Title>Notas</Title>
-        <Space direction='vertical'>
-          <div className='date-container'>
-            <Title level={5} style={{ marginBottom: 5 }}>
-              {currentDate}
-            </Title>
-            <CalendarOutlined twoToneColor='#bfbfbf' style={{ fontSize: 'large' }} />
-          </div>
-          {getAverageHeader(students)}
-        </Space>
+        <StudentsAverage students={students} />
       </div>
 
       <Title level={3}>

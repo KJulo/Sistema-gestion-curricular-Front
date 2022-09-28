@@ -60,6 +60,11 @@ const Attendance = () => {
   const [userState, setUserState] = useState(student);
   const [selectedDate, setSelectedDate] = useState(currentDate);
 
+  // Esto se hace porque el useState se actuliza por renderizado
+  useEffect(() => {
+    setSelectedDate(selectedDate);
+  }, [currentDate])
+
   useEffect(() => {
     // Cuando se elimina la fecha, la fecha por defecto queda en formato YYYY-MM
     if (selectedDate.split('-')[0].length == 4)
@@ -72,7 +77,7 @@ const Attendance = () => {
 
   return (
     <div>
-      <div className='header-container'>
+      <div style={{ marginBottom: 20 }}>
         <Title>Asistencia</Title>
         <Space direction='vertical'>
           <DatePicker
@@ -82,6 +87,7 @@ const Attendance = () => {
           />
         </Space>
       </div>
+      
       <Title level={3}>
         {student.nombres} {student.apellidos}
       </Title>

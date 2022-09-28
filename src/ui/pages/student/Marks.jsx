@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import '@styles/Marks.less';
 
 // antd
-import { Checkbox, Collapse, Typography, Space, DatePicker, Button } from 'antd';
+import { Statistic, Typography, Space, DatePicker, Button } from 'antd';
 import { CalendarOutlined, ReconciliationFilled } from '@ant-design/icons';
 const { Title } = Typography;
 
@@ -124,6 +124,15 @@ const student = {
   ],
 };
 
+const Header = ({...props}) => {
+  return (
+    <div style={{ marginBottom: 20 }}>
+      <Title>{props.titulo}</Title>
+      <Statistic title="Promedio" value={props.promedio} />
+    </div>
+  )
+}
+
 const Marks = () => {
   const currentDate = useGetCurrentDay() + '-' + useGetCurrentMonth() + '-' + useGetCurrentYear();
   const [userState, setUserState] = useState(student);
@@ -134,23 +143,7 @@ const Marks = () => {
     
   return (
     <div>
-      <div className='header-container'>
-        <Title>Notas</Title>
-        <Space direction='vertical'>
-          <div className='date-container'>
-            <Title level={5} style={{ marginBottom: 5 }}>
-              {currentDate}
-            </Title>
-            <CalendarOutlined twoToneColor='#bfbfbf' style={{ fontSize: 'large' }} />
-          </div>
-          <div className='average-container'>
-            <Title level={5} style={{ marginBottom: 5 }}>
-              Promedio {useAverage(userState.notas, 2)}
-            </Title>
-            <ReconciliationFilled style={{ fontSize: 'large' }} />
-          </div>
-        </Space>
-      </div>
+      <Header titulo='Notas' promedio={useAverage(userState.notas, 2)}/>
 
       <Title level={3}>
         {userState.nombres} {userState.apellidos}

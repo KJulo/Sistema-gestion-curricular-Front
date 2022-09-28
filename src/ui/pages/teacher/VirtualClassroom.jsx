@@ -87,7 +87,7 @@ const VitualClassroom = () => {
     setCurrentCourse(newCourse)
   }
 
-  const courseFilter = () => {
+  const CourseFilter = () => {
     return (
       <Select size="large" defaultValue={courseNames[0]} onChange={handleChange}>
         {courseNames.map((filter, index) => (
@@ -114,7 +114,18 @@ const VitualClassroom = () => {
 
   return isLoaded ? (
     <div>
-      <Header title='Aula Virtual' date={currentDate} filterOptions={courseFilter()} />
+      <div
+        style={{
+          justifyContent: "space-between",
+          marginTop: "6px",
+          alignItems: "flex-start",
+          display: "flex",
+          marginBottom: "20px",
+          flexDirection: 'column',
+      }}>
+        <Title>Aula Virtual</Title>
+        <CourseFilter />
+      </div>
 
       <Menu
         onClick={onClickMenu}
@@ -129,7 +140,7 @@ const VitualClassroom = () => {
         mode='horizontal'
         items={subMenuItems}
         defaultSelectedKeys={currentMenu.menus[0].nombre}
-      />
+        />
 
       <MenuContent content={currentSubMenu.contenido} />
     </div>

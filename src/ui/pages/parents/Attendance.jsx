@@ -134,7 +134,7 @@ const Attendance = () => {
 
   return familyState ? (
     <div>
-      <div className='header-container'>
+      <div style={{ marginBottom: 20 }}>  
         <Title>Asistencia</Title>
         <Space direction='vertical'>
           <DatePicker
