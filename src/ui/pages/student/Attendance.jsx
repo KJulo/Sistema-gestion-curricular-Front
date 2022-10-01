@@ -12,24 +12,24 @@ const { Panel } = Collapse;
 import {
   useGetCurrentMonth,
   useGetCurrentYear,
-  useGetDateDaysFirst,
   useGetDateMonthFirst,
-  useIsSameMonth,
 } from '@hooks/useDate';
 
-// components
-import HomeNavBar from '@components/HomeNavBar';
+//components
+import {
+  ContentTable,
+  SearchContent,
+  TeacherFilterCourse,
+  DefaultTitleContent,
+} from '@components/index';
 
-// constants
-import { studentMenu } from '@constants/menu.js';
+//containers
+import { AdminTableLayout } from "@containers/index";
 
-let course = {
-  id: '12s21ksjh2j12k4',
-  nombre: '1ro Básico',
-  año: '2022',
-};
+//constants
+import { columns } from "@constants/attendanceTable";
 
-let student = {
+const student = {
   id: '2k1928d9218',
   nombres: 'John',
   apellidos: 'Brown',
@@ -87,28 +87,22 @@ const Attendance = () => {
           />
         </Space>
       </div>
-      
-      <Title level={3}>
-        {student.nombres} {student.apellidos}
-      </Title>
-      <table className='table'>
-        <thead className='thead'>
-          <tr className='trHead'>
-            <th>Fecha</th>
-            <th>Asiste</th>
-          </tr>
-        </thead>
-        <tbody className='tbody'>
-          {userState.asistencia.map((date) =>
-            useIsSameMonth(selectedDate, date) ? (
-              <tr className='trBody'>
-                <td>{useGetDateDaysFirst(date.fecha)}</td>
-                <td>{date.presente ? 'Si' : 'No'}</td>
-              </tr>
-            ) : null
-          )}
-        </tbody>
-      </table>
+
+      <div
+        style={true ? {} : { pointerEvents: "none" }}
+      >
+        <AdminTableLayout
+          searchInput={""}
+          // selectFilter={<TeacherFilterCourse />}
+          tableContent={
+            <ContentTable
+              content={userState.asistencia}
+              columns={columns}
+              type="course"
+            />
+          }
+        />
+      </div>
     </div>
   );
 };

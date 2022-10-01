@@ -59,8 +59,6 @@ const Marks = () => {
       );
     },
   }))
-
-  console.log("testColumns: ", testColums);
   
   return (
     <div>
