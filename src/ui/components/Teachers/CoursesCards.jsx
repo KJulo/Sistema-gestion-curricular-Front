@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 // antd
-import { Typography, Button, Modal } from 'antd';
+import { Typography, Button, Modal, Row } from 'antd';
 const { Title } = Typography;
 
 // styles
@@ -40,15 +40,17 @@ const CoursesCards = ({courses}) => {
 
   return (
     <div className='card-container'>
-      {courses.map((course) => (
-        <div onClick={() => showModal(course)}>
-          <Card
-            title={course.nombre}
-            content={course.año}
-            icon={course.nombre.split(' ')[0] + ' ' + course.nombre.split(' ')[1][0]}
-            />
-        </div>
-      ))}
+      <Row gutter={16}>
+        {courses.map((course) => (
+          <div onClick={() => showModal(course)}>
+            <Card
+              title={course.nombre}
+              content={course.año}
+              icon={course.nombre.split(' ')[0] + ' ' + course.nombre.split(' ')[1][0]}
+              />
+          </div>
+        ))}
+      </Row>
 
       <Modal
         title={"Planificación " + selectedCourse.nombre}
