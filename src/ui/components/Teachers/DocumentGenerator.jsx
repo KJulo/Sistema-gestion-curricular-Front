@@ -2,32 +2,28 @@ import React, { Component } from "react";
 
 import { saveAs } from "file-saver";
 import { Packer } from "docx";
-import { experiences, education, skills, achievements } from "@utils/cv-data";
+import { courseInformation } from "@utils/cv-data.js";
 import { DocumentCreator } from "@utils/cv-creator";
 
 const DocumentGenerator = () => {
 
   function generate() {
     const documentCreator = new DocumentCreator();
-    const doc = documentCreator.create([
-      experiences,
-      education,
-      skills,
-      achievements
-    ]);
+    const doc = documentCreator.create(
+      courseInformation
+    );
 
     Packer.toBlob(doc).then(blob => {
-      console.log(blob);
-      saveAs(blob, "example.docx");
-      console.log("Document created successfully");
+      saveAs(blob, "planificacion.docx");
+      console.log("Documento creado");
     });
   }
+
   return (
     <div>
-      Holaa
+      Documento Word listo
       <p>
-        Start editing to see some magic happen :)
-        <button onClick={()=>generate()}>Generate CV with docx!</button>
+        <button onClick={()=>generate()}>Descargar</button>
       </p>
     </div>
   )
