@@ -8,7 +8,6 @@ const NavigationMenu = () => {
   const { pathname } = useLocation();
   const resolver = useResolvedPath(pathname);
   const match = useMatch(resolver.pathname);
-  console.log(match);
   
   const menuItems = [
     {

@@ -162,7 +162,6 @@ const VitualClassroom = () => {
     // buscar el materia del id y setearlo
     let item = currentMenu.menus.find((menu) => menu.id == e.key)
     setCurrentSubMenu(item);
-    console.log("item seleccionado: ",item);
   };
 
   return (

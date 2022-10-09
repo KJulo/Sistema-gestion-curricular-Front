@@ -177,7 +177,6 @@ export const columns = [
           onClick={(e) => {
             e.stopPropagation();
             e.preventDefault();
-            console.log(record);
           }}
         >
           <Link to={`${record.key}`}>

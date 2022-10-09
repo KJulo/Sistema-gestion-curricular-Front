@@ -8,7 +8,7 @@ const { Title } = Typography;
 import '@styles/Home.less';
 
 // components
-import { CoursesCards } from '@components';
+import { CoursesCards } from '@components/index';
 
 // constants
 import { courses } from '@constants/course';

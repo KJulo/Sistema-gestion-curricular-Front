@@ -81,9 +81,7 @@ const VitualClassroom = () => {
   })) : null
 
   const handleChange = (value) => {
-    console.log(value);
     let newCourse = courses[value];
-    console.log(newCourse);
     setCurrentCourse(newCourse)
   }
 
