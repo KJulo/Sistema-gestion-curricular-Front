@@ -1,14 +1,14 @@
-import React from "react";
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Outlet } from "react-router-dom";
+import { fetchTeacher } from '@slices/teachers';      
 
-import { Layout, Menu, Affix, Dropdown, Avatar, Select } from "antd";
-const { Option } = Select;
-import { DownOutlined } from "@ant-design/icons";
-
-import { AdminMenu, TeacherMenu, StudentMenu, ParentsMenu, HandleError } from "@components/index";
-
+import { Layout, Affix} from "antd";
 import SchoolLogo from "@logos/school-icon.svg";
 import "@styles/MainLayout.less";
+
+import { AdminMenu, TeacherMenu, StudentMenu, ParentsMenu, HandleError, UserDropdown } from "@components/index";
+
 
 const { Header, Content, Sider } = Layout;
 
@@ -20,12 +20,14 @@ const SiderMenu = ({ userType }) => {
 }
 
 const MainLayout = ({ userType }) => {
+  const dispatch = useDispatch();
 
-  const menuPerfil = (
-    <Menu style={{marginTop:"12px"}}>
-      <Menu.Item key={"logout"}>Cerrar sesión</Menu.Item>
-    </Menu>
-  );
+  // Buscar al usuario (esto es provicional)
+  useEffect(() => {
+    dispatch(fetchTeacher());
+  }, [])
+
+  const { userData } = useSelector((store) => store.user);
 
   return (
     <Layout>
@@ -65,17 +67,7 @@ const MainLayout = ({ userType }) => {
                 "0px 9px 28px 8px rgb(0 0 0 / 5%), 0px 3px 6px -4px rgb(0 0 0 / 12%)",
             }}
           >
-            <Dropdown overlay={menuPerfil}>
-              <a
-                onClick={(e) => e.preventDefault()}
-                style={{ color: "black", justifyItems: "baseline" }}
-              >
-                <Avatar size="medium" style={{ marginRight: "10px" }}>
-                  {"B"}
-                </Avatar>{" "}
-                Bruno <DownOutlined />
-              </a>
-            </Dropdown>
+            <UserDropdown user={userData}/>
           </Header>
         </Affix>
 

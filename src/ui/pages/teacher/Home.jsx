@@ -16,15 +16,6 @@ import { CoursesCards } from '@components/index';
 import { courses } from '@constants/course';
 
 const Home = () => {
-  const dispatch = useDispatch();
-  const teacher = useSelector((store) => store.teacher.user);
-  console.log(teacher);
-
-  useEffect(() => {
-    dispatch(fetchTeacher());
-  }, [])
-
-  
 
   return (
     <div

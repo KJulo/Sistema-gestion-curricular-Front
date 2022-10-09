@@ -1,4 +1,5 @@
 // Global
+export { default as UserDropdown } from "@components/UserDropdown";
 export { default as Card } from "@components/Card";
 export { default as ContentTable } from "@components/ContentTable";
 export { default as HomeNavBar } from "@components/HomeNavBar";
