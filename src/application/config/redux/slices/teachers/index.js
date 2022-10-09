@@ -9,7 +9,7 @@ import { studentsMarks } from '@constants/teacher/studentsMarks';
 export const teacherSlice = createSlice({
     name: 'teacher',
     initialState: {
-      user: {
+      teacher: {
         id: '',
         id_colegio: '',
         nombres: '',
@@ -31,7 +31,7 @@ export const teacherSlice = createSlice({
     reducers: {
       fetchTeacher: () => {},
       updateTeacher: (state, action) => {
-        state.user = action.payload;
+        state.teacher = { ...state.teacher, ...action.payload };
       },
       updateStudents: (state, action) => {
         state.students = action.payload;

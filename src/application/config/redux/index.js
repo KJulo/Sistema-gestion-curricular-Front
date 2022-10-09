@@ -8,6 +8,7 @@ import teacherSlice from '@slices/teachers';
 import errorReducer from '@slices/error';
 import adminSlice from '@slices/admin';
 import userSlice from '@slices/user';
+import parentSlice from '@slices/parents';
 
 
 const sagaMiddleware = createSagaMiddleware();
@@ -18,6 +19,7 @@ const store = configureStore({
         error: errorReducer,
         admin: adminSlice, 
         teacher: teacherSlice,
+        parent: parentSlice,
         user: userSlice,
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(sagaMiddleware),

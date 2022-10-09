@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Outlet } from "react-router-dom";
-import { fetchTeacher } from '@slices/teachers';      
+import { fetchTeacher } from '@slices/teachers';
+import { fetchParent } from '@slices/parents';      
+import { fetchStudent } from '@slices/students';
+import { fetchAdmin } from '@slices/admin';
 
 import { Layout, Affix} from "antd";
 import SchoolLogo from "@logos/school-icon.svg";
@@ -24,7 +27,10 @@ const MainLayout = ({ userType }) => {
 
   // Buscar al usuario (esto es provicional)
   useEffect(() => {
-    dispatch(fetchTeacher());
+    if (userType === 'admin') dispatch(fetchAdmin());
+    if (userType === 'teacher') dispatch(fetchTeacher());
+    if (userType === 'student') dispatch(fetchStudent());
+    if (userType === 'parent') dispatch(fetchParent());
   }, [])
 
   const { userData } = useSelector((store) => store.user);
