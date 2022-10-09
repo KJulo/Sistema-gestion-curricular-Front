@@ -1,7 +1,7 @@
 import { call, put, takeLatest } from 'redux-saga/effects';
 
 // Reducers
-import { fetchParent, updateParent } from '@slices/admin';
+import { fetchParent, updateParent } from '@slices/parents';
 import { updateUser } from '@slices/user';
 
 // Network
