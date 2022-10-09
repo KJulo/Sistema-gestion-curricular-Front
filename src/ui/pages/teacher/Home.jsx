@@ -8,7 +8,7 @@ const { Title } = Typography;
 import '@styles/Home.less';
 
 // components
-import { CoursesCards } from '@components/index';
+import { CoursesCards, DefaultTitleContent } from '@components/index';
 
 // constants
 import { courses } from '@constants/course';
@@ -19,12 +19,10 @@ const Home = () => {
     <div
       className='body-bg'
       style={{
-        padding: 30,
-        paddingTop: 0,
-        margin: '0px 16px 20px',
+        padding: 0,
         minHeight: 280,
       }}>
-      <Title> Mis Cursos</Title>
+      <DefaultTitleContent title={"Mis Cursos"} action="" />
 
       <div className='flex-container'>
         <CoursesCards courses={courses} />
