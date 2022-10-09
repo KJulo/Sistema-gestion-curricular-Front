@@ -10,6 +10,20 @@ const { Title } = Typography;
 import { useGetCurrentMonth, useGetCurrentYear, useGetCurrentDay } from '@hooks/useDate';
 import { useAverage } from '@hooks/useAverage';
 
+//components
+import {
+  ContentTable,
+  SearchContent,
+  TeacherFilterCourse,
+  DefaultTitleContent,
+} from '@components/index';
+
+//containers
+import { AdminTableLayout } from "@containers/index";
+
+//constants
+import { columns } from "@constants/marksTable";
+
 const course = {
   id: '12s21ksjh2j12k4',
   nombre: '1ro Básico',
@@ -124,13 +138,15 @@ const student = {
   ],
 };
 
-const Header = ({...props}) => {
+const StudentsAverage = ({ students }) => {
   return (
-    <div style={{ marginBottom: 20 }}>
-      <Title>{props.titulo}</Title>
-      <Statistic title="Promedio" value={props.promedio} />
-    </div>
-  )
+    students.map((student) => (
+      <div>
+        <Statistic
+        title={student.nombres.split(' ')[0] + ' ' + student.apellidos[0]}
+        value={'Promedio: ' + useAverage(student.notas, 2)} />
+      </div>
+    )))
 }
 
 const Marks = () => {
@@ -140,39 +156,27 @@ const Marks = () => {
   useEffect(() => {
     console.log(userState);
   }, [])
-    
+
   return (
     <div>
-      <Header titulo='Notas' promedio={useAverage(userState.notas, 2)}/>
-
-      <Title level={3}>
-        {userState.nombres} {userState.apellidos}
-      </Title>
-      <table className='table'>
-        <thead className='thead'>
-          <tr className='trHead'>
-            <th>Fecha</th>
-            <th>Evaluación</th>
-            <th>Nota</th>
-            <th>Total</th>
-          </tr>
-        </thead>
-        <tbody className='tbody'>
-          {userState.notas.map((mark, index) => (
-            <tr className='trBody' key={index}>
-              <td>{mark.fecha}</td>
-              <td>{mark.evaluacion}</td>
-              <td>{mark.nota}</td>
-              <td>{mark.ponderacion * 100}%</td>
-            </tr>
-          ))}
-          <tr className='trBody'>
-            <td>-</td>
-            <td>-</td>
-            <td>Promedio: {useAverage(userState.notas, 2)}</td>
-          </tr>
-        </tbody>
-      </table>
+      <DefaultTitleContent title={"Notas"} action="" />
+      <StudentsAverage students={[userState]} />
+      
+      <div
+        style={true ? {} : { pointerEvents: "none" }}
+      >
+        <AdminTableLayout
+          searchInput={""}
+          // selectFilter={<TeacherFilterCourse />}
+          tableContent={
+            <ContentTable
+              content={student.notas}
+              columns={columns}
+              type="scroll"
+            />
+          }
+        />
+      </div>
     </div>
   );
 };

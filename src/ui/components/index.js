@@ -16,6 +16,7 @@ export { default as AdminMenu } from "@components/Admin/NavigationMenu";
 export { default as TeacherMenu } from "@components/Teachers/NavigationMenu.jsx";
 export { default as AddTeacher } from "@components/Teachers/AddTeacher";
 export { default as TeacherFilterCourse } from "@components/Teachers/FilterCourse";
+export { default as CoursesCards } from "@components/Teachers/CoursesCards";
 
 //students
 export { default as StudentContent } from "@components/Students/HomeContent.jsx";

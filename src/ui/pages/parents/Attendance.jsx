@@ -17,6 +17,18 @@ import {
   useIsSameMonth
 } from '@hooks/useDate';
 
+//containers
+import { AdminTableLayout } from "@containers/index";
+
+//components
+import {
+  ContentTable,
+  DefaultTitleContent,
+} from '@components/index';
+
+// constants
+import { columns } from "@constants/attendanceTable";
+
 const family = {
   idFamily: "2fj2fj98j3gjf",
   parents: [
@@ -80,47 +92,36 @@ const family = {
   ]
 }
 
-const getAsistanceRow = (student, selectedDate) => {
-  let attendance = student.asistencia.map((date) =>
-    useIsSameMonth(selectedDate, date) ? (
-      <tr className='trBody'>
-        <td>{useGetDateDaysFirst(date.fecha)}</td>
-        <td>
-          {date.presente ? (
-            <>
-              'Si' <CheckCircleTwoTone twoToneColor="#52c41a" style={{ marginLeft: 8 }}/>
-            </>
-          ) : (
-            <>
-              'No' <CloseCircleTwoTone twoToneColor="#eb2f96"/>
-            </>
-          )}
-        </td>
-      </tr>
-    ) : null
+
+const CollapsePanel = ({ studentArray }) => {
+  const onChange = (key) => {
+    console.log(key);
+  };
+
+  return (
+    <Collapse onChange={onChange}>
+      {studentArray.map((student, index) => (
+        <Panel header={student.nombres + ' ' + student.apellidos} key={index}>
+          <AdminTableLayout
+            searchInput={""}
+            tableContent={
+              <ContentTable
+                content={student.asistencia}
+                columns={columns}
+                // type="scroll"
+              />
+            }
+          />
+        </Panel>
+      ))}
+    </Collapse>
   );
-
-  
-  if (attendance.find(date => date != null) == null ) {
-    return (
-      <tr className='trBody'>
-        <td>No hay assistencia registrada en este mes</td>
-        <td>-</td>
-      </tr>
-    )
-  }
-
-  return attendance;
-}
+} 
 
 const Attendance = () => {
   const currentDate = useGetCurrentMonth() + '-' + useGetCurrentYear();
-  const [familyState, setFamilyState] = useState(null);
+  const [familyState, setFamilyState] = useState(family);
   const [selectedDate, setSelectedDate] = useState(currentDate);
-
-  useEffect(() => {
-    setFamilyState(family)
-  }, [])
 
   useEffect(() => {
     // Cuando se elimina la fecha, la fecha por defecto queda en formato YYYY-MM
@@ -132,37 +133,22 @@ const Attendance = () => {
     if (dateString != '') setSelectedDate(useGetDateMonthFirst(dateString));
   };
 
-  return familyState ? (
+  return (
     <div>
-      <div style={{ marginBottom: 20 }}>  
-        <Title>Asistencia</Title>
-        <Space direction='vertical'>
-          <DatePicker
-            defaultValue={moment(currentDate, 'MM-YYYY')}
-            picker='month'
-            onChange={onChange}
-          />
-        </Space>
+      <DefaultTitleContent title={"Asistencia"} action="" />
+      <Space direction='vertical'>
+        <DatePicker
+          defaultValue={moment(currentDate, 'MM-YYYY')}
+          picker='month'
+          onChange={onChange}
+        />
+      </Space>
+
+      <div style={{ marginTop: 22, maxWidth: 600 }}>
+        <CollapsePanel studentArray={familyState.students} />
       </div>
-      <Collapse accordion>
-        {familyState.students.map((student, index) => (
-          <Panel header={student.nombres +" "+ student.apellidos} key={index}>
-            <table className='table'>
-              <thead className='thead'>
-                <tr className='trHead'>
-                  <th>{selectedDate}</th>
-                  <th>Asiste</th>
-                </tr>
-              </thead>
-              <tbody className='tbody'>
-                {getAsistanceRow(student, selectedDate)}
-              </tbody>
-            </table>
-          </Panel>
-        ))}
-      </Collapse>
     </div>
-  ) : null;
-};
+  );
+}
 
 export default Attendance;

@@ -26,13 +26,14 @@ const Home = () => {
     setParent(parents.parents[0])
   }, [])
 
-  const studentsCards = (studentsList) => {
+  const StudentsCards = ({students}) => {
     return (
       <div className='card-container'>
-        {studentsList.map((student) => (
+        {students.map((student) => (
           <Card
             title={student.nombres + ' ' + student.apellidos}
             content={student.curso}
+            icon="user"
           />
         ))}
       </div>
@@ -49,14 +50,14 @@ const Home = () => {
       <Title>
         {' '}
         Hola, {parent.nombres} {parent.apellidos} !
-      </Title>
+      </Title>  
 
       <div
         className='flex-container'
         style={{ padding: '1rem', justifyContent: 'space-around' }}>
         <div style={ { display: 'contents' } }> 
           <img src={SchoolImg} alt='Logo Colegio' className='fit-image' />
-          {studentsCards(students)}
+          <StudentsCards students={students} />
         </div>
         <Notifications />
       </div>

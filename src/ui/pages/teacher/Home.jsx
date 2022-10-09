@@ -1,14 +1,17 @@
-import React from 'react';
-
-// constants
-import { courses } from '@constants/course';
+import React, { useState } from 'react';
 
 // antd
-import { Typography } from 'antd';
+import { Typography, Button, Modal } from 'antd';
 const { Title } = Typography;
 
 // styles
 import '@styles/Home.less';
+
+// components
+import { CoursesCards } from '@components';
+
+// constants
+import { courses } from '@constants/course';
 
 const Home = () => {
   return (
@@ -23,14 +26,7 @@ const Home = () => {
       <Title> Mis Cursos</Title>
 
       <div className='flex-container'>
-        {courses.map((course) => {
-          return (
-            <div className='course-container'>
-              <div className='box-container' />
-              {course.nombre}
-            </div>
-          );
-        })}
+        <CoursesCards courses={courses} />
       </div>
     </div>
   );

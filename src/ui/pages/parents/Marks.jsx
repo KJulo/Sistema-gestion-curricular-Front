@@ -9,23 +9,20 @@ const { Title } = Typography;
 const { Panel } = Collapse;
 
 // hooks
-import { useGetCurrentMonth, useGetCurrentYear, useGetCurrentDay } from '@hooks/useDate';
 import { useAverage } from '@hooks/useAverage';
+
+//containers
+import { AdminTableLayout } from "@containers/index";
+
+//components
+import {
+  ContentTable,
+  DefaultTitleContent,
+} from '@components/index';
 
 // constants
 import { family } from '@constants/familyMarks.js';
-
-const courses = [
-  {
-  id: '12s21ksjh2j12k4',
-  nombre: '1ro Básico',
-  año: '2022',
-  },{
-  id: 'd129j3d8129kjsdad',
-  nombre: "2do Medio",
-  año: '2022'
-  }
-];
+import { columns } from "@constants/marksTable";
 
 const StudentsAverage = ({ students }) => {
   return (
@@ -38,72 +35,43 @@ const StudentsAverage = ({ students }) => {
     )))
 }
 
-const getNames = (arrayPerson) => {
-  {arrayPerson.map((person) => {
-    return person.nombres + '' + person.apellidos + '\n';
-  })}
-}
+const CollapsePanel = ({ studentArray }) => {
+  const onChange = (key) => {
+    console.log(key);
+  };
 
-const getMarksColumns = () => {
   return (
-    <thead className='thead'>
-      <tr className='trHead'>
-        <th>Fecha</th>
-        <th>Evaluación</th>
-        <th>Nota</th>
-        <th>Ponderacion</th>
-      </tr>
-    </thead>
-  )
-}
-
-const getMarksRows = (student) => {
-  return (
-    <tbody className='tbody'>
-      {student.notas.map((mark, index) => (
-        <tr className='trBody' key={index}>
-          <td>{mark.fecha}</td>
-          <td>{mark.evaluacion}</td>
-          <td>{mark.nota}</td>
-          <td>{mark.ponderacion * 100}%</td>
-        </tr>
+    <Collapse onChange={onChange}>
+      {studentArray.map((student, index) => (
+        <Panel header={student.nombres + ' ' + student.apellidos} key={index}>
+          <AdminTableLayout
+            searchInput={""}
+            tableContent={
+              <ContentTable
+                content={student.notas}
+                columns={columns}
+                type="scroll"
+              />
+            }
+          />
+        </Panel>
       ))}
-      <tr className='trBody'>
-        <td>-</td>
-        <td>-</td>
-        <td>Promedio: {useAverage(student.notas, 2)}</td>
-      </tr>
-    </tbody>
-  )
-}
+    </Collapse>
+  );
+} 
 
 const Marks = () => {
-  const currentDate = useGetCurrentDay() + '-' + useGetCurrentMonth() + '-' + useGetCurrentYear();
   const [familyState, setFamily] = useState(family);
   const { parents, students } = familyState;
 
-
   return (
     <div>
-      <div style={{ marginBottom: 20 }}>
-        <Title>Notas</Title>
-        <StudentsAverage students={students} />
+      <DefaultTitleContent title={"Notas"} action="" />
+      <StudentsAverage students={familyState.students} />
+      
+      <div style={{ marginTop: 22 }}>
+        <CollapsePanel studentArray={familyState.students} />
       </div>
-
-      <Title level={3}>
-        {getNames(students)}
-      </Title>
-
-      <Collapse accordion>
-        {familyState.students.map((student, index) => (
-          <Panel header={student.nombres +" "+ student.apellidos} key={index}>
-            <table className='table'>
-              {getMarksColumns()}
-              {getMarksRows(student)}
-            </table>
-          </Panel>
-        ))}
-      </Collapse>
     </div>
   );
 };
