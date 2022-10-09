@@ -9,6 +9,15 @@ import { studentsMarks } from '@constants/teacher/studentsMarks';
 export const teacherSlice = createSlice({
     name: 'teacher',
     initialState: {
+      user: {
+        id: '',
+        id_colegio: '',
+        nombres: '',
+        apellidos: '',
+        rut: '',
+        constrasena: '',
+        correo: '',
+      },
       courses: {
         virtualClasses: courses,
         attendance: courseNames,
@@ -20,6 +29,10 @@ export const teacherSlice = createSlice({
       }
     },
     reducers: {
+      fetchTeacher: () => {},
+      updateTeacher: (state, action) => {
+        state.user = action.payload;
+      },
       updateStudents: (state, action) => {
         state.students = action.payload;
       },
@@ -47,6 +60,8 @@ export const teacherSlice = createSlice({
 export const {
   courseFiltersUpdate,
   updateStudentAttendance,
+  fetchTeacher,
+  updateTeacher,
 } = teacherSlice.actions;
 
 // exportar reducer del slice para mandarlo a la store

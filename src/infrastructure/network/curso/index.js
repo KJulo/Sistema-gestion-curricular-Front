@@ -1,4 +1,4 @@
-import services from "@servuces/curso/index";
+import services from "@services/curso/index";
 
 const { baseCursoURI, cursoURI } = services();
 

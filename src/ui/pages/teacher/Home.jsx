@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchTeacher } from '@slices/teachers';
 
 // antd
 import { Typography, Button, Modal } from 'antd';
@@ -14,6 +16,16 @@ import { CoursesCards } from '@components/index';
 import { courses } from '@constants/course';
 
 const Home = () => {
+  const dispatch = useDispatch();
+  const teacher = useSelector((store) => store.teacher.user);
+  console.log(teacher);
+
+  useEffect(() => {
+    dispatch(fetchTeacher());
+  }, [])
+
+  
+
   return (
     <div
       className='body-bg'
