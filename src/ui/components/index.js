@@ -9,6 +9,7 @@ export { default as FilterCourse } from "@components/FilterCourse";
 export { default as AddCourse } from "@components/AddCourse";
 export { default as SubTitleContent } from "@components/SubTitleContent";
 export { default as HandleError } from '@components/Error/HandleError';
+export { default as LoadingScreen } from '@components/LoadingScreen';
 
 //admin
 export { default as AdminMenu } from "@components/Admin/NavigationMenu";

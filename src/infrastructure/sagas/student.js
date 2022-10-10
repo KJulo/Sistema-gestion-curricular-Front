@@ -12,8 +12,8 @@ function* getStudent() {
     const response = yield call(alumno.getStudents);
     const studentList = response.data.data;
     const userData = studentList[0]
-    yield put(updateStudent(userData));
-    yield put(updateUser(userData));
+    yield put(updateStudent({...userData, tipo: 'estudiante' }));
+    yield put(updateUser({...userData, tipo: 'estudiante' }));
   } catch(e) {
     console.log(e);
   }

@@ -19,6 +19,7 @@ export const teacherSlice = createSlice({
         correo: '',
       },
       courses: {
+        basicInfo: [],
         virtualClasses: courses,
         attendance: courseNames,
         courseFilters: courseNames.map((course) => course.nombre),
@@ -30,8 +31,12 @@ export const teacherSlice = createSlice({
     },
     reducers: {
       fetchTeacher: () => {},
+      fetchCourses: () => {},
       updateTeacher: (state, action) => {
         state.teacher = { ...state.teacher, ...action.payload };
+      },
+      updateCourses: (state, action) => {
+        state.courses.basicInfo = action.payload;
       },
       updateStudents: (state, action) => {
         state.students = action.payload;
@@ -61,7 +66,9 @@ export const {
   courseFiltersUpdate,
   updateStudentAttendance,
   fetchTeacher,
+  fetchCourses,
   updateTeacher,
+  updateCourses,
 } = teacherSlice.actions;
 
 // exportar reducer del slice para mandarlo a la store

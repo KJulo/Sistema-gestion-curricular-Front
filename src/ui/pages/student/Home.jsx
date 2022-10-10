@@ -14,10 +14,15 @@ import '@styles/Home.less';
 import SchoolImg from '@logos/school-img.png';
 
 // constants
-import { student } from '@constants/users';
+import { useDispatch, useSelector } from 'react-redux';
 
 
 const Home = () => {
+  const dispatch = useDispatch();
+  const { student } = useSelector((store) => store.student);
+
+  // *fetch notifications
+
   return (
     <div
       style={{ minHeight: 280 }}>

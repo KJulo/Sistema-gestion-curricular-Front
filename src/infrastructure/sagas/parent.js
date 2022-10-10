@@ -12,8 +12,8 @@ function* getParent() {
     const response = yield call(apoderado.getParents);
     const parentList = response.data.data;
     const userData = parentList[0]
-    yield put(updateParent(userData));
-    yield put(updateUser(userData));
+    yield put(updateParent({...userData, tipo: 'apoderado' }));
+    yield put(updateUser({...userData, tipo: 'apoderado' }));
   } catch(e) {
     console.log(e);
   }
