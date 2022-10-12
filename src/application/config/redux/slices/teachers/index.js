@@ -25,6 +25,7 @@ export const teacherSlice = createSlice({
         courseFilters: courseNames.map((course) => course.nombre),
       },
       students: {
+        list: [],
         attendance: students.map((student) => ({ ...student, asistencia: false })),
         marks: studentsMarks,
       }
@@ -32,6 +33,8 @@ export const teacherSlice = createSlice({
     reducers: {
       fetchTeacher: () => {},
       fetchCourses: () => {},
+      fetchStudents: () => {},
+      fetchStudentsNotes: () => {},
       updateTeacher: (state, action) => {
         state.teacher = { ...state.teacher, ...action.payload };
       },
@@ -39,7 +42,23 @@ export const teacherSlice = createSlice({
         state.courses.basicInfo = action.payload;
       },
       updateStudents: (state, action) => {
-        state.students = action.payload;
+        state.students.list = action.payload.map((student) => {
+          return { ...student, notas: [], asistencia: {} }
+        });
+      },
+      updateStudentsNotes: () => {
+        const marksList = action.payload;
+
+        const studentsWithNotes = state.students.list.map((student) => { // recorrer la lista de estudiantes
+          const mark = marksList.find(e => e.id_alumno === student.id); // ver si hay nota para el estudiante
+          if (mark) {
+            return { ...student, notas: [...student.notas, mark]}  // retorna al estudiante añadiendo la nueva nota
+          } else {
+            return student
+          }
+        })
+        
+        state.students.list = studentsWithNotes
       },
       updateStudentAttendance: (state, action) => {
         const payload = action.payload;
@@ -67,8 +86,12 @@ export const {
   updateStudentAttendance,
   fetchTeacher,
   fetchCourses,
+  fetchStudents,
+  fetchStudentsNotes,
   updateTeacher,
   updateCourses,
+  updateStudents,
+  updateStudentsNotes,
 } = teacherSlice.actions;
 
 // exportar reducer del slice para mandarlo a la store

@@ -12,8 +12,8 @@ function* getAdmin() {
     const response = yield call(administrador.getAdmins);
     const adminList = response.data.data;
     const userData = adminList[0]
-    yield put(updateAdmin(userData));
-    yield put(updateUser(userData));
+    yield put(updateAdmin({ ...userData, tipo: 'administrador' }));
+    yield put(updateUser({ ...userData, tipo: 'administrador' }));
   } catch(e) {
     console.log(e);
   }
