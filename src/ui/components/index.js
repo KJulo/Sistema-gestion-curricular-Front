@@ -29,3 +29,7 @@ export { default as AddPupilo } from "@components/Students/AddPupilo";
 //Parents
 export { default as ParentsMenu } from "@components/Parents/NavigationMenu.jsx";
 export { default as AddParent } from "@components/Parents/AddParent";
+
+//Forum
+export { default as ForumContent } from "@components/ForumContent";
+export { default as FilterButton } from "@components/FilterButton";

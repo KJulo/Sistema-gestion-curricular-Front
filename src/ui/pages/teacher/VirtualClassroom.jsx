@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 
 // antd
-import { Typography, Space, Menu, Select } from 'antd';
-import { AppstoreOutlined, CalendarOutlined, CloseSquareFilled, MoreOutlined } from '@ant-design/icons';
+import { Typography, Space, Menu, Select, Modal, Input } from 'antd';
+import { AppstoreOutlined, PlusSquareOutlined, CloseSquareFilled, MoreOutlined, RightOutlined } from '@ant-design/icons';
+const { TextArea } = Input;
 
 // styles
 import '@styles/Home.less';
@@ -12,6 +13,9 @@ import '@styles/VirtualClass.less';
 // hooks
 import { useGetCurrentMonth, useGetCurrentYear, useGetCurrentDay } from '@hooks/useDate';
 import { useEffect } from 'react';
+
+//components
+import { ForumContent, FilterButton } from '@components/index';
 
 //constants
 const { Title } = Typography;
@@ -34,21 +38,9 @@ const Header = ({title, filterOptions}) => {
   )
 }
 
-const MenuContent = ({content}) => {
-  return (
-    <div className='content-container'>
-        {content.map((item) => (
-          <div className='item-container'>
-          <h3>{'> ' + item.titulo}</h3>
-          <p>{item.cuerpo}</p>
-        </div>
-      ))}
-    </div>
-  )
-}
-
 const VitualClassroom = () => {
   const currentDate = useGetCurrentDay() + '-' + useGetCurrentMonth() + '-' + useGetCurrentYear();
+  const [isAddOpen, setIsAddOpen] = useState(false);
 
   const courses = useSelector((store) => store.teacher.courses.virtualClasses);
   const [currentCourse, setCurrentCourse] = useState(courses[0]);
@@ -85,16 +77,6 @@ const VitualClassroom = () => {
     setCurrentCourse(newCourse)
   }
 
-  const CourseFilter = () => {
-    return (
-      <Select size="large" defaultValue={courseNames[0]} onChange={handleChange}>
-        {courseNames.map((filter, index) => (
-          <Option value={index}>{filter}</Option>
-        ))}
-      </Select>
-    )
-  }
-
   const onClickMenu = (e) => {
     // buscar el materia del id y setearlo
     let item = currentCourse.materias.find((materia) => materia.id == e.key)
@@ -103,12 +85,17 @@ const VitualClassroom = () => {
   };
 
   const onClickSubMenu = (e) => {
-    console.log('click ', e.key);
     // buscar el materia del id y setearlo
     let item = currentMenu.menus.find((menu) => menu.id == e.key)
     setCurrentSubMenu(item);
-    console.log("item seleccionado: ",item);
   };
+
+  function onClickAdd () {setIsAddOpen(true)}
+  function handdleClose () {
+    setIsAddOpen(false);
+    let input = document.getElementById("input");
+    let textArea = document.getElementById("textArea");
+  }
 
   return isLoaded ? (
     <div>
@@ -122,7 +109,7 @@ const VitualClassroom = () => {
           flexDirection: 'column',
       }}>
         <Title>Aula Virtual</Title>
-        <CourseFilter />
+        <FilterButton options={courseNames} onChange={handleChange}/>
       </div>
 
       <Menu
@@ -140,7 +127,19 @@ const VitualClassroom = () => {
         defaultSelectedKeys={currentMenu.menus[0].nombre}
         />
 
-      <MenuContent content={currentSubMenu.contenido} />
+      <div className='content-container'>
+        {currentSubMenu.contenido.map((item) => (
+          <ForumContent content={item} />
+        ))}
+
+        <PlusSquareOutlined onClick={() => {onClickAdd()}} />
+        <Modal title="Añadir nueva información o tarea" open={isAddOpen} onOk={handdleClose} onCancel={handdleClose}>
+          <Input.Group>
+            <Input size="large" placeholder="Titulo." prefix={<RightOutlined />} id="input"/>
+            <TextArea rows={6} placeholder="Contenido." id="textArea"/>
+          </Input.Group>
+        </Modal>
+      </div>
     </div>
   ) : <></>;
 }
