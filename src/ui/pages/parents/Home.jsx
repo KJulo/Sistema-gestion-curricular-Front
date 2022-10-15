@@ -17,28 +17,30 @@ import Card from '@components/Card';
 // constants
 import { parents } from '@constants/users';
 
+const StudentsCards = ({students}) => {
+  return (
+    <div className='card-container'>
+      {students.map((student) => (
+        <Card
+          title={student.nombres + ' ' + student.apellidos}
+          content={student.curso}
+          icon="user"
+        />
+      ))}
+    </div>
+  )
+}
+
+// no funcionando, faltan endpoints
 const Home = () => {
   const [parent, setParent] = useState(parents.parents[0]);
-  const [students, setStudents] = useState(parents.students)
+  const [students, setStudents] = useState(parents.students);
 
   // Seleccionar un padre cualquiera
   useEffect(() => {
     setParent(parents.parents[0])
   }, [])
 
-  const StudentsCards = ({students}) => {
-    return (
-      <div className='card-container'>
-        {students.map((student) => (
-          <Card
-            title={student.nombres + ' ' + student.apellidos}
-            content={student.curso}
-            icon="user"
-          />
-        ))}
-      </div>
-    )
-  }
 
   return (
     <div

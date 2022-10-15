@@ -2,10 +2,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 // redux
-import { updateStudentAttendance } from '@slices/teachers';
-
-// antd
-import { SwapOutlined } from "@ant-design/icons";
+import { fetchStudents, fetchCourses, fetchStudentsNotes } from '@slices/teachers';
 
 //components
 import {
@@ -20,6 +17,7 @@ import { AdminTableLayout } from "@containers/index";
 
 //constants
 import { columns } from "@constants/teacher/marksTable";
+import { useEffect } from 'react';
 
 const getMarkTest = (allMarks, test) => {
   return allMarks.notas.map((marks) => marks.evaluacion === test ? marks.nota : null ) // devuelve un arreglo con muchos null y una nota
@@ -29,7 +27,19 @@ const getMarkTest = (allMarks, test) => {
 const Marks = () => {
   const dispatch = useDispatch();
   const content = useSelector((store) => store.teacher.students.marks);
+  const courses = useSelector((store) => store.teacher.courses.basicInfo);
   
+  // console.log("content ", content);
+  // obtener alumnos
+  // obtener cursos
+  // filtrar a los alumnos por curso
+
+  useEffect(() => {
+    dispatch(fetchCourses());
+    dispatch(fetchStudents());
+    dispatch(fetchStudentsNotes());
+  }, [])
+
   // Al hacer click en el icono de switch, cambiar estado de asiste
   const handleClick = (record) => {
     console.log(record);

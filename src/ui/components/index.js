@@ -1,4 +1,5 @@
 // Global
+export { default as UserDropdown } from "@components/UserDropdown";
 export { default as Card } from "@components/Card";
 export { default as ContentTable } from "@components/ContentTable";
 export { default as HomeNavBar } from "@components/HomeNavBar";
@@ -8,6 +9,7 @@ export { default as FilterCourse } from "@components/FilterCourse";
 export { default as AddCourse } from "@components/AddCourse";
 export { default as SubTitleContent } from "@components/SubTitleContent";
 export { default as HandleError } from '@components/Error/HandleError';
+export { default as LoadingScreen } from '@components/LoadingScreen';
 
 //admin
 export { default as AdminMenu } from "@components/Admin/NavigationMenu";
@@ -27,3 +29,7 @@ export { default as AddPupilo } from "@components/Students/AddPupilo";
 //Parents
 export { default as ParentsMenu } from "@components/Parents/NavigationMenu.jsx";
 export { default as AddParent } from "@components/Parents/AddParent";
+
+//Forum
+export { default as ForumContent } from "@components/ForumContent";
+export { default as FilterButton } from "@components/FilterButton";
