@@ -8,8 +8,9 @@ const { Title } = Typography;
 import '@styles/Home.less';
 
 // components
-import { Card } from '@components';
-import DocumentGenerator from './DocumentGenerator';
+import { Card, Planification } from '@components';
+
+import { courseInformation } from "@constants/document/data";
 
 const CoursesCards = ({courses}) => {
   // Modal
@@ -58,9 +59,10 @@ const CoursesCards = ({courses}) => {
         onOk={handleOk}
         confirmLoading={confirmLoading}
         onCancel={handleCancel}
+        width={800}
+        style={{ top: 20 }}
       >
-        <p>{modalText}</p>
-        <DocumentGenerator />
+        <Planification course={courseInformation}/>
       </Modal>
     </div>
   )

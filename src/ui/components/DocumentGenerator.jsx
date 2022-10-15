@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import { Button } from "antd";
+import { DownloadOutlined, FileWordOutlined } from "@ant-design/icons";
 
 import { saveAs } from "file-saver";
 import { Packer } from "docx";
@@ -21,9 +23,12 @@ const DocumentGenerator = () => {
 
   return (
     <div>
-      Documento Word listo
       <p>
-        <button onClick={()=>generate()}>Descargar</button>
+        <Button
+        type="primary"
+        shape="round"
+        icon={<><DownloadOutlined /><FileWordOutlined /></>}
+        onClick={()=>generate()}>Descargar en Word</Button>
       </p>
     </div>
   )

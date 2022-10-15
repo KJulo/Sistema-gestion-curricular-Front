@@ -12,7 +12,7 @@ const { Title } = Typography;
 import '@styles/Home.less';
 
 // components
-import { CoursesCards, DefaultTitleContent, LoadingScreen } from '@components/index';
+import { CoursesCards, DefaultTitleContent, LoadingSpinner } from '@components/index';
 
 // constants
 // import { courses } from '@constants/course';
@@ -34,11 +34,10 @@ const Home = () => {
         minHeight: 280,
       }}>
       <DefaultTitleContent title={"Mis Cursos"} action="" />
-
       <div className='flex-container'>
-        {courses.length == 0
-        ? <LoadingScreen />
-        : <CoursesCards courses={courses} />}
+        <LoadingSpinner isLoading={courses.length == 0} >
+          <CoursesCards courses={courses} />
+        </LoadingSpinner>
       </div>
     </div>
   );

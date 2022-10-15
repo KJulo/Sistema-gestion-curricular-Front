@@ -23,6 +23,10 @@ export const teacherSlice = createSlice({
         virtualClasses: courses,
         attendance: courseNames,
         courseFilters: courseNames.map((course) => course.nombre),
+        management: {
+          course: {},
+          units: [],
+        },
       },
       students: {
         list: [],
@@ -76,7 +80,24 @@ export const teacherSlice = createSlice({
               attendance: studentList
           }
         }
-      }
+      },
+      updateCourseManagement: (state, action) => {
+        state.courses.management.course = action.payload;
+      },
+      appendUnitsManagement: (state, action) => {
+        state.courses.management.units = state.courses.management.units.concat(action.payload);
+      },
+      updateUnitManagement: (state, action) => {
+        const unitsUpdated = state.courses.management.units.map((unit) => 
+          unit.id === action.payload.id ? action.payload : unit
+        )
+        state.courses.management.units = unitsUpdated;
+      },
+      deleteUnitManagement: (state, action) => {
+        state.courses.management.units = state.courses.management.units.filter(
+          unit => unit.id !== action.payload.id
+        )
+      },
     }
 })
 
@@ -92,6 +113,10 @@ export const {
   updateCourses,
   updateStudents,
   updateStudentsNotes,
+  updateCourseManagement,
+  appendUnitsManagement,
+  deleteUnitManagement,
+  updateUnitManagement,
 } = teacherSlice.actions;
 
 // exportar reducer del slice para mandarlo a la store
