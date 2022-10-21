@@ -1,5 +1,6 @@
 // Main
 export { default as Login } from '@pages/login/Login';
+export { default as Recover } from '@pages/login/Recover';
 
 // parents
 export { default as ParentsHome } from "@pages/parents/Home";
