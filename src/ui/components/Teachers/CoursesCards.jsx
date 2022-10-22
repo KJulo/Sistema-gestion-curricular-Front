@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 
 // antd
-import { Typography, Button, Modal, Row } from 'antd';
+import { Typography, Button, Modal, Row, Space } from 'antd';
 const { Title } = Typography;
 
 // styles
@@ -60,8 +60,11 @@ const CoursesCards = ({courses}) => {
         onCancel={handleCancel}
         width={800}
         style={{ top: 20 }}
+        footer={[]}
       >
         <Planification course={selectedCourse}/>
+        <br></br>
+        <Button onClick={handleOk}type="primary" shape="round">Guardar Cambios</Button>
       </Modal>
     </div>
   )

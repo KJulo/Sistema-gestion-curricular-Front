@@ -38,3 +38,5 @@ export { default as FilterButton } from "@components/FilterButton";
 //Forms
 export { default as Planification } from "@components/Forms/Planification";
 export { default as UnitHeader } from "@components/Forms/UnitHeader";
+export { default as UnitBody } from "@components/Forms/UnitBody";
+export { default as Objetive } from "@components/Forms/Objetive";

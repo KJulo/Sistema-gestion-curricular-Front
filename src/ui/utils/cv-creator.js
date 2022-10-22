@@ -11,10 +11,11 @@ import {
   TableRow,
   TableCell,
 } from "docx";
+import teacher from "../../infrastructure/sagas/teacher";
 
 export class DocumentCreator {
   // tslint:disable-next-line: typedef
-  create(course, units) {
+  create(course, units, teacher) {
     const document = new Document({
       sections: [
         {
@@ -26,7 +27,7 @@ export class DocumentCreator {
                 line: 276,
               },
             }),
-            this.createContactInfo(course),
+            this.createContactInfo(course, teacher),
             this.createTable(units),
           ]
         }
@@ -36,27 +37,32 @@ export class DocumentCreator {
     return document;
   }
 
-  createContactInfo({subject, course, teacher, date}) {
+  createContactInfo(course, teacher) {
     return new Paragraph({
       // alignment: AlignmentType.CENTER,
       children: [
         new TextRun({
-          text: "Asignatura "+subject,
+          text: "Asignatura: "+course.asignatura,
           bold: true,
           break: 1,
         }),
         new TextRun({
-          text: "Curso "+course,
+          text: "Curso: "+course.nombre,
           bold: true,
           break: 1,
         }),
         new TextRun({
-          text: "Profesor "+teacher,
+          text: "Paralelo: "+course.paralelo,
           bold: true,
           break: 1,
         }),
         new TextRun({
-          text: "Año "+date,
+          text: "Profesor: "+teacher.nombres + ' ' +teacher.apellidos,
+          bold: true,
+          break: 1,
+        }),
+        new TextRun({
+          text: "Año: "+course.anho,
           bold: true,
           break: 1,
         }),
@@ -65,19 +71,30 @@ export class DocumentCreator {
   }
 
   createTable(units) {
-    return new Table({
-      columnWidths: [4300, 2300, 2300],
-      rows: [
-        // Fila 1
-        this.createTableRow(["UNIDADES DE APRENDIZAJE", "TIEMPO (mes)", "VALOR"]),
-        // Filas n
-        units.map((unit) => (
-          this.createTableRow([unit.nombre+": Diversidad e interacciones en los ecosistemas chilenos. Habilidades de investigación, experimentos, trabajo con tablas y gráficos. (24 horas)", "Tiempo en meses: Marzo a mayo ", "Responsabilidad"])
-        )),
-        // Si no va esta fila adicional, se buguea la tabla
-        this.createTableRow(["", "", ""]),
-      ]
-    })
+    const columnWidth = [4300, 2300, 2300];
+    const titleRows = this.createTableRow(["UNIDADES DE APRENDIZAJE", "TIEMPO (mes)", "VALOR"]);
+
+    if (units.length > 0) {
+      return new Table({
+        columnWidths: columnWidth,
+        rows: [
+          // Fila 1
+          titleRows,
+          // Filas n
+          ...units.map((unit) => (
+            this.createTableRow([unit.nombre+": "+unit.objetivos, "Tiempo en meses: Marzo a mayo ", "Responsabilidad"])
+          ))
+        ]
+      })
+    } else {
+      return new Table({
+        columnWidths: columnWidth,
+        rows: [
+          titleRows,
+          this.createTableRow(["-", "-", "-"]),
+        ]
+      })
+    }
   }
 
   createTableRow(paragraphs) {

@@ -12,7 +12,7 @@ import "@styles/Forms.less";
 // Redux-Saga
 import { updateCourseManagement, appendUnitsManagement } from '@slices/teachers';
 
-import { DocumentGenerator, UnitHeader } from "@components"
+import { DocumentGenerator, UnitHeader, UnitBody } from "@components"
 
 const formItemLayout = {
   labelCol: {
@@ -33,15 +33,15 @@ const formItemLayoutWithOutLabel = {
 };
 
 export const Planification = ({course}) => {
-  const [ selectedSubject, setSelectedSubject ] = useState(course.asignaturas[0].nombre)
+  const [ selectedSubject, setSelectedSubject ] = useState(course.asignaturas[0]?.nombre)
   const { units } = useSelector(store => store.teacher.courses.management);
   const { teacher } = useSelector(store => store.teacher);
   const dispatch = useDispatch();
 
   useEffect(() => {
     // falta el sagas
-    dispatch(updateCourseManagement(course));
-  })
+    dispatch(updateCourseManagement({...course, asignatura: selectedSubject}));
+  }, [])
 
   const onFinish = (values) => {
     console.log('Received values of form:', values);
@@ -49,6 +49,7 @@ export const Planification = ({course}) => {
 
   const onSubjectChange = (value) => {
     setSelectedSubject(value.subject);
+    dispatch(updateCourseManagement({...course, asignatura: value.subject}));
   }
 
   const addUnit = (unit) => {
@@ -63,7 +64,7 @@ export const Planification = ({course}) => {
       style={{ display: 'grid' }}
       onValuesChange={onSubjectChange}
     >
-      <Form.Item label="Asignaturas" name="subject">
+      <Form.Item label="Cambiar Asignatura: " name="subject">
         <Radio.Group value={selectedSubject}>
           {course.asignaturas.map((subject) => (
             <Radio.Button value={subject.nombre}>{subject.nombre}</Radio.Button>
@@ -78,7 +79,7 @@ export const Planification = ({course}) => {
             Curso: {course.nombre} <br></br>
             Paralelo: {course.paralelo} <br></br>
             Profesor: {teacher.nombres + ' ' + teacher.apellidos} <br></br>
-            Año: {course.anhoa} <br></br>
+            Año: {course.anho} <br></br>
           </blockquote>
         </Paragraph>
       </Typography>
@@ -88,13 +89,13 @@ export const Planification = ({course}) => {
         { units == 0
           ? <Empty />
           : <Collapse>
-              {units.map((unit, index) => (
+              {units.map((unit) => (
                 <>
                   <Panel
                     header={<UnitHeader unit={unit} />}
                     width={1000}
                   >
-                    {unit.objetivos}
+                    <UnitBody unit={unit}/>
                   </Panel>
                 </>
               ))}
@@ -102,12 +103,26 @@ export const Planification = ({course}) => {
         }
         <br></br>
         <Button type="dashed" block icon={<PlusOutlined />}
-          onClick={() => addUnit({ id: randomId(), nombre: 'Nueva Unidad', objetivos: ['objetivo1', 'objetivo2'] })}
+          onClick={() => addUnit({
+            id: randomId(),
+            nombre: 'Nueva Unidad',
+            descripcion: '',
+            objetivos: []
+          })}
         >
           Añadir unidad
         </Button>
+
         <br></br>
-        <DocumentGenerator data={{course: course, units: units}} />
+
+        <DocumentGenerator data={{
+          course: {
+            ...course,
+            asignatura: selectedSubject
+          },
+          units: units,
+          teacher: teacher
+        }} />
     </Form>
   );
 }

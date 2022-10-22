@@ -102,6 +102,58 @@ export const teacherSlice = createSlice({
         state.courses.management.units = unitsUpdated;
         state.isLoading = false;
       },
+      appendObjetiveManagement: (state, action) => {
+        const payload = action.payload;
+        const stateUnits = state.courses.management.units;
+
+        stateUnits.map(unit => {
+          if (unit.id === payload.unit.id) {
+            return { ...unit, objetivos: unit.objetivos.push(payload.objetive)}
+          } else {
+            return unit
+          }
+        });
+      },
+      editObjetiveManagement: (state, action) => {
+        const stateUnits = state.courses.management.units;
+        const payObjetive = action.payload.objetive;
+        const updatedUnits = stateUnits.map(unit => {
+          if (unit.id === action.payload.unitId) {
+            return {
+              ...unit,
+              objetivos: unit.objetivos.map(obj => {
+                if (obj.id === payObjetive.id) {
+                  return {
+                    ...obj,
+                    descripcion: payObjetive.descripcion
+                  }
+                } else {
+                  return { ...obj }
+                }
+              })
+            }
+          } else {
+            return unit
+          }
+        })
+        state.courses.management.units = updatedUnits;
+      },
+      deleteObjetiveManagement: (state, action) => {
+        console.log(action);
+        const stateUnits = state.courses.management.units;
+        const objId = action.payload.objetiveId;
+        const updatedUnits = stateUnits.map(unit => {
+          if (unit.id === action.payload.unitId) {
+            return {
+              ...unit,
+              objetivos: unit.objetivos.filter(obj => obj.id !== objId)
+            }
+          } else {
+            return unit
+          }
+        })
+        state.courses.management.units = updatedUnits;
+      },
       deleteUnitManagement: (state, action) => {
         state.courses.management.units = state.courses.management.units.filter(
           unit => unit.id !== action.payload.id
@@ -127,6 +179,9 @@ export const {
   appendUnitsManagement,
   deleteUnitManagement,
   updateUnitManagement,
+  appendObjetiveManagement,
+  editObjetiveManagement,
+  deleteObjetiveManagement,
 } = teacherSlice.actions;
 
 // exportar reducer del slice para mandarlo a la store

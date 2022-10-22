@@ -10,9 +10,9 @@ import { DocumentCreator } from "@utils/cv-creator";
 
 const DocumentGenerator = ({ data }) => {
 
-  function generate() {
+  function generate(data) {
     const documentCreator = new DocumentCreator();
-    const doc = documentCreator.create(data.course, data.units);
+    const doc = documentCreator.create(data.course, data.units, data.teacher);
 
     Packer.toBlob(doc).then(blob => {
       saveAs(blob, "planificacion.docx");
@@ -21,10 +21,11 @@ const DocumentGenerator = ({ data }) => {
   }
 
   return (
-    <div>
+    <div style={{ maxWidth: 50}}>
       <Button
-      type="primary"
-      shape="round"
+      block
+      type="link"
+      size="small"
       icon={<><DownloadOutlined /><FileWordOutlined /></>}
       onClick={()=>generate(data)}>Descargar en Word</Button>
     </div>
