@@ -1,13 +1,23 @@
 import { call, put, takeLatest } from "redux-saga/effects";
 
 // Reducers
-import { fetchAdmin, updateAdmin, updateTeacherAdmin, updateStudentAdmin, updateParentAdmin } from "@slices/admin";
+import {
+  fetchAdmin,
+  updateAdmin,
+  updateTeachersAdmin,
+  updateTeacherAdmin,
+  updateStudentAdmin,
+  updateParentAdmin,
+} from "@slices/admin";
 import { updateUser } from "@slices/user";
 
 import {
   FETCH_PARENTS_ADMIN,
+  FETCH_PARENT_ADMIN,
   FETCH_STUDENTS_ADMIN,
+  FETCH_STUDENT_ADMIN,
   FETCH_TEACHERS_ADMIN,
+  FETCH_TEACHER_ADMIN,
 } from "./types/admin";
 
 // Network
@@ -31,9 +41,18 @@ function* getAdmin() {
   }
 }
 
-function* getTeacher() {
+function* getTeachers() {
   try {
     const response = yield call(profesor.getTeachers);
+    yield put(updateTeachersAdmin(response.data.data));
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+function* getTeacher(action) {
+  try {
+    const response = yield call(profesor.getTeacherById, action.payload);
     yield put(updateTeacherAdmin(response.data.data));
   } catch (error) {
     console.log(error);
@@ -62,8 +81,12 @@ function* watchGetAdminUser() {
   yield takeLatest(fetchAdmin, getAdmin);
 }
 
+function* watchGetTeachers() {
+  yield takeLatest(FETCH_TEACHERS_ADMIN, getTeachers);
+}
+
 function* watchGetTeacher() {
-  yield takeLatest(FETCH_TEACHERS_ADMIN, getTeacher);
+  yield takeLatest(FETCH_TEACHER_ADMIN, getTeacher);
 }
 
 function* watchGetStudents() {
@@ -76,6 +99,7 @@ function* watchGetParents() {
 
 export default [
   watchGetAdminUser(),
+  watchGetTeachers(),
   watchGetTeacher(),
   watchGetStudents(),
   watchGetParents(),

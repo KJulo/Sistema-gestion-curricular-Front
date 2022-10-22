@@ -40,13 +40,13 @@ export const content = [
 export const columns = [
   {
     title: "Nombres",
-    dataIndex: "name",
-    key: "name",
+    dataIndex: "nombres",
+    key: "nombres",
   },
   {
     title: "Apellidos",
-    dataIndex: "surname",
-    key: "surname",
+    dataIndex: "apellidos",
+    key: "apellidos",
   },
   {
     title: "Rut",
@@ -64,15 +64,15 @@ export const columns = [
     key: "correo",
   },
   {
-    title: "Fecha de nacimiento",
-    dataIndex: "anho",
-    key: "anho",
-  },
-  {
     title: "Acciones",
+    dataIndex: "id",
+    key: "id",
     render: (record) => (
       <span>
-        <Link to={`/administrador/profesores/${record.key}`}>
+        <Link
+          to={`/administrador/profesores/${record}`}
+          state={{ id: record }}
+        >
           <EyeOutlined style={{ marginRight: "8px" }} /> Ver
         </Link>
       </span>

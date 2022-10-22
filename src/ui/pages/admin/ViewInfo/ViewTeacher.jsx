@@ -1,19 +1,38 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import { Avatar, Card, Button, Typography } from "antd";
-import { EditOutlined,DeleteOutlined } from "@ant-design/icons";
+import { EditOutlined, DeleteOutlined, UserOutlined } from "@ant-design/icons";
+import { useLocation, matchPath } from "react-router-dom";
 const { Text } = Typography;
 
 import "@styles/AdminViewInfo.less";
 
+import { useDispatch, useSelector } from "react-redux";
+import { FETCH_TEACHER_ADMIN } from "@infrastructure/sagas/types/admin";
+
 const ViewTeacher = () => {
-  return (
-    <Card
-      style={{ textAlign: "center" }}
-      title={<div style={{ marginLeft: "210px" }}>Pedro Gutierrez</div>}
-      extra={
+  const location = useLocation();
+  const { id } = location.state;
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch({ type: FETCH_TEACHER_ADMIN, payload: id });
+  }, []);
+
+  const { teacher } = useSelector((store) => store.admin);
+
+  if (teacher) {
+    return (
+      <Card
+        style={{ textAlign: "center" }}
+        title={
+          <div style={{ marginLeft: "210px" }}>
+            <Text strong>Información personal</Text>
+          </div>
+        }
+        extra={
           <div>
-            <Button style={{marginRight:"20px"}}>
+            <Button style={{ marginRight: "20px" }}>
               <EditOutlined /> Editar
             </Button>
             <Button>
@@ -21,25 +40,28 @@ const ViewTeacher = () => {
               Eliminar
             </Button>
           </div>
-      }
-    >
-      <div
-        style={{
-          display: "flex",
-          flexFlow: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          gap: "12px",
-        }}
+        }
       >
-        <Avatar size={128} src="https://joeschmoe.io/api/v1/random" />
-        <Text strong>Nombre: Pedro Gutierrez</Text>
-        <Text strong>Correo: example@example.com </Text>
-        <Text strong>Telefono: +569 12345678</Text>
-        <Text strong>Dirección: Av.SiempreVida 3844</Text>
-      </div>
-    </Card>
-  );
+        <div
+          style={{
+            display: "flex",
+            flexFlow: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: "12px",
+          }}
+        >
+          <Avatar size={128} icon={<UserOutlined />} />
+          <Text strong>Nombre(s): {teacher.nombres}</Text>
+          <Text strong>Apellido(s): {teacher.apellidos}</Text>
+          <Text strong>Correo: {teacher.correo}</Text>
+          <Text strong>Rut: {teacher.rut}</Text>
+        </div>
+      </Card>
+    );
+  } else {
+    return <div>loading...</div>;
+  }
 };
 
 export default ViewTeacher;

@@ -28,8 +28,11 @@ export const adminSlice = createSlice({
     courseFiltersUpdate: (state, action) => {
       state.student = action;
     },
-    updateTeacherAdmin: (state, action) => {
+    updateTeachersAdmin: (state, action) => {
       state.teachers = action.payload;
+    },
+    updateTeacherAdmin: (state, action) => {
+      state.teacher = action.payload;
     },
     updateStudentAdmin: (state, action) => {
       state.students = action.payload;
@@ -45,6 +48,7 @@ export const {
   courseFiltersUpdate,
   fetchAdmin,
   updateAdmin,
+  updateTeachersAdmin,
   updateTeacherAdmin,
   updateParentAdmin,
   updateStudentAdmin
