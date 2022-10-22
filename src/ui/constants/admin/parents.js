@@ -34,25 +34,29 @@ export const content = [
     rut: "12345678-9",
     correo: "example@example.com",
     anho: "1/2/1962",
-  }
-]
+  },
+];
 
 export const columns = [
   {
     title: "Nombres",
-    dataIndex: "name",
-    key: "name",
+    dataIndex: "nombres",
+    key: "nombres",
   },
   {
     title: "Apellidos",
-    dataIndex: "surname",
-    key: "surname",
+    dataIndex: "apellidos",
+    key: "apellidos",
   },
   {
     title: "Rut",
     dataIndex: "rut",
     key: "rut",
-    render: (text) => (<div style={{textOverflow:"clip !important", whiteSpace:"nowrap"}} >{text}</div>),
+    render: (text) => (
+      <div style={{ textOverflow: "clip !important", whiteSpace: "nowrap" }}>
+        {text}
+      </div>
+    ),
   },
   {
     title: "Correo",
@@ -60,19 +64,15 @@ export const columns = [
     key: "correo",
   },
   {
-    title: "Fecha de nacimiento",
-    dataIndex: "anho",
-    key: "anho",
-  },
-  {
     title: "Acciones",
+    dataIndex: "id",
+    key: "id",
     render: (record) => (
       <span>
-        <Link to={`/administrador/apoderados/${record.key}`}>
+        <Link to={`/administrador/apoderados/${record}`} state={{ id: record }}>
           <EyeOutlined style={{ marginRight: "8px" }} /> Ver
         </Link>
       </span>
     ),
   },
 ];
-

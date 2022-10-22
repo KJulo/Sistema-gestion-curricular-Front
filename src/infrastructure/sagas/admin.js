@@ -8,6 +8,7 @@ import {
   updateTeacherAdmin,
   updateStudentsAdmin,
   updateStudentAdmin,
+  updateParentsAdmin,
   updateParentAdmin,
 } from "@slices/admin";
 import { updateUser } from "@slices/user";
@@ -81,7 +82,7 @@ function* getStudent(action) {
 function* getParents() {
   try {
     const response = yield call(apoderado.getParents);
-    yield put(updateParentAdmin(response.data.data));
+    yield put(updateParentsAdmin(response.data.data));
   } catch (error) {
     console.log(error);
   }
