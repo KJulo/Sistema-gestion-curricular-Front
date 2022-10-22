@@ -40,13 +40,13 @@ export const content = [
 export const columns = [
   {
     title: "Nombres",
-    dataIndex: "name",
+    dataIndex: "nombres",
     key: "name",
   },
   {
     title: "Apellidos",
-    dataIndex: "surname",
-    key: "surname",
+    dataIndex: "apellidos",
+    key: "apellidos",
   },
   {
     title: "Rut",
@@ -64,15 +64,12 @@ export const columns = [
     key: "correo",
   },
   {
-    title: "Fecha de nacimiento",
-    dataIndex: "anho",
-    key: "anho",
-  },
-  {
     title: "Acciones",
+    dataIndex: "id",
+    key: "id",
     render: (record) => (
       <span>
-        <Link to={`/administrador/alumnos/${record.key}`}>
+        <Link to={`/administrador/alumnos/${record}`} state={{ id: record }}>
           <EyeOutlined style={{ marginRight: "8px" }} /> Ver
         </Link>
       </span>
@@ -115,7 +112,7 @@ export const columnsCourse = [
     title: "Acciones",
     render: (record) => (
       <span>
-        <Link to={`/administrador/alumnos/${record.key}`}>
+        <Link to={`/administrador/alumnos/${record}`} state={{ id: record }}>
           <EyeOutlined style={{ marginRight: "8px" }} />
         </Link>
         <a>

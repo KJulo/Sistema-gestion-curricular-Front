@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 
 import { Avatar, Card, Button, Typography } from "antd";
 import { EditOutlined, DeleteOutlined, UserOutlined } from "@ant-design/icons";
-import { useLocation, matchPath } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 const { Text } = Typography;
 
 import "@styles/AdminViewInfo.less";

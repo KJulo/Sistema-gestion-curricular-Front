@@ -34,24 +34,32 @@ export const adminSlice = createSlice({
     updateTeacherAdmin: (state, action) => {
       state.teacher = action.payload;
     },
-    updateStudentAdmin: (state, action) => {
+    updateStudentsAdmin: (state, action) => {
       state.students = action.payload;
     },
-    updateParentAdmin: (state, action) => {
+    updateStudentAdmin: (state, action) => {
+      state.student = action.payload;
+    },
+    updateParentsAdmin: (state, action) => {
       state.parents = action.payload;
-    }
+    },
+    updateParentAdmin: (state, action) => {
+      state.parent = action.payload;
+    },
   },
 });
 
-// exportar funciones individuales
+// ex ortar funciones individuales
 export const {
   courseFiltersUpdate,
   fetchAdmin,
   updateAdmin,
   updateTeachersAdmin,
   updateTeacherAdmin,
+  updateParentsAdmin,
   updateParentAdmin,
-  updateStudentAdmin
+  updateStudentsAdmin,
+  updateStudentAdmin,
 } = adminSlice.actions;
 
 // exportar reducer del slice para mandarlo a la store

@@ -6,6 +6,7 @@ import {
   updateAdmin,
   updateTeachersAdmin,
   updateTeacherAdmin,
+  updateStudentsAdmin,
   updateStudentAdmin,
   updateParentAdmin,
 } from "@slices/admin";
@@ -62,6 +63,15 @@ function* getTeacher(action) {
 function* getStudents() {
   try {
     const response = yield call(alumno.getStudents);
+    yield put(updateStudentsAdmin(response.data.data));
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+function* getStudent(action) {
+  try {
+    const response = yield call(alumno.getStudentById, action.payload);
     yield put(updateStudentAdmin(response.data.data));
   } catch (error) {
     console.log(error);
@@ -71,6 +81,15 @@ function* getStudents() {
 function* getParents() {
   try {
     const response = yield call(apoderado.getParents);
+    yield put(updateParentAdmin(response.data.data));
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+function* getParent(action) {
+  try {
+    const response = yield call(apoderado.getParentById, action.payload);
     yield put(updateParentAdmin(response.data.data));
   } catch (error) {
     console.log(error);
@@ -93,8 +112,16 @@ function* watchGetStudents() {
   yield takeLatest(FETCH_STUDENTS_ADMIN, getStudents);
 }
 
+function* watchGetStudent() {
+  yield takeLatest(FETCH_STUDENT_ADMIN, getStudent);
+}
+
 function* watchGetParents() {
   yield takeLatest(FETCH_PARENTS_ADMIN, getParents);
+}
+
+function* watchGetParent() {
+  yield takeLatest(FETCH_PARENT_ADMIN, getParent);
 }
 
 export default [
@@ -102,5 +129,7 @@ export default [
   watchGetTeachers(),
   watchGetTeacher(),
   watchGetStudents(),
+  watchGetStudent(),
   watchGetParents(),
+  watchGetParent(),
 ];
