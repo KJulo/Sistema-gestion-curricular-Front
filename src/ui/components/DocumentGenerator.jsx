@@ -1,19 +1,18 @@
 import React, { Component } from "react";
-import { Button } from "antd";
+import { Button, Form } from "antd";
+
 import { DownloadOutlined, FileWordOutlined } from "@ant-design/icons";
 
 import { saveAs } from "file-saver";
 import { Packer } from "docx";
-import { courseInformation } from "@utils/cv-data.js";
+
 import { DocumentCreator } from "@utils/cv-creator";
 
-const DocumentGenerator = () => {
+const DocumentGenerator = ({ data }) => {
 
   function generate() {
     const documentCreator = new DocumentCreator();
-    const doc = documentCreator.create(
-      courseInformation
-    );
+    const doc = documentCreator.create(data.course, data.units);
 
     Packer.toBlob(doc).then(blob => {
       saveAs(blob, "planificacion.docx");
@@ -23,13 +22,11 @@ const DocumentGenerator = () => {
 
   return (
     <div>
-      <p>
-        <Button
-        type="primary"
-        shape="round"
-        icon={<><DownloadOutlined /><FileWordOutlined /></>}
-        onClick={()=>generate()}>Descargar en Word</Button>
-      </p>
+      <Button
+      type="primary"
+      shape="round"
+      icon={<><DownloadOutlined /><FileWordOutlined /></>}
+      onClick={()=>generate(data)}>Descargar en Word</Button>
     </div>
   )
 }

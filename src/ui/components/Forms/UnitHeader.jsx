@@ -6,7 +6,7 @@ import { MinusCircleOutlined } from '@ant-design/icons';
 import { Typography, Popconfirm } from 'antd';
 const { Text } = Typography;
 
-const PlanificationPanelHeader = ({unit}) => {
+const UnitHeader = ({unit}) => {
   const dispatch = useDispatch();
   const confirmText = '¿Deseas eliminar esta unidad?';
 
@@ -28,4 +28,4 @@ const PlanificationPanelHeader = ({unit}) => {
   )
 }
 
-export default PlanificationPanelHeader
+export default UnitHeader

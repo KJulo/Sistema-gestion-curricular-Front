@@ -14,7 +14,7 @@ import {
 
 export class DocumentCreator {
   // tslint:disable-next-line: typedef
-  create(courseInformation) {
+  create(course, units) {
     const document = new Document({
       sections: [
         {
@@ -26,8 +26,8 @@ export class DocumentCreator {
                 line: 276,
               },
             }),
-            this.createContactInfo(courseInformation),
-            this.createTable(),
+            this.createContactInfo(course),
+            this.createTable(units),
           ]
         }
       ]
@@ -64,15 +64,16 @@ export class DocumentCreator {
     });
   }
 
-  createTable() {
+  createTable(units) {
     return new Table({
       columnWidths: [4300, 2300, 2300],
       rows: [
         // Fila 1
         this.createTableRow(["UNIDADES DE APRENDIZAJE", "TIEMPO (mes)", "VALOR"]),
-        this.createTableRow(["Unidad N°1: Diversidad e interacciones en los ecosistemas chilenos. Habilidades de investigación, experimentos, trabajo con tablas y gráficos. (24 horas)", "Tiempo en meses: Marzo a mayo ", "Responsabilidad"]),
-        this.createTableRow(["Unidad N°2: El cuerpo humano, sus sistemas de órganos y sus funciones básicas. Se aborda la estructura y funciones de los sistemas esquelético y nervioso. (33 horas)", "Tiempo en meses: mayo - julio", "Amor\nRespeto\nVerdad"]),
-        this.createTableRow(["Unidad N°3: Concepto de materia y sus estados, características y propiedades. Cuantificar magnitudes de masa, volumen y temperatura.", "Tiempo en meses: julio - septiembre", "Solidaridad\nPaz"]),
+        // Filas n
+        units.map((unit) => (
+          this.createTableRow([unit.nombre+": Diversidad e interacciones en los ecosistemas chilenos. Habilidades de investigación, experimentos, trabajo con tablas y gráficos. (24 horas)", "Tiempo en meses: Marzo a mayo ", "Responsabilidad"])
+        )),
         // Si no va esta fila adicional, se buguea la tabla
         this.createTableRow(["", "", ""]),
       ]

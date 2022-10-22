@@ -14,7 +14,7 @@ import {
 } from '@slices/teachers';
 
 // Network
-import { profesor, curso, alumno, notas } from '@network/index';
+import { profesor, curso, alumno, notas, asignatura } from '@network/index';
 
 function* getTeacher() {
   try {
@@ -30,9 +30,27 @@ function* getTeacher() {
 
 function* getCourses() {
   try {
-    const response = yield call(curso.getCourses);
-    const courseList = response.data.data;
-    yield put(updateCourses(courseList));
+    const responseCourses = (yield call(curso.getCourses)).data.data;
+    const responseSubjects = (yield call(asignatura.getAsignaturas)).data.data;
+
+    // Combinar las asignaturas con su correspondiente curso
+    let merged = [];
+    for(let i=0; i < responseCourses.length; i++) {
+      // obtener lista de asignaturas
+      const subjectList = responseSubjects.filter((subject) => subject.id_curso === responseCourses[i].id)
+      if (subjectList) {
+        merged.push({
+          ...responseCourses[i],
+          asignaturas: subjectList
+        })
+      } else {
+        merged.push({
+          ...responseCourses[i],
+          asignaturas: []
+        })
+      }
+    }
+    yield put(updateCourses(merged));
   } catch (e) {
     console.log(e);
   }

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 // antd
 import { Typography, Button, Modal, Row } from 'antd';
@@ -9,8 +10,6 @@ import '@styles/Home.less';
 
 // components
 import { Card, Planification } from '@components';
-
-import { courseInformation } from "@constants/document/data";
 
 const CoursesCards = ({courses}) => {
   // Modal
@@ -45,16 +44,16 @@ const CoursesCards = ({courses}) => {
         {courses.map((course) => (
           <div onClick={() => showModal(course)}>
             <Card
-              title={course.nombre}
+              title={course.nombre + ' - ' + course.paralelo}
               content={course.año}
-              icon={course.nombre.split(' ')[0] + ' ' + course.nombre.split(' ')[1][0]}
+              icon={course.nombre.split(' ')[0] + ' ' + course.nombre.split(' ')[1][0] + course.paralelo}
               />
           </div>
         ))}
       </Row>
 
       <Modal
-        title={"Planificación " + selectedCourse.nombre}
+        title={<Title level={4}>Planificación {selectedCourse.nombre} </Title>}
         open={open}
         onOk={handleOk}
         confirmLoading={confirmLoading}
@@ -62,7 +61,7 @@ const CoursesCards = ({courses}) => {
         width={800}
         style={{ top: 20 }}
       >
-        <Planification course={courseInformation}/>
+        <Planification course={selectedCourse}/>
       </Modal>
     </div>
   )

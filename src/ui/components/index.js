@@ -37,4 +37,4 @@ export { default as FilterButton } from "@components/FilterButton";
 
 //Forms
 export { default as Planification } from "@components/Forms/Planification";
-export { default as PlanificationPanelHeader } from "@components/Forms/PlanificationPanelHeader";
+export { default as UnitHeader } from "@components/Forms/UnitHeader";

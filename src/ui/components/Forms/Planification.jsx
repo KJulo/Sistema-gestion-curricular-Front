@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { randomId } from '@utils/randomId';
 
 import { MinusCircleOutlined, PlusOutlined } from '@ant-design/icons';
-import { Button, Form, Input, Typography, Collapse, Empty } from 'antd';
+import { Button, Form, Input, Typography, Collapse, Empty, Radio } from 'antd';
 const { Title, Paragraph, Text, Link } = Typography;
 const { TextArea } = Input;
 const { Panel } = Collapse;
@@ -12,7 +12,7 @@ import "@styles/Forms.less";
 // Redux-Saga
 import { updateCourseManagement, appendUnitsManagement } from '@slices/teachers';
 
-import { DocumentGenerator, PlanificationPanelHeader } from "@components"
+import { DocumentGenerator, UnitHeader } from "@components"
 
 const formItemLayout = {
   labelCol: {
@@ -33,8 +33,10 @@ const formItemLayoutWithOutLabel = {
 };
 
 export const Planification = ({course}) => {
-  const dispatch = useDispatch();
+  const [ selectedSubject, setSelectedSubject ] = useState(course.asignaturas[0].nombre)
   const { units } = useSelector(store => store.teacher.courses.management);
+  const { teacher } = useSelector(store => store.teacher);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     // falta el sagas
@@ -44,6 +46,10 @@ export const Planification = ({course}) => {
   const onFinish = (values) => {
     console.log('Received values of form:', values);
   };
+
+  const onSubjectChange = (value) => {
+    setSelectedSubject(value.subject);
+  }
 
   const addUnit = (unit) => {
     dispatch(appendUnitsManagement(unit))
@@ -55,15 +61,24 @@ export const Planification = ({course}) => {
       {...formItemLayoutWithOutLabel}
       onFinish={onFinish}
       style={{ display: 'grid' }}
+      onValuesChange={onSubjectChange}
     >
+      <Form.Item label="Asignaturas" name="subject">
+        <Radio.Group value={selectedSubject}>
+          {course.asignaturas.map((subject) => (
+            <Radio.Button value={subject.nombre}>{subject.nombre}</Radio.Button>
+          ))}
+        </Radio.Group>
+      </Form.Item>
       <Typography>
         <Paragraph>
           <Title level={4}>Información del curso</Title>
           <blockquote>
-            Asignatura: {course.subject} <br></br>
-            Curso: {course.course} <br></br>
-            Profesor: {course.teacher} <br></br>
-            Año: {course.date} <br></br>
+            Asignatura: {selectedSubject} <br></br>
+            Curso: {course.nombre} <br></br>
+            Paralelo: {course.paralelo} <br></br>
+            Profesor: {teacher.nombres + ' ' + teacher.apellidos} <br></br>
+            Año: {course.anhoa} <br></br>
           </blockquote>
         </Paragraph>
       </Typography>
@@ -76,7 +91,7 @@ export const Planification = ({course}) => {
               {units.map((unit, index) => (
                 <>
                   <Panel
-                    header={<PlanificationPanelHeader unit={unit} />}
+                    header={<UnitHeader unit={unit} />}
                     width={1000}
                   >
                     {unit.objetivos}
@@ -92,8 +107,7 @@ export const Planification = ({course}) => {
           Añadir unidad
         </Button>
         <br></br>
-        <DocumentGenerator />
-
+        <DocumentGenerator data={{course: course, units: units}} />
     </Form>
   );
 }
