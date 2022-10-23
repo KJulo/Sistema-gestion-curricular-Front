@@ -4,7 +4,8 @@ const { baseProfesorURI, profesorURI } = services();
 
 const profesor = (client) => ({
   getTeachers: () => client.get(baseProfesorURI),
-  getTeacherById: (id) => client.get(profesorURI.replace(':id', id)),
+  getTeacherById: (id) => client.get(profesorURI.replace(":id", id)),
+  deleteTeacher: (id) => client.delete(profesorURI.replace(":id", id)),
 });
 
 export default profesor;

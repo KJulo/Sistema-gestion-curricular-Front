@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 
-import { Avatar, Card, Divider, Typography, Button } from "antd";
+import { Avatar, Card, Divider, Typography, Button, Popconfirm, message } from "antd";
 const { Text } = Typography;
 import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
 
@@ -17,11 +17,15 @@ import {
 
 import { content, columns } from "@constants/admin/students";
 
-import { FETCH_STUDENT_ADMIN } from "@infrastructure/sagas/types/admin";
+import {
+  FETCH_STUDENT_ADMIN,
+  DELETE_STUDENT_ADMIN,
+} from "@infrastructure/sagas/types/admin";
 
 const ViewStudent = () => {
   const location = useLocation();
   const { id } = location.state;
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
 
@@ -29,6 +33,18 @@ const ViewStudent = () => {
     dispatch({ type: FETCH_STUDENT_ADMIN, payload: id });
   }, []);
 
+  const confirm = (e) => {
+    dispatch({
+      type: DELETE_STUDENT_ADMIN,
+      payload: { id: id, navigate },
+    });
+    message.success("Click on Yes");
+  };
+
+  const cancel = (e) => {
+    console.log(e);
+    message.error("Click on No");
+  };
   const { student } = useSelector((store) => store.admin);
   if (student) {
     return (
@@ -45,10 +61,18 @@ const ViewStudent = () => {
               <Button style={{ marginRight: "20px" }}>
                 <EditOutlined /> Editar
               </Button>
-              <Button>
-                <DeleteOutlined />
-                Eliminar
-              </Button>
+              <Popconfirm
+                title="¿Estás seguro de que quieres eliminar a este usuario?"
+                onConfirm={confirm}
+                onCancel={cancel}
+                okText="Si"
+                cancelText="No"
+              >
+                <Button>
+                  <DeleteOutlined />
+                  Eliminar
+                </Button>
+              </Popconfirm>
             </div>
           }
         >

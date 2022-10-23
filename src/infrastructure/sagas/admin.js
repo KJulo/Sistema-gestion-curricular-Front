@@ -16,10 +16,13 @@ import { updateUser } from "@slices/user";
 import {
   FETCH_PARENTS_ADMIN,
   FETCH_PARENT_ADMIN,
+  DELETE_PARENT_ADMIN,
   FETCH_STUDENTS_ADMIN,
   FETCH_STUDENT_ADMIN,
+  DELETE_STUDENT_ADMIN,
   FETCH_TEACHERS_ADMIN,
   FETCH_TEACHER_ADMIN,
+  DELETE_TEACHER_ADMIN,
 } from "./types/admin";
 
 // Network
@@ -61,6 +64,11 @@ function* getTeacher(action) {
   }
 }
 
+function* deleteTeacher(action) {
+  yield call(profesor.deleteTeacher, action.payload.id);
+  action.payload.navigate("/administrador/profesores");
+}
+
 function* getStudents() {
   try {
     const response = yield call(alumno.getStudents);
@@ -74,6 +82,15 @@ function* getStudent(action) {
   try {
     const response = yield call(alumno.getStudentById, action.payload);
     yield put(updateStudentAdmin(response.data.data));
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+function* deleteStudent(action) {
+  try {
+    yield call(alumno.deleteStudent, action.payload.id);
+    action.payload.navigate("/administrador/alumnos");
   } catch (error) {
     console.log(error);
   }
@@ -97,6 +114,15 @@ function* getParent(action) {
   }
 }
 
+function* deleteParent(action) {
+  try {
+    yield call(apoderado.deleteParent, action.payload.id);
+    action.payload.navigate("/administrador/apoderados");
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 function* watchGetAdminUser() {
   yield takeLatest(fetchAdmin, getAdmin);
 }
@@ -109,12 +135,20 @@ function* watchGetTeacher() {
   yield takeLatest(FETCH_TEACHER_ADMIN, getTeacher);
 }
 
+function* watchDeleteTeacher() {
+  yield takeLatest(DELETE_TEACHER_ADMIN, deleteTeacher);
+}
+
 function* watchGetStudents() {
   yield takeLatest(FETCH_STUDENTS_ADMIN, getStudents);
 }
 
 function* watchGetStudent() {
   yield takeLatest(FETCH_STUDENT_ADMIN, getStudent);
+}
+
+function* watchDeleteStudent() {
+  yield takeLatest(DELETE_STUDENT_ADMIN, deleteStudent);
 }
 
 function* watchGetParents() {
@@ -125,12 +159,22 @@ function* watchGetParent() {
   yield takeLatest(FETCH_PARENT_ADMIN, getParent);
 }
 
+function* watchDeleteParent() {
+  yield takeLatest(DELETE_PARENT_ADMIN, deleteParent);
+}
+
 export default [
   watchGetAdminUser(),
+
   watchGetTeachers(),
   watchGetTeacher(),
+  watchDeleteTeacher(),
+
   watchGetStudents(),
   watchGetStudent(),
+  watchDeleteStudent(),
+
   watchGetParents(),
   watchGetParent(),
+  watchDeleteParent(),
 ];

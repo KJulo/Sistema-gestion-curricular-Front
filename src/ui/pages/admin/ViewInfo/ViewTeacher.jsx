@@ -1,18 +1,22 @@
 import React, { useEffect } from "react";
 
-import { Avatar, Card, Button, Typography } from "antd";
+import { Avatar, Card, Button, Typography, Popconfirm, message } from "antd";
 import { EditOutlined, DeleteOutlined, UserOutlined } from "@ant-design/icons";
-import { useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 const { Text } = Typography;
 
 import "@styles/AdminViewInfo.less";
 
 import { useDispatch, useSelector } from "react-redux";
-import { FETCH_TEACHER_ADMIN } from "@infrastructure/sagas/types/admin";
+import {
+  FETCH_TEACHER_ADMIN,
+  DELETE_TEACHER_ADMIN,
+} from "@infrastructure/sagas/types/admin";
 
 const ViewTeacher = () => {
   const location = useLocation();
   const { id } = location.state;
+  const navigate = useNavigate();
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -20,7 +24,17 @@ const ViewTeacher = () => {
   }, []);
 
   const { teacher } = useSelector((store) => store.admin);
-
+  const confirm = (e) => {
+    dispatch({
+      type: DELETE_TEACHER_ADMIN,
+      payload: { id: id, navigate },
+    });
+    message.success("Click on Yes");
+  };
+  const cancel = (e) => {
+    console.log(e);
+    message.error("Click on No");
+  };
   if (teacher) {
     return (
       <Card
@@ -35,10 +49,18 @@ const ViewTeacher = () => {
             <Button style={{ marginRight: "20px" }}>
               <EditOutlined /> Editar
             </Button>
-            <Button>
-              <DeleteOutlined />
-              Eliminar
-            </Button>
+            <Popconfirm
+              title="¿Estás seguro de que quieres eliminar a este usuario?"
+              onConfirm={confirm}
+              onCancel={cancel}
+              okText="Si"
+              cancelText="No"
+            >
+              <Button>
+                <DeleteOutlined />
+                Eliminar
+              </Button>
+            </Popconfirm>
           </div>
         }
       >
