@@ -10,8 +10,9 @@ import {
   Table,
   TableRow,
   TableCell,
+  VerticalAlign,
+  ITableCellOptions,
 } from "docx";
-import teacher from "../../infrastructure/sagas/teacher";
 
 export class DocumentCreator {
   // tslint:disable-next-line: typedef
@@ -71,7 +72,8 @@ export class DocumentCreator {
   }
 
   createTable(units) {
-    const columnWidth = [4300, 2300, 2300];
+    console.log(units);
+    const columnWidth = [2300, 2300, 2300];
     const titleRows = this.createTableRow(["UNIDADES DE APRENDIZAJE", "TIEMPO (mes)", "VALOR"]);
 
     if (units.length > 0) {
@@ -80,9 +82,48 @@ export class DocumentCreator {
         rows: [
           // Fila 1
           titleRows,
-          // Filas n
+          // Content
           ...units.map((unit) => (
-            this.createTableRow([unit.nombre+": "+unit.objetivos, "Tiempo en meses: Marzo a mayo ", "Responsabilidad"])
+            new TableRow({
+              children: [
+                // Unit description
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      text: unit.nombre,
+                      bold: true,
+                    }),
+                    //Objetives
+                    ...unit.objetivos.map((obj) => {
+                      return new Paragraph({
+                        text: obj.descripcion
+                      })
+                    })
+                  ],
+                }),
+                // Date
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                        text: 'desde ' + unit.dateRange[0]
+                    }),
+                    new Paragraph({
+                      text: 'hasta ' + unit.dateRange[1]
+                    })
+                  ],
+                }),
+                // Responsability
+                new TableCell({
+                  children: [
+                    ...unit.valores.map((val) => {
+                      return new Paragraph({
+                        text: val.descripcion
+                      })
+                    })
+                  ],
+                })
+              ],
+            })
           ))
         ]
       })
@@ -107,6 +148,14 @@ export class DocumentCreator {
           })],
         })
       )),
+    })
+  }
+
+  createParagraph (text) {
+    return new Paragraph({
+      children: [
+          new TextRun(text),
+      ],
     })
   }
 

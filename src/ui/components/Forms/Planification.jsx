@@ -90,14 +90,12 @@ export const Planification = ({course}) => {
           ? <Empty />
           : <Collapse>
               {units.map((unit) => (
-                <>
-                  <Panel
-                    header={<UnitHeader unit={unit} />}
-                    width={1000}
-                  >
-                    <UnitBody unit={unit}/>
-                  </Panel>
-                </>
+                <Panel
+                  header={<UnitHeader unit={unit} />}
+                  width={1000}
+                >
+                  <UnitBody unit={unit}/>
+                </Panel>
               ))}
             </Collapse>
         }
@@ -105,9 +103,9 @@ export const Planification = ({course}) => {
         <Button type="dashed" block icon={<PlusOutlined />}
           onClick={() => addUnit({
             id: randomId(),
-            nombre: 'Nueva Unidad',
-            descripcion: '',
-            objetivos: []
+            nombre: 'Nueva unidad: Descripción',
+            objetivos: [],
+            valores: [],
           })}
         >
           Añadir unidad

@@ -40,3 +40,4 @@ export { default as Planification } from "@components/Forms/Planification";
 export { default as UnitHeader } from "@components/Forms/UnitHeader";
 export { default as UnitBody } from "@components/Forms/UnitBody";
 export { default as Objetive } from "@components/Forms/Objetive";
+export { default as Value } from "@components/Forms/Value";

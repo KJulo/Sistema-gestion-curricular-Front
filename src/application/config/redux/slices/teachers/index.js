@@ -139,7 +139,6 @@ export const teacherSlice = createSlice({
         state.courses.management.units = updatedUnits;
       },
       deleteObjetiveManagement: (state, action) => {
-        console.log(action);
         const stateUnits = state.courses.management.units;
         const objId = action.payload.objetiveId;
         const updatedUnits = stateUnits.map(unit => {
@@ -153,6 +152,65 @@ export const teacherSlice = createSlice({
           }
         })
         state.courses.management.units = updatedUnits;
+      },
+      appendValueManagement: (state, action) => {
+        const payload = action.payload;
+        const stateUnits = state.courses.management.units;
+
+        stateUnits.map(unit => {
+          if (unit.id === payload.unit.id) {
+            return { ...unit, valores: unit.valores.push(payload.value)}
+          } else {
+            return unit
+          }
+        });
+      },
+      editValueManagement: (state, action) => {
+        const stateUnits = state.courses.management.units;
+        const payValue = action.payload.value;
+        const updatedUnits = stateUnits.map(unit => {
+          if (unit.id === action.payload.unitId) {
+            return {
+              ...unit,
+              valores: unit.valores.map(val => {
+                if (val.id === payValue.id) {
+                  return {
+                    ...val,
+                    descripcion: payValue.descripcion
+                  }
+                } else {
+                  return { ...val }
+                }
+              })
+            }
+          } else {
+            return unit
+          }
+        })
+        state.courses.management.units = updatedUnits;
+      },
+      deleteValueManagement: (state, action) => {
+        const stateUnits = state.courses.management.units;
+        const valId = action.payload.valueId;
+        const updatedUnits = stateUnits.map(unit => {
+          if (unit.id === action.payload.unitId) {
+            return {
+              ...unit,
+              valores: unit.valores.filter(val => val.id !== valId)
+            }
+          } else {
+            return unit
+          }
+        })
+        state.courses.management.units = updatedUnits;
+      },
+      updateDateManagement: (state, action) => {
+        const data = action.payload;
+        state.courses.management.units = state.courses.management.units.map((unit) => (
+          unit.id === data.unit.id
+          ? { ...unit, dateRange: data.dateRange}
+          : unit
+        ))
       },
       deleteUnitManagement: (state, action) => {
         state.courses.management.units = state.courses.management.units.filter(
@@ -182,6 +240,10 @@ export const {
   appendObjetiveManagement,
   editObjetiveManagement,
   deleteObjetiveManagement,
+  updateDateManagement,
+  appendValueManagement,
+  editValueManagement,
+  deleteValueManagement,
 } = teacherSlice.actions;
 
 // exportar reducer del slice para mandarlo a la store
