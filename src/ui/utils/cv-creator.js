@@ -72,7 +72,6 @@ export class DocumentCreator {
   }
 
   createTable(units) {
-    console.log(units);
     const columnWidth = [2300, 2300, 2300];
     const titleRows = this.createTableRow(["UNIDADES DE APRENDIZAJE", "TIEMPO (mes)", "VALOR"]);
 

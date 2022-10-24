@@ -68,10 +68,8 @@ function* getStudents() {
 
 function* getStudentsNotes() {
   try {
-    const response = yield call(notas.getNotas);
-    const notesList = response.data.data;
-    console.log(notesList);
-    yield put(updateStudentsNotes(notesList));
+    const response = (yield call(notas.getNotas)).data.data;
+    yield put(updateStudentsNotes(response));
   } catch (e) {
     console.log(e);
   }

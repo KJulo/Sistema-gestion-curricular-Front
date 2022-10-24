@@ -1,22 +1,20 @@
-import React, { useEffect } from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import moment from "moment";
+
 import { DatePicker, Select } from "antd";
 const { Option } = Select;
 
-
-const Options = ({ options }) => {
-  return (
-    <Select size="large" defaultValue={options[0]}>
-      {options.map((filter, index) => (
-        <Option value={index}>{filter}</Option>
-      ))}
-    </Select>
-  )
-}
+import { setActiveFilter } from "@slices/teachers";
 
 const FilterCourse = () => {
-  const courseFilters = useSelector((store) => store.teacher.courses.courseFilters);
+  const dispatch = useDispatch();
+  const courses = useSelector((store) => store.teacher.courses.basicInfo);
+  
+  const handleChange = (value) => {
+    dispatch(setActiveFilter({ filter: value }))
+  };
+
   return (
     <div style={{ display: "flex", flexDirection: "row-revers", flexWrap:"wrap", gap: "12px" }}>
       <DatePicker
@@ -25,7 +23,11 @@ const FilterCourse = () => {
         size="large"
         defaultValue={moment("2022", "YYYY")}
       />
-      <Options options={courseFilters} />
+      <Select size="large" defaultValue={'Cambiar curso'} onChange={handleChange}>
+        {courses.map((course) => (
+          <Option value={course.id}>{course.nombre} - {course.paralelo}</Option>
+        ))}
+      </Select>
     </div>
   );
 };
