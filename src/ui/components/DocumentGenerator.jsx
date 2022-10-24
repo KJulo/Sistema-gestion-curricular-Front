@@ -8,6 +8,8 @@ import { Packer } from "docx";
 
 import { DocumentCreator } from "@utils/cv-creator";
 
+// TODO: validación de la fecha
+
 const DocumentGenerator = ({ data }) => {
 
   function generate(data) {

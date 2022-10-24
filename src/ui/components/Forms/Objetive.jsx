@@ -11,21 +11,26 @@ const Objetive = ({unit, objetive, index}) => {
   const confirmText = '¿Deseas eliminar este objetivo?';
 
   function onEdit(value) {
-    const objetiveUpdated = { ...objetive, descripcion: value }
+    let objetiveUpdated;
+    if (value.search(':') == -1) {
+      objetiveUpdated = { ...objetive, descripcion: (index+1) + ": " + value }
+    } else {
+      objetiveUpdated = { ...objetive, descripcion: value }
+    }
     dispatch(editObjetiveManagement({unitId: unit.id, objetive: objetiveUpdated}))
   }
 
-  function removeUnit(id) {
+  function removeObjetive(id) {
     dispatch(deleteObjetiveManagement({unitId: unit.id, objetiveId: id}))
   }
 
   return (
       <Typography>
-        <pre>{index + ": "}
+        <pre>
           <Text editable={{ onChange: onEdit }}>
             {objetive.descripcion}
           </Text>
-            <Popconfirm placement="topLeft" title={confirmText} onConfirm={()=>removeUnit(objetive.id)} okText="Eliminar" cancelText="Cancelar">
+            <Popconfirm placement="topLeft" title={confirmText} onConfirm={()=>removeObjetive(objetive.id)} okText="Eliminar" cancelText="Cancelar">
               <MinusCircleOutlined />
             </Popconfirm>
         </pre>

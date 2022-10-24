@@ -47,7 +47,7 @@ const UnitBody = ({unit}) => {
       <Button type="dashed" block icon={<PlusOutlined />}
         onClick={() => addOjetive({
           id: randomId(),
-          descripcion: 'Objetivo ' + (unit.objetivos.length + 1)
+          descripcion: (unit.objetivos.length+1) + ': Objetivo ' + (unit.objetivos.length + 1)
         })}
       >
         Añadir objetivo
@@ -64,10 +64,10 @@ const UnitBody = ({unit}) => {
       <Button type="dashed" block icon={<PlusOutlined />}
         onClick={() => addValue({
           id: randomId(),
-          descripcion: 'Valor ' + (unit.valores.length + 1)
+          descripcion: (unit.valores.length+1) + ': Valor ' + (unit.valores.length + 1)
         })}
       >
-        Añadir objetivo
+        Añadir valor
       </Button>
     </Col>
   )

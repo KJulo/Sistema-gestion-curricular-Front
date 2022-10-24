@@ -11,21 +11,26 @@ const Value = ({unit, value, index}) => {
   const confirmText = '¿Deseas eliminar este objetivo?';
 
   function onEdit(newValue) {
-    const valueUpdated = { ...value, descripcion: newValue }
+    let valueUpdated;
+    if (newValue.search(':') == -1) {
+      valueUpdated = { ...value, descripcion: (index+1) + ": " + newValue }
+    } else {
+      valueUpdated = { ...value, descripcion: newValue }
+    }
     dispatch(editValueManagement({unitId: unit.id, value: valueUpdated}))
   }
 
-  function removeUnit(id) {
+  function removeValue(id) {
     dispatch(deleteValueManagement({unitId: unit.id, valueId: id}))
   }
 
   return (
       <Typography>
-        <pre>{index + ": "}
+        <pre>
           <Text editable={{ onChange: onEdit }}>
             {value.descripcion}
           </Text>
-            <Popconfirm placement="topLeft" title={confirmText} onConfirm={()=>removeUnit(value.id)} okText="Eliminar" cancelText="Cancelar">
+            <Popconfirm placement="topLeft" title={confirmText} onConfirm={()=>removeValue(value.id)} okText="Eliminar" cancelText="Cancelar">
               <MinusCircleOutlined />
             </Popconfirm>
         </pre>
