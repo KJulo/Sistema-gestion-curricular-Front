@@ -1,8 +1,16 @@
 import React, { useEffect } from "react";
 
-import { Avatar, Card, Divider, Typography, Button, Popconfirm, message } from "antd";
+import {
+  Avatar,
+  Card,
+  Divider,
+  Typography,
+  Button,
+  Popconfirm,
+  message,
+} from "antd";
 const { Text } = Typography;
-import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
+import { EditOutlined, DeleteOutlined, UserOutlined } from "@ant-design/icons";
 
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -38,12 +46,7 @@ const ViewStudent = () => {
       type: DELETE_STUDENT_ADMIN,
       payload: { id: id, navigate },
     });
-    message.success("Click on Yes");
-  };
-
-  const cancel = (e) => {
-    console.log(e);
-    message.error("Click on No");
+    message.success("Estudiante eliminado con exito.");
   };
   const { student } = useSelector((store) => store.admin);
   if (student) {
@@ -64,7 +67,6 @@ const ViewStudent = () => {
               <Popconfirm
                 title="¿Estás seguro de que quieres eliminar a este usuario?"
                 onConfirm={confirm}
-                onCancel={cancel}
                 okText="Si"
                 cancelText="No"
               >
@@ -85,7 +87,7 @@ const ViewStudent = () => {
               gap: "12px",
             }}
           >
-            <Avatar size={128} src="https://joeschmoe.io/api/v1/random" />
+            <Avatar size={128} icon={<UserOutlined />} />
             <Text strong>Nombre(s): {student.nombres}</Text>
             <Text strong>Apellido(s): {student.apellidos}</Text>
             <Text strong>Correo: {student.correo}</Text>

@@ -34,11 +34,17 @@ export const adminSlice = createSlice({
     updateTeacherAdmin: (state, action) => {
       state.teacher = action.payload;
     },
+    appendTeacherAdmin: (state, action) => { 
+      state.teachers = [action.payload, ...state.teachers];
+    },
     updateStudentsAdmin: (state, action) => {
       state.students = action.payload;
     },
     updateStudentAdmin: (state, action) => {
       state.student = action.payload;
+    },
+    appendStudentAdmin: (state, action) => {
+      state.students = [action.payload, ...state.students]
     },
     updateParentsAdmin: (state, action) => {
       state.parents = action.payload;
@@ -46,6 +52,9 @@ export const adminSlice = createSlice({
     updateParentAdmin: (state, action) => {
       state.parent = action.payload;
     },
+    appendParentAdmin: (state, action) => {
+      state.parents = [action.payload, ...state.parents]
+    }
   },
 });
 
@@ -56,10 +65,13 @@ export const {
   updateAdmin,
   updateTeachersAdmin,
   updateTeacherAdmin,
+  appendTeacherAdmin,
   updateParentsAdmin,
   updateParentAdmin,
+  appendParentAdmin,
   updateStudentsAdmin,
   updateStudentAdmin,
+  appendStudentAdmin,
 } = adminSlice.actions;
 
 // exportar reducer del slice para mandarlo a la store

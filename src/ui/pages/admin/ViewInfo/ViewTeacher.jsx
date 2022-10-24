@@ -29,11 +29,7 @@ const ViewTeacher = () => {
       type: DELETE_TEACHER_ADMIN,
       payload: { id: id, navigate },
     });
-    message.success("Click on Yes");
-  };
-  const cancel = (e) => {
-    console.log(e);
-    message.error("Click on No");
+    message.success("Profesor eliminado con exito.");
   };
   if (teacher) {
     return (
@@ -52,7 +48,6 @@ const ViewTeacher = () => {
             <Popconfirm
               title="¿Estás seguro de que quieres eliminar a este usuario?"
               onConfirm={confirm}
-              onCancel={cancel}
               okText="Si"
               cancelText="No"
             >

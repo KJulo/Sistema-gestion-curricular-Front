@@ -14,7 +14,6 @@ import {
   SubTitleContent,
   ContentTable,
   AddPupilo,
-  DefaultTitleContent,
 } from "@components/index";
 import { EditOutlined, DeleteOutlined, UserOutlined } from "@ant-design/icons";
 
@@ -44,12 +43,9 @@ const ViewParent = () => {
       type: DELETE_PARENT_ADMIN,
       payload: { id: id, navigate },
     });
-    message.success("Click on Yes");
+    message.success("Apoderado eliminado con exito.");
   };
-  const cancel = (e) => {
-    console.log(e);
-    message.error("Click on No");
-  };
+
   if (parent) {
     return (
       <>
@@ -68,7 +64,6 @@ const ViewParent = () => {
               <Popconfirm
                 title="¿Estás seguro de que quieres eliminar a este usuario?"
                 onConfirm={confirm}
-                onCancel={cancel}
                 okText="Si"
                 cancelText="No"
               >

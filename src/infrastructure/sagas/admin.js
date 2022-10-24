@@ -6,10 +6,13 @@ import {
   updateAdmin,
   updateTeachersAdmin,
   updateTeacherAdmin,
+  appendTeacherAdmin,
   updateStudentsAdmin,
   updateStudentAdmin,
+  appendStudentAdmin,
   updateParentsAdmin,
   updateParentAdmin,
+  appendParentAdmin,
 } from "@slices/admin";
 import { updateUser } from "@slices/user";
 
@@ -17,12 +20,15 @@ import {
   FETCH_PARENTS_ADMIN,
   FETCH_PARENT_ADMIN,
   DELETE_PARENT_ADMIN,
+  ADD_PARENT_ADMIN,
   FETCH_STUDENTS_ADMIN,
   FETCH_STUDENT_ADMIN,
   DELETE_STUDENT_ADMIN,
+  ADD_STUDENT_ADMIN,
   FETCH_TEACHERS_ADMIN,
   FETCH_TEACHER_ADMIN,
   DELETE_TEACHER_ADMIN,
+  ADD_TEACHER_ADMIN,
 } from "./types/admin";
 
 // Network
@@ -65,8 +71,23 @@ function* getTeacher(action) {
 }
 
 function* deleteTeacher(action) {
-  yield call(profesor.deleteTeacher, action.payload.id);
-  action.payload.navigate("/administrador/profesores");
+  try {
+    yield call(profesor.deleteTeacher, action.payload.id);
+    action.payload.navigate("/administrador/profesores");
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+function* addTeacher(action) {
+  try {
+    console.log(action);
+    const response = yield call(profesor.addTeacher, action.payload);
+    console.log(response);
+    yield put(appendTeacherAdmin(response.data.data));
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 function* getStudents() {
@@ -91,6 +112,15 @@ function* deleteStudent(action) {
   try {
     yield call(alumno.deleteStudent, action.payload.id);
     action.payload.navigate("/administrador/alumnos");
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+function* addStudent(action) {
+  try {
+    const response = yield call(alumno.addStudent, action.payload);
+    yield put(appendStudentAdmin(response.data.data));
   } catch (error) {
     console.log(error);
   }
@@ -123,6 +153,16 @@ function* deleteParent(action) {
   }
 }
 
+function* addParent(action) {
+  try {
+    console.log(action);
+    const response = yield call(apoderado.addParent, action.payload);
+    yield put(appendParentAdmin(response.data.data));
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 function* watchGetAdminUser() {
   yield takeLatest(fetchAdmin, getAdmin);
 }
@@ -139,6 +179,10 @@ function* watchDeleteTeacher() {
   yield takeLatest(DELETE_TEACHER_ADMIN, deleteTeacher);
 }
 
+function* watchAddTeacher() {
+  yield takeLatest(ADD_TEACHER_ADMIN, addTeacher);
+}
+
 function* watchGetStudents() {
   yield takeLatest(FETCH_STUDENTS_ADMIN, getStudents);
 }
@@ -149,6 +193,10 @@ function* watchGetStudent() {
 
 function* watchDeleteStudent() {
   yield takeLatest(DELETE_STUDENT_ADMIN, deleteStudent);
+}
+
+function* watchAppendStudent() {
+  yield takeLatest(ADD_STUDENT_ADMIN, addStudent);
 }
 
 function* watchGetParents() {
@@ -163,18 +211,25 @@ function* watchDeleteParent() {
   yield takeLatest(DELETE_PARENT_ADMIN, deleteParent);
 }
 
+function* watchAddParent() {
+  yield takeLatest(ADD_PARENT_ADMIN, addParent);
+}
+
 export default [
   watchGetAdminUser(),
 
   watchGetTeachers(),
   watchGetTeacher(),
+  watchAddTeacher(),
   watchDeleteTeacher(),
 
   watchGetStudents(),
   watchGetStudent(),
   watchDeleteStudent(),
+  watchAppendStudent(),
 
   watchGetParents(),
   watchGetParent(),
   watchDeleteParent(),
+  watchAddParent(),
 ];
