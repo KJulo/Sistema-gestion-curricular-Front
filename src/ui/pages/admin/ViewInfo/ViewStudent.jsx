@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect,useState } from "react";
 
 import {
   Avatar,
@@ -20,7 +20,7 @@ import {
   SubTitleContent,
   ContentTable,
   AddStudent,
-  DefaultTitleContent,
+  EditStudent,
 } from "@components/index";
 
 import { content, columns } from "@constants/admin/students";
@@ -49,6 +49,7 @@ const ViewStudent = () => {
     message.success("Estudiante eliminado con exito.");
   };
   const { student } = useSelector((store) => store.admin);
+
   if (student) {
     return (
       <>
@@ -61,9 +62,7 @@ const ViewStudent = () => {
           }
           extra={
             <div>
-              <Button style={{ marginRight: "20px" }}>
-                <EditOutlined /> Editar
-              </Button>
+              <EditStudent student={student} />
               <Popconfirm
                 title="¿Estás seguro de que quieres eliminar a este usuario?"
                 onConfirm={confirm}

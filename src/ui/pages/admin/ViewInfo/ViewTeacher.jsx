@@ -1,11 +1,15 @@
 import React, { useEffect } from "react";
 
 import { Avatar, Card, Button, Typography, Popconfirm, message } from "antd";
-import { EditOutlined, DeleteOutlined, UserOutlined } from "@ant-design/icons";
+import { DeleteOutlined, UserOutlined } from "@ant-design/icons";
 import { useNavigate, useLocation } from "react-router-dom";
 const { Text } = Typography;
 
 import "@styles/AdminViewInfo.less";
+
+import {
+  EditTeacher
+} from "@components/index";
 
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -42,9 +46,7 @@ const ViewTeacher = () => {
         }
         extra={
           <div>
-            <Button style={{ marginRight: "20px" }}>
-              <EditOutlined /> Editar
-            </Button>
+            <EditTeacher teacher={teacher} />
             <Popconfirm
               title="¿Estás seguro de que quieres eliminar a este usuario?"
               onConfirm={confirm}

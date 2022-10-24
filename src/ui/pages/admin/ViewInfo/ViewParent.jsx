@@ -14,8 +14,9 @@ import {
   SubTitleContent,
   ContentTable,
   AddPupilo,
+  EditParent,
 } from "@components/index";
-import { EditOutlined, DeleteOutlined, UserOutlined } from "@ant-design/icons";
+import { DeleteOutlined, UserOutlined } from "@ant-design/icons";
 
 import { content, columns } from "@constants/admin/students";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -58,9 +59,7 @@ const ViewParent = () => {
           }
           extra={
             <div>
-              <Button style={{ marginRight: "20px" }}>
-                <EditOutlined /> Editar
-              </Button>
+              <EditParent parent={parent} />
               <Popconfirm
                 title="¿Estás seguro de que quieres eliminar a este usuario?"
                 onConfirm={confirm}
@@ -89,6 +88,13 @@ const ViewParent = () => {
             <Text strong>Apellido(s): {parent.apellidos}</Text>
             <Text strong>Correo: {parent.correo}</Text>
             <Text strong>Rut: {parent.rut}</Text>
+            <Text strong>Telofono celular: {parent.telefono}</Text>
+            {parent.telefonoEmergencia && (
+              <Text strong>
+                Telefono emergencia: {parent.telefonoEmergencia}
+              </Text>
+            )}
+            <Text strong>Dirección: {parent.direccion}</Text>
           </div>
           <Divider />
           <SubTitleContent title="Pupilos" action={<AddPupilo />} />
