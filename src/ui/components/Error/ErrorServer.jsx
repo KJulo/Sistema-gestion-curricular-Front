@@ -9,7 +9,6 @@ const { Title, Text } = Typography;
 import Error400 from "@img/404error.jpg";
 
 const ErrorServer = ({ error }) => {
-  console.log(error);
   return (
     <div className="display-flex flex-column" style={{ margin: "100px" }}>
       <div

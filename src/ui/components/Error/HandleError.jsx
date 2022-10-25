@@ -15,9 +15,9 @@ import '@styles/Error.less';
 const HandleError = ({ children }) => {
   const error = useSelector((store) => store.error);
   const dispatch = useDispatch();
-  
+
   switch (true) {
-    case (error.code == 404):
+    case (error.code !== 200 && error.code !== 0):
       return <ErrorServer error={error}/>
     default:
       return <>{children}</>;
