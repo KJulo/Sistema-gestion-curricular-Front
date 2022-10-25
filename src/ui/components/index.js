@@ -6,7 +6,6 @@ export { default as HomeNavBar } from "@components/HomeNavBar";
 export { default as DefaultTitleContent } from "@components/DefaultTitleContent";
 export { default as SearchContent } from "@components/SearchContent";
 export { default as FilterCourse } from "@components/FilterCourse";
-export { default as AddCourse } from "@components/AddCourse";
 export { default as SubTitleContent } from "@components/SubTitleContent";
 export { default as HandleError } from "@components/Error/HandleError";
 export { default as LoadingSpinner } from "@components/LoadingSpinner";
@@ -14,6 +13,10 @@ export { default as DocumentGenerator } from "@components/DocumentGenerator";
 
 //admin
 export { default as AdminMenu } from "@components/Admin/NavigationMenu";
+
+//course
+export { default as AddCourse } from "@components/Course/AddCourse";
+export { default as EditCourse } from "@components/Course/EditCourse";
 
 //teachers
 export { default as TeacherMenu } from "@components/Teachers/NavigationMenu.jsx";

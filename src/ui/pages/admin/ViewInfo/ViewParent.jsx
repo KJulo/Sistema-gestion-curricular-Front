@@ -66,7 +66,7 @@ const ViewParent = () => {
                 okText="Si"
                 cancelText="No"
               >
-                <Button>
+                <Button type="danger">
                   <DeleteOutlined />
                   Eliminar
                 </Button>

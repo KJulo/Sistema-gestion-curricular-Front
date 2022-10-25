@@ -152,25 +152,23 @@ export const content = [
 export const columns = [
   {
     title: "Curso",
-    dataIndex: "course",
-    key: "course",
-    fixed: "left",
+    dataIndex: "nombre",
+    key: "nombre",
   },
   {
-    title: "Asignatura",
-    dataIndex: "subject",
-    key: "subject",
-    fixed: "left",
+    title: "Paralelo",
+    dataIndex: "paralelo",
+    key: "paralelo",
   },
   {
     title: "Año",
     dataIndex: "anho",
     key: "anho",
-    fixed: "left",
   },
   {
     title: "Editar",
-    key: "actions",
+    dataIndex: "id",
+    key: "id",
     render: (record) => {
       return (
         <div
@@ -179,7 +177,7 @@ export const columns = [
             e.preventDefault();
           }}
         >
-          <Link to={`${record.key}`}>
+          <Link to={`/administrador/cursos/${record}`} state={{ id: record }}>
             <EyeOutlined style={{ marginRight: "6px" }} />
             Ver
           </Link>

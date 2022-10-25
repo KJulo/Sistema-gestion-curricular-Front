@@ -1,4 +1,4 @@
-import React, { useEffect,useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import {
   Avatar,
@@ -69,7 +69,7 @@ const ViewStudent = () => {
                 okText="Si"
                 cancelText="No"
               >
-                <Button>
+                <Button type="danger">
                   <DeleteOutlined />
                   Eliminar
                 </Button>

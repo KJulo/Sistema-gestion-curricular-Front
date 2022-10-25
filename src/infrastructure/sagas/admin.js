@@ -4,16 +4,24 @@ import { call, put, takeLatest } from "redux-saga/effects";
 import {
   fetchAdmin,
   updateAdmin,
+
+  updateCoursesAdmin,
+  updateCourseAdmin,
+  appendCourseAdmin,
+
   updateTeachersAdmin,
   updateTeacherAdmin,
   appendTeacherAdmin,
+
   updateStudentsAdmin,
   updateStudentAdmin,
   appendStudentAdmin,
+
   updateParentsAdmin,
   updateParentAdmin,
   appendParentAdmin,
 } from "@slices/admin";
+
 import { updateUser } from "@slices/user";
 
 import {
@@ -32,6 +40,11 @@ import {
   ADD_TEACHER_ADMIN,
   UPDATE_TEACHER_ADMIN,
   DELETE_TEACHER_ADMIN,
+  FETCH_COURSES_ADMIN,
+  FETCH_COURSE_ADMIN,
+  ADD_COURSE_ADMIN,
+  UPDATE_COURSE_ADMIN,
+  DELETE_COURSE_ADMIN,
 } from "./types/admin";
 
 // Network
@@ -194,6 +207,53 @@ function* deleteParent(action) {
   }
 }
 
+function* getCourses() {
+  try {
+    const response = yield call(curso.getCourses);
+    yield put(updateCoursesAdmin(response.data.data));
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+function* getCourse(action) {
+  try {
+    const response = yield call(curso.getCourseById, action.payload);
+    yield put(updateCourseAdmin(response.data.data));
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+function* addCourse(action) { 
+  try {
+    const response = yield call(curso.addCourse, action.payload);
+    yield put(appendCourseAdmin(response.data.data));
+  }
+  catch (error) { 
+    console.log(error);
+  }
+}
+
+function* updateCourse(action) { 
+  try {
+    const response = yield call(curso.patchCourse, action.payload);
+    yield put(updateCourseAdmin(response.data.data));
+  }
+  catch (error) { 
+    console.log(error);
+  }
+}
+
+function* deleteCourse(action) {
+  try {
+    yield call(curso.deleteCourse, action.payload.id);
+    action.payload.navigate("/administrador/cursos");
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 function* watchGetAdminUser() {
   yield takeLatest(fetchAdmin, getAdmin);
 }
@@ -258,6 +318,26 @@ function* watchDeleteParent() {
   yield takeLatest(DELETE_PARENT_ADMIN, deleteParent);
 }
 
+function* watchGetCourses() { 
+  yield takeLatest(FETCH_COURSES_ADMIN, getCourses);
+}
+
+function* watchGetCourse() { 
+  yield takeLatest(FETCH_COURSE_ADMIN, getCourse);
+}
+
+function* watchAddCourse() { 
+  yield takeLatest(ADD_COURSE_ADMIN, addCourse);
+}
+
+function* watchUpdateCourse() { 
+  yield takeLatest(UPDATE_COURSE_ADMIN, updateCourse);
+}
+
+function* watchDeleteCourse() { 
+  yield takeLatest(DELETE_COURSE_ADMIN, deleteCourse);
+}
+
 export default [
   watchGetAdminUser(),
 
@@ -278,4 +358,10 @@ export default [
   watchAddParent(),
   watchUpdateParent(),
   watchDeleteParent(),
+
+  watchGetCourses(),
+  watchGetCourse(),
+  watchAddCourse(),
+  watchUpdateCourse(),
+  watchDeleteCourse(),
 ];

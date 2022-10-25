@@ -4,7 +4,7 @@ import { EditOutlined } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
 import { UPDATE_PARENT_ADMIN } from "@infrastructure/sagas/types/admin";
 
-const AddTeacher = ({ parent }) => {
+const EditParent = ({ parent }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
   const dispatch = useDispatch();
@@ -128,4 +128,4 @@ const AddTeacher = ({ parent }) => {
   );
 };
 
-export default AddTeacher;
+export default EditParent;

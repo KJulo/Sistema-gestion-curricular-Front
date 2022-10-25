@@ -4,21 +4,17 @@ export const adminSlice = createSlice({
   name: "admin",
   initialState: {
     admin: {},
-    courses: {
-      filters: {
-        courses: [
-          "Primero",
-          "Segundo",
-          "Tercero",
-          "Cuarto ",
-          "Quinto ",
-          "Sexto",
-          "Septimo",
-          "Octavo ",
-        ],
-        subjects: ["Matematicas", "Fisica", "Quimica", "Biologia"],
-      },
-    },
+    courses: [{}],
+    course: {},
+    subjects: [{}],
+    subject: {},
+    teachers: [{}],
+    teacher: {},
+    parents: [{}],
+    parent: {},
+    students: [{}],
+    student: {},
+    
   },
   reducers: {
     fetchAdmin: () => {},
@@ -34,7 +30,7 @@ export const adminSlice = createSlice({
     updateTeacherAdmin: (state, action) => {
       state.teacher = action.payload;
     },
-    appendTeacherAdmin: (state, action) => { 
+    appendTeacherAdmin: (state, action) => {
       state.teachers = [action.payload, ...state.teachers];
     },
     updateStudentsAdmin: (state, action) => {
@@ -44,7 +40,7 @@ export const adminSlice = createSlice({
       state.student = action.payload;
     },
     appendStudentAdmin: (state, action) => {
-      state.students = [action.payload, ...state.students]
+      state.students = [action.payload, ...state.students];
     },
     updateParentsAdmin: (state, action) => {
       state.parents = action.payload;
@@ -53,8 +49,17 @@ export const adminSlice = createSlice({
       state.parent = action.payload;
     },
     appendParentAdmin: (state, action) => {
-      state.parents = [action.payload, ...state.parents]
-    }
+      state.parents = [action.payload, ...state.parents];
+    },
+    updateCoursesAdmin: (state, action) => {
+      state.courses = action.payload;
+    },
+    updateCourseAdmin: (state, action) => {
+      state.course = action.payload;
+    },
+    appendCourseAdmin: (state, action) => {
+      state.courses = [action.payload, ...state.courses];
+    },
   },
 });
 
@@ -72,6 +77,9 @@ export const {
   updateStudentsAdmin,
   updateStudentAdmin,
   appendStudentAdmin,
+  updateCoursesAdmin,
+  updateCourseAdmin,
+  appendCourseAdmin,
 } = adminSlice.actions;
 
 // exportar reducer del slice para mandarlo a la store

@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useLocation, useNavigate } from "react-router-dom";
 import {
   DefaultTitleContent,
   ContentTable,
   SubTitleContent,
   AddStudent,
-  AddTeacher,
+  EditCourse,
 } from "@components/index";
 import { AdminTableLayout } from "@containers/index";
 import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
@@ -19,63 +21,81 @@ import {
   columnsCourse as columnsTeachers,
 } from "@constants/admin/teachers";
 
-import { Divider, Button } from "antd";
+import {
+  FETCH_COURSE_ADMIN,
+  DELETE_COURSE_ADMIN,
+} from "@infrastructure/sagas/types/admin";
+
+import { Divider, Button, Popconfirm, message } from "antd";
 
 const ViewCourse = () => {
-  const cursoExample = {
-    key: "24",
-    name: "Lenguaje - Cuarto medio",
-    anho: "2020",
+  const location = useLocation();
+  const { id } = location.state;
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch({ type: FETCH_COURSE_ADMIN, payload: id });
+  }, []);
+
+  const confirm = (e) => {
+    dispatch({
+      type: DELETE_COURSE_ADMIN,
+      payload: { id: id, navigate },
+    });
+    message.success("Curso eliminado con exito.");
   };
 
-  return (
-    <>
-      <DefaultTitleContent
-        title={cursoExample.name}
-        action={
-          <div>
-            <Button style={{ marginRight: "20px" }}>
-              <EditOutlined /> Editar
-            </Button>
-            <Button>
-              <DeleteOutlined />
-              Eliminar
-            </Button>
-          </div>
-        }
-      />
-      <Divider />
-
-      <div>
-        <SubTitleContent title="Profesor(es):" action={<AddTeacher />} />
-        <AdminTableLayout
-          tableContent={
-            <ContentTable
-              content={contentTeachers}
-              columns={columnsTeachers}
-              type="course"
-            />
+  const { course } = useSelector((store) => store.admin);
+  if (course) {
+    return (
+      <>
+        <DefaultTitleContent
+          title={
+            course.nombre !== undefined
+              ? `${course.nombre} - ${course.paralelo}`
+              : ""
+          }
+          action={
+            <div>
+              <EditCourse course={course} />
+              <Popconfirm
+                title="¿Estás seguro de que quieres eliminar este curso?"
+                onConfirm={confirm}
+                okText="Si"
+                cancelText="No"
+              >
+                <Button type="danger">
+                  <DeleteOutlined /> Eliminar
+                </Button>
+              </Popconfirm>
+            </div>
           }
         />
-      </div>
+        <Divider />
 
-      <Divider />
+        {/* //TODO agregar el componente del profesor para agregarlo o eliminarlo del curso */}
 
-      <div>
-        <SubTitleContent title="Estudiante(s)" action={<AddStudent />} />
-        <AdminTableLayout
-          title="Alumnos"
-          tableContent={
-            <ContentTable
-              content={contentStudents}
-              columns={columnsStudents}
-              type="student"
-            />
-          }
-        />
-      </div>
-    </>
-  );
+        <Divider />
+
+        <div>
+          <SubTitleContent title="Estudiante(s)" action={<AddStudent />} />
+          <AdminTableLayout
+            title="Alumnos"
+            tableContent={
+              <ContentTable
+                content={contentStudents}
+                columns={columnsStudents}
+                type="student"
+              />
+            }
+          />
+        </div>
+      </>
+    );
+  } else {
+    return <></>;
+  }
 };
 
 export default ViewCourse;
