@@ -61,7 +61,7 @@ const getColumns = (content) => {
 const Marks = () => {
   const dispatch = useDispatch();
   const content = useSelector((store) => store.teacher.students.list);
-  const activeFilter = useSelector((store) => store.teacher.students.marks.activeFilter);
+  const activeFilter = useSelector((store) => store.teacher.activeFilters);
   const isLoading = useSelector((store) => store.teacher.isLoading);
   const [studentsFiltered, setStudentsFiltered] = useState(content);
   const [tableColumns, setTableColumns] = useState(getColumns(content));
@@ -81,7 +81,7 @@ const Marks = () => {
 
   // Filtro de curso
   useEffect(() => {
-    setStudentsFiltered(content.filter(c => c.id_curso === activeFilter))
+    setStudentsFiltered(content.filter(c => c.id_curso === activeFilter.courseId))
   }, [activeFilter])
 
   useEffect(() => {
