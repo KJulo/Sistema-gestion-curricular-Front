@@ -1,20 +1,25 @@
 import { call, put, takeEvery, takeLatest } from 'redux-saga/effects';
 
 // Reducers
+import { errorClear, errorFetch } from '@slices/error';
 import { updateUser } from '@slices/user';
 import {
+  setIsLoading,
   fetchTeacher,
   fetchCourses,
   fetchStudents,
   fetchStudentsNotes,
+  fetchAttendance,
   updateTeacher,
   updateCourses,
   updateStudents,
   updateStudentsNotes,
+  setStudentsAttendance,
+  addAttendance,
 } from '@slices/teachers';
 
 // Network
-import { profesor, curso, alumno, notas, asignatura } from '@network/index';
+import { profesor, curso, alumno, notas, asignatura, asistencia } from '@network/index';
 
 function* getTeacher() {
   try {
@@ -25,6 +30,7 @@ function* getTeacher() {
     yield put(updateUser({...userData, tipo: 'profesor' }));
   } catch(e) {
     console.log(e);
+    yield put(errorFetch({ code: '500', error: 'Error en la respuesta del servidor.'}));
   }
 }
 
@@ -53,6 +59,7 @@ function* getCourses() {
     yield put(updateCourses(merged));
   } catch (e) {
     console.log(e);
+    yield put(errorFetch({ code: '500', error: 'Error en la respuesta del servidor.'}));
   }
 }
 
@@ -63,6 +70,7 @@ function* getStudents() {
     yield put(updateStudents(studentList));
   } catch (e) {
     console.log(e);
+    yield put(errorFetch({ code: '500', error: 'Error en la respuesta del servidor.'}));
   }
 }
 
@@ -72,6 +80,42 @@ function* getStudentsNotes() {
     yield put(updateStudentsNotes(response));
   } catch (e) {
     console.log(e);
+    yield put(errorFetch({ code: '500', error: 'Error en la respuesta del servidor.'}));
+  }
+}
+
+function* getStudentsAttendance() {
+  try {
+    const response = (yield call(asistencia.getAttendance)).data.data;
+    yield put(setStudentsAttendance(response));
+  } catch (e) {
+    console.log(e);
+    yield put(errorFetch({ code: '500', error: 'Error en la respuesta del servidor.'}));
+  }
+}
+
+function* createAttendance(action) {
+  const payload = action.payload
+  console.log(payload);
+  try {
+    /**
+     * TODO
+     * ! Falta obtener id_asignatura
+     * * enviar
+     * * id_asignatura,
+     * * id_alumno,
+     * * asistencia,
+     * * fecha
+     */
+    yield put(setIsLoading(true));
+    // const response = (yield call(asistencia.addAttendance)).data.data;
+    // console.log(response);
+    // yield put(setStudentsAttendance(response));
+    yield put(setIsLoading(false));
+  } catch (e) {
+    console.log(e);
+    yield put(e);
+    yield put(errorFetch({ code: '500', error: 'Error en la respuesta del servidor.'}));
   }
 }
 
@@ -87,10 +131,18 @@ function* watchGetStudents() {
 function* watchGetStudentsNotes() {
   yield takeLatest(fetchStudentsNotes, getStudentsNotes)
 }
+function* watchGetStudentsAttendance() {
+  yield takeLatest(fetchAttendance, getStudentsAttendance)
+}
+function* watchCreateAttendance() {
+  yield takeLatest(addAttendance, createAttendance);
+}
 
 export default [
   watchGetTeacherUser(),
   watchGetCourses(),
   watchGetStudents(),
   watchGetStudentsNotes(),
+  watchGetStudentsAttendance(),
+  watchCreateAttendance(),
 ]

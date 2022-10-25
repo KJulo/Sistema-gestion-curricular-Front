@@ -1,13 +1,19 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import '@styles/Attendance.less';
 
 // redux
-import { updateStudentAttendance } from '@slices/teachers';
+import {
+  updateStudentAttendance,
+  fetchStudents,
+  fetchCourses,
+  fetchAttendance,
+  addAttendance,
+} from '@slices/teachers';
 
 // antd
-import { Collapse, Typography} from 'antd';
-import { SwapOutlined } from "@ant-design/icons";
+import { Button } from 'antd';
+import { SwapOutlined, CheckOutlined } from "@ant-design/icons";
 
 //components
 import {
@@ -25,12 +31,35 @@ import { columns } from "@constants/teacher/attendanceTable";
 
 const Attendance = () => {
   const dispatch = useDispatch();
-  const content = useSelector((store) => store.teacher.students.attendance);
+  const content = useSelector((store) => store.teacher.students.list);
+  const { activeFilters } = useSelector((store) => store.teacher);
+  const { isLoading } = useSelector((store) => store.teacher);
+
+  useEffect(() => {
+    dispatch(fetchCourses());
+    dispatch(fetchStudents());
+    dispatch(fetchAttendance());
+  }, [])
+
+  // Inicializar las asistencias de los estudiantes al cambiar la fecha
+  useEffect(() => {
+    initAttendance();
+  }, [activeFilters, content.length>0])
+
+  function initAttendance () {
+    content.map((student) => {
+      dispatch(updateStudentAttendance({ id: student.id, asistencia: { fecha: activeFilters.selectedDate, asiste: false} }));
+    })
+  }
   
   // Al hacer click en el icono de switch, cambiar estado de asiste
   const handleClick = (record) => {
-    const cambio = record.asistencia ? false : true;
-    dispatch(updateStudentAttendance({ id: record.id, asistencia: cambio }));
+    const cambio = record.asistencia.asiste ? false : true;
+    dispatch(updateStudentAttendance({ id: record.id, asistencia: { fecha: activeFilters.selectedDate, asiste: cambio} }));
+  }
+
+  const onSaveChanges = (content) => {
+    dispatch(addAttendance(content));
   }
 
   // Columna de edición, se agrega ahora con un concat
@@ -70,6 +99,10 @@ const Attendance = () => {
             />
           }
         />
+        <br></br>
+        <Button onClick={()=>onSaveChanges(content)} type="primary" shape="round" icon={<CheckOutlined />} size="middle" loading={isLoading}>
+          Guardar Cambios
+        </Button>
       </div>
     </div>
   );

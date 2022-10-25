@@ -36,6 +36,7 @@ export const teacherSlice = createSlice({
         },
       },
       isLoading: false,
+      activeFilters: {},
     },
     reducers: {
       setIsLoading: (state, action) => { state.isLoading = action.payload },
@@ -43,6 +44,8 @@ export const teacherSlice = createSlice({
       fetchCourses: (state) => { state.isLoading = true },
       fetchStudents: (state) => { state.isLoading = true },
       fetchStudentsNotes: (state) => { state.isLoading = true },
+      fetchAttendance: (state) => { state.isLoading = true },
+      addAttendance: (state) => { state.isLoading = true },
       updateTeacher: (state, action) => {
         state.teacher = { ...state.teacher, ...action.payload };
         state.isLoading = false;
@@ -79,19 +82,19 @@ export const teacherSlice = createSlice({
       },
       updateStudentAttendance: (state, action) => {
         const payload = action.payload;
-        const studentList = state.students.attendance.map((student) => {
+        const studentList = state.students.list.map((student) => {
           if (payload.id === student.id) return {
             ...student,
             asistencia: payload.asistencia
           }
           return student
         });
-        // TODO reemplazar este return por un seteo normal
+        state.isLoading = false;
         return {
           ...state,
           students: {
               ...state.students,
-              attendance: studentList
+              list: studentList
           }
         }
       },
@@ -121,6 +124,7 @@ export const teacherSlice = createSlice({
             return unit
           }
         });
+        state.isLoading = false;
       },
       editObjetiveManagement: (state, action) => {
         const stateUnits = state.courses.management.units;
@@ -145,6 +149,7 @@ export const teacherSlice = createSlice({
           }
         })
         state.courses.management.units = updatedUnits;
+        state.isLoading = false;
       },
       deleteObjetiveManagement: (state, action) => {
         const stateUnits = state.courses.management.units;
@@ -160,6 +165,7 @@ export const teacherSlice = createSlice({
           }
         })
         state.courses.management.units = updatedUnits;
+        state.isLoading = false;
       },
       appendValueManagement: (state, action) => {
         const payload = action.payload;
@@ -172,6 +178,7 @@ export const teacherSlice = createSlice({
             return unit
           }
         });
+        state.isLoading = false;
       },
       editValueManagement: (state, action) => {
         const stateUnits = state.courses.management.units;
@@ -196,6 +203,7 @@ export const teacherSlice = createSlice({
           }
         })
         state.courses.management.units = updatedUnits;
+        state.isLoading = false;
       },
       deleteValueManagement: (state, action) => {
         const stateUnits = state.courses.management.units;
@@ -211,6 +219,7 @@ export const teacherSlice = createSlice({
           }
         })
         state.courses.management.units = updatedUnits;
+        state.isLoading = false;
       },
       updateDateManagement: (state, action) => {
         const data = action.payload;
@@ -219,6 +228,7 @@ export const teacherSlice = createSlice({
           ? { ...unit, dateRange: data.dateRange}
           : unit
         ))
+        state.isLoading = false;
       },
       deleteUnitManagement: (state, action) => {
         state.courses.management.units = state.courses.management.units.filter(
@@ -228,8 +238,11 @@ export const teacherSlice = createSlice({
       },
       setActiveFilter: (state, action) => {
         const data = action.payload;
-        state.students.marks.activeFilter = data.filter;
+        state.activeFilters = { ...state.activeFilters, ...data } ;
       },
+      setStudentsAttendance: (state, action) => {
+        console.log(action);
+      }
     }
 })
 
@@ -258,6 +271,9 @@ export const {
   editValueManagement,
   deleteValueManagement,
   setActiveFilter,
+  fetchAttendance,
+  setStudentsAttendance,
+  addAttendance,
 } = teacherSlice.actions;
 
 // exportar reducer del slice para mandarlo a la store
