@@ -1,44 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-// Constants
-import { courses } from '@constants/teacher/virtualClass.js';
-import { courseNames } from '@constants/teacher/coursesNames';
-import { students } from '@constants/teacher/students';
-import { studentsMarks } from '@constants/teacher/studentsMarks';
+import { initState } from '@domain/teacher';
 
 export const teacherSlice = createSlice({
     name: 'teacher',
-    initialState: {
-      teacher: {
-        id: '',
-        id_colegio: '',
-        nombres: '',
-        apellidos: '',
-        rut: '',
-        constrasena: '',
-        correo: '',
-      },
-      courses: {
-        basicInfo: [],
-        virtualClasses: courses,
-        attendance: courseNames,
-        courseFilters: courseNames.map((course) => course.nombre),
-        management: {
-          course: {},
-          units: [],
-        },
-      },
-      students: {
-        list: [],
-        attendance: students.map((student) => ({ ...student, asistencia: false })),
-        marks: {
-          activeFilter: '',
-        },
-      },
-      isLoading: false,
-      activeFilters: {},
-    },
+    initialState: initState,
     reducers: {
+      resetStore: (state) => { state = initState },
       setIsLoading: (state, action) => { state.isLoading = action.payload },
       fetchTeacher: (state) => { state.isLoading = true },
       fetchCourses: (state) => { state.isLoading = true },
@@ -242,12 +210,14 @@ export const teacherSlice = createSlice({
       },
       setStudentsAttendance: (state, action) => {
         console.log(action);
+        return state;
       }
     }
 })
 
 // exportar funciones individuales
 export const {
+  resetStore,
   setIsLoading,
   courseFiltersUpdate,
   updateStudentAttendance,

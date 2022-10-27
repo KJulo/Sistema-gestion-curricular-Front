@@ -4,15 +4,17 @@ import '@styles/Attendance.less';
 
 // redux
 import {
+  setIsLoading,
   updateStudentAttendance,
   fetchStudents,
   fetchCourses,
   fetchAttendance,
   addAttendance,
+  resetStore,
 } from '@slices/teachers';
 
 // antd
-import { Button } from 'antd';
+import { Button, Alert  } from 'antd';
 import { SwapOutlined, CheckOutlined } from "@ant-design/icons";
 
 //components
@@ -21,6 +23,7 @@ import {
   SearchContent,
   TeacherFilterCourse,
   DefaultTitleContent,
+  FilterSubject,
 } from '@components/index';
 
 //containers
@@ -32,10 +35,15 @@ import { columns } from "@constants/teacher/attendanceTable";
 const Attendance = () => {
   const dispatch = useDispatch();
   const content = useSelector((store) => store.teacher.students.list);
-  const { activeFilters } = useSelector((store) => store.teacher);
-  const { isLoading } = useSelector((store) => store.teacher);
-
+  const courses = useSelector((store) => store.teacher.courses.basicInfo);
+  const { activeFilters, isLoading } = useSelector((store) => store.teacher);
+  const [studentsFiltered, setStudentsFiltered] = useState(content);
+  const [selectedCourseSubjects, setSelectedCourseSubjects] = useState([]);
+  const [alertActive, setAlertActive] = useState(false);
+  
   useEffect(() => {
+    // TODO: se cae cuando se entre desde otro modulo a este de asistencia
+    dispatch(resetStore());
     dispatch(fetchCourses());
     dispatch(fetchStudents());
     dispatch(fetchAttendance());
@@ -43,7 +51,13 @@ const Attendance = () => {
 
   // Inicializar las asistencias de los estudiantes al cambiar la fecha
   useEffect(() => {
-    initAttendance();
+    if (activeFilters) {
+      initAttendance();
+      if (activeFilters.courseId) {
+        const selectedCourse = courses.find(c => c.id === activeFilters.courseId);
+        setSelectedCourseSubjects(selectedCourse.asignaturas);
+      }
+    }
   }, [activeFilters, content.length>0])
 
   function initAttendance () {
@@ -51,6 +65,12 @@ const Attendance = () => {
       dispatch(updateStudentAttendance({ id: student.id, asistencia: { fecha: activeFilters.selectedDate, asiste: false} }));
     })
   }
+
+  // Filtro de curso
+  useEffect(() => {
+    if (activeFilters.courseId)
+      setStudentsFiltered(content.filter(c => c.id_curso === activeFilters.courseId))
+  }, [activeFilters])
   
   // Al hacer click en el icono de switch, cambiar estado de asiste
   const handleClick = (record) => {
@@ -59,7 +79,27 @@ const Attendance = () => {
   }
 
   const onSaveChanges = (content) => {
-    dispatch(addAttendance(content));
+    const { students, filters } = content
+    const condition = activeFilters && activeFilters.courseId && activeFilters.selectedDate && activeFilters.subjectId;
+
+    if (condition || condition !== undefined) {
+      setAlertActive(false);
+      setIsLoading(true);
+      students.map((student) => {
+        const dateSplited = filters.selectedDate.split('-');
+        const date = dateSplited[2]+'-'+dateSplited[1]+'-'+dateSplited[0] + 'T00:00:00.000Z'
+        const params = {
+          id_asignatura: filters.subjectId,
+          id_alumno: student.id,
+          asistencia: student.asistencia.asiste,
+          fecha: date,
+        }
+        dispatch(addAttendance(params));
+      })
+      setIsLoading(false);
+    } else {
+      setAlertActive(true);
+    }
   }
 
   // Columna de edición, se agrega ahora con un concat
@@ -91,18 +131,22 @@ const Attendance = () => {
         <AdminTableLayout
           searchInput={""}
           selectFilter={<TeacherFilterCourse />}
+          extraFilter={<FilterSubject subjects={selectedCourseSubjects} />}
           tableContent={
             <ContentTable
-              content={content}
+              content={studentsFiltered}
               columns={columns.concat(editColumn)}
               type="course"
             />
           }
         />
         <br></br>
-        <Button onClick={()=>onSaveChanges(content)} type="primary" shape="round" icon={<CheckOutlined />} size="middle" loading={isLoading}>
+        <Button onClick={()=>onSaveChanges({ students: studentsFiltered, filters: activeFilters })} type="primary" shape="round" icon={<CheckOutlined />} size="middle" loading={isLoading}>
           Guardar Cambios
         </Button>
+        {alertActive ? (
+          <Alert style={{ marginTop: 20 }} message="Porfavor, seleccione un curso, asignatura y fecha." type="warning" showIcon />
+        ) : <></>}
       </div>
     </div>
   );

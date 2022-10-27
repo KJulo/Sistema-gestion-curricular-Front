@@ -5,7 +5,7 @@ const { baseAsistenciaURI, asistenciaURI } = services();
 const asistencia = (client) => ({
   getAttendance: () => client.get(baseAsistenciaURI),
   getAttendanceById: (id) => client.get(asistenciaURI.replace(':id', id)),
-  addAttendance: (params) => client.get(baseAsistenciaURI, {params}),
+  addAttendance: (params) => client.post(baseAsistenciaURI, params),
 });
 
 export default asistencia;

@@ -107,15 +107,14 @@ function* createAttendance(action) {
      * * asistencia,
      * * fecha
      */
-    yield put(setIsLoading(true));
-    // const response = (yield call(asistencia.addAttendance)).data.data;
-    // console.log(response);
-    // yield put(setStudentsAttendance(response));
-    yield put(setIsLoading(false));
+
+    const response = (yield call(asistencia.addAttendance, payload)).data.data;
+    console.log("response: ", response);
+
   } catch (e) {
     console.log(e);
     yield put(e);
-    yield put(errorFetch({ code: '500', error: 'Error en la respuesta del servidor.'}));
+    yield put(errorFetch({ code: 500, error: 'Error en la respuesta del servidor.'}));
   }
 }
 
