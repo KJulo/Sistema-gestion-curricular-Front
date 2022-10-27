@@ -1,7 +1,8 @@
 import React from "react";
 import { EyeOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
-
+import { Col, Row, Tooltip, Typography } from "antd";
+const { Paragraph } = Typography;
 export const content = [
   {
     key: "1",
@@ -68,11 +69,26 @@ export const columns = [
     dataIndex: "id",
     key: "id",
     render: (record) => (
-      <span>
-        <Link to={`/administrador/alumnos/${record}`} state={{ id: record }}>
-          <EyeOutlined style={{ marginRight: "8px" }} /> Ver
-        </Link>
-      </span>
+      <Row>
+        <Col>
+          <Tooltip title="Ver información del alumno">
+            <Link
+              to={`/administrador/alumnos/${record}`}
+              state={{ id: record }}
+            >
+              <EyeOutlined style={{ marginRight: "8px" }} />
+            </Link>
+          </Tooltip>
+        </Col>
+        <Col>
+          <Paragraph
+            copyable={{
+              text: record,
+              tooltips: ["Copiar ID del alumno", "ID copiado"],
+            }}
+          ></Paragraph>
+        </Col>
+      </Row>
     ),
   },
 ];

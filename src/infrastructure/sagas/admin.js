@@ -45,6 +45,10 @@ import {
   ADD_COURSE_ADMIN,
   UPDATE_COURSE_ADMIN,
   DELETE_COURSE_ADMIN,
+  APPEND_COURSE_STUDENT_ADMIN,
+  DELETE_COURSE_STUDENT_ADMIN,
+  APPEND_COURSE_TEACHER_ADMIN,
+  DELETE_COURSE_TEACHER_ADMIN,
 } from "./types/admin";
 
 // Network
@@ -254,6 +258,14 @@ function* deleteCourse(action) {
   }
 }
 
+function* appendStudentCourse(action) {
+  try {
+    console.log(action);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 function* watchGetAdminUser() {
   yield takeLatest(fetchAdmin, getAdmin);
 }
@@ -338,6 +350,10 @@ function* watchDeleteCourse() {
   yield takeLatest(DELETE_COURSE_ADMIN, deleteCourse);
 }
 
+function* watchAppendStudentCourse() {
+  yield takeLatest(APPEND_COURSE_STUDENT_ADMIN, appendStudentCourse);
+}
+
 export default [
   watchGetAdminUser(),
 
@@ -364,4 +380,5 @@ export default [
   watchAddCourse(),
   watchUpdateCourse(),
   watchDeleteCourse(),
+  watchAppendStudentCourse(),
 ];

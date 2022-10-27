@@ -17,6 +17,7 @@ export { default as AdminMenu } from "@components/Admin/NavigationMenu";
 //course
 export { default as AddCourse } from "@components/Course/AddCourse";
 export { default as EditCourse } from "@components/Course/EditCourse";
+export { default as AppendStudent } from "@components/Course/AppendStudent";
 
 //teachers
 export { default as TeacherMenu } from "@components/Teachers/NavigationMenu.jsx";
