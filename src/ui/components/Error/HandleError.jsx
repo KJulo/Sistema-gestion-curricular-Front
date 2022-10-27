@@ -9,16 +9,15 @@ import ErrorServer from "@components/Error/ErrorServer";
 import { useLocation } from "react-router-dom";
 
 //styles
-import '@styles/Error.less';
-
+import "@styles/Error.less";
 
 const HandleError = ({ children }) => {
   const error = useSelector((store) => store.error);
   const dispatch = useDispatch();
 
   switch (true) {
-    case (error.code !== 200 && error.code !== 0):
-      return <ErrorServer error={error}/>
+    case error && error.code !== 200 && error.code !== 0:
+      return <ErrorServer error={error} />;
     default:
       return <>{children}</>;
   }

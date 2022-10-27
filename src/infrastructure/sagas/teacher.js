@@ -30,7 +30,7 @@ function* getTeacher() {
     yield put(updateUser({...userData, tipo: 'profesor' }));
   } catch(e) {
     console.log(e);
-    yield put(errorFetch({ code: '500', error: 'Error en la respuesta del servidor.'}));
+    yield put(errorFetch({ code: e.response.status, error: e.message}));
   }
 }
 
@@ -59,7 +59,7 @@ function* getCourses() {
     yield put(updateCourses(merged));
   } catch (e) {
     console.log(e);
-    yield put(errorFetch({ code: '500', error: 'Error en la respuesta del servidor.'}));
+    yield put(errorFetch({ code: e.response.status, error: e.message}));
   }
 }
 
@@ -70,7 +70,7 @@ function* getStudents() {
     yield put(updateStudents(studentList));
   } catch (e) {
     console.log(e);
-    yield put(errorFetch({ code: '500', error: 'Error en la respuesta del servidor.'}));
+    yield put(errorFetch({ code: e.response.status, error: e.message}));
   }
 }
 
@@ -80,7 +80,7 @@ function* getStudentsNotes() {
     yield put(updateStudentsNotes(response));
   } catch (e) {
     console.log(e);
-    yield put(errorFetch({ code: '500', error: 'Error en la respuesta del servidor.'}));
+    yield put(errorFetch({ code: e.response.status, error: e.message}));
   }
 }
 
@@ -90,7 +90,7 @@ function* getStudentsAttendance() {
     yield put(setStudentsAttendance(response));
   } catch (e) {
     console.log(e);
-    yield put(errorFetch({ code: '500', error: 'Error en la respuesta del servidor.'}));
+    yield put(errorFetch({ code: e.response.status, error: e.message}));
   }
 }
 
