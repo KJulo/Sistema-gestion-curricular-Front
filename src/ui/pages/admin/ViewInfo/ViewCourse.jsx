@@ -41,10 +41,14 @@ import {
   Result,
   List,
 } from "antd";
+import {
+  APPEND_COURSE_TEACHER_ADMIN,
+  DELETE_SUBJECT_ADMIN,
+} from "../../../../infrastructure/sagas/types/admin";
 const { Text } = Typography;
 
 const ViewCourse = () => {
-  const [idProfesor, setIdProfesor] = useState();
+  const [id_profesor, setIdProfesor] = useState();
 
   const location = useLocation();
   const { id } = location.state;
@@ -64,7 +68,10 @@ const ViewCourse = () => {
   };
 
   const agregarProfesor = () => {
-    console.log(idProfesor);
+    dispatch({
+      type: APPEND_COURSE_TEACHER_ADMIN,
+      payload: { id_profesor, id: course.id },
+    });
   };
 
   const { course } = useSelector((store) => store.admin);
@@ -95,17 +102,45 @@ const ViewCourse = () => {
         />
         <Divider />
         <Row gutter={16} type="flex">
-          <Col span={12} style={{display: "flex"}}>
+          <Col span={12} style={{ display: "flex" }}>
             {course.profesor ? (
-              <Card title="Profesor jefe" style={{flex:1}}>
-                <Avatar size={128} icon={<UserOutlined />} />
-                <Text strong>Nombre(s): {course.profesor.nombres}</Text>
-                <Text strong>Apellido(s): {course.profesor.apellidos}</Text>
-                <Text strong>Correo: {course.profesor.correo}</Text>
-                <Text strong>Rut: {course.profesor.rut}</Text>{" "}
+              <Card
+                title="Profesor jefe"
+                style={{ flex: 1, flexFlow: "column" }}
+                extra={
+                  <Popconfirm
+                    title="¿Estás seguro de que quieres eliminar el profesor de este curso?"
+                    onConfirm={() => {
+                      dispatch({
+                        type: APPEND_COURSE_TEACHER_ADMIN,
+                        payload: { id_profesor: null, id: course.id },
+                      });
+                    }}
+                    okText="Si"
+                    cancelText="No"
+                  >
+                    <Button type="danger">Eliminar</Button>
+                  </Popconfirm>
+                }
+              >
+                <div
+                  style={{
+                    display: "flex",
+                    flexFlow: "column",
+                    justifyContent: "center",
+                    gap: "8px",
+                    alignItems: "center",
+                  }}
+                >
+                  <Avatar size={128} icon={<UserOutlined />} />
+                  <Text strong>Nombre(s): {course.profesor.nombres}</Text>
+                  <Text strong>Apellido(s): {course.profesor.apellidos}</Text>
+                  <Text strong>Correo: {course.profesor.correo}</Text>
+                  <Text strong>Rut: {course.profesor.rut}</Text>{" "}
+                </div>
               </Card>
             ) : (
-              <Card title="Profesor jefe" style={{flex:1}} >
+              <Card title="Profesor jefe" style={{ flex: 1 }}>
                 <Row style={{ justifyContent: "center" }}>
                   <Col>
                     <Result
@@ -117,9 +152,9 @@ const ViewCourse = () => {
                             <Input
                               placeholder="ID del profesor"
                               onChange={(e) => {
-                                setIdProfesor({ id_profesor: e.target.value });
+                                setIdProfesor(e.target.value);
                               }}
-                              style={{ marginBottom:"20px"}}
+                              style={{ marginBottom: "20px" }}
                             ></Input>
                             <Button type="primary" onClick={agregarProfesor}>
                               Agregar
@@ -133,26 +168,39 @@ const ViewCourse = () => {
               </Card>
             )}
           </Col>
-          <Col span={12} style={{display:"flex"}}>
-            <Card title="Asignaturas" style={{flex:1}}>
+          <Col span={12} style={{ display: "flex" }}>
+            <Card title="Asignaturas" style={{ flex: 1 }}>
               <List
                 itemLayout="horizontal"
                 size="default"
-                dataSource={[
-                  { title: "Matemáticas" },
-                  { title: "Lenguaje" },
-                  { title: "Ciencias" },
-                  { title: "Historia" },
-                  { title: "Educación Física" },
-                  { title: "Arte" },
-                  { title: "Tecnología" },
-                ]}
-                renderItem={(item) => (
-                  <Row>
-                    <Text>{item.title}</Text>
+                dataSource={course.asignatura}
+                renderItem={(asignatura) => (
+                  <Row style={{ justifyContent: "space-between" }}>
+                    <Col>
+                      <Text>{asignatura.nombre}</Text>
+                    </Col>
+                    <Col style={{ display: "flex", gap: "10px" }}>
+                      <Popconfirm
+                        title="¿Estás seguro de que quieres eliminar esta asignatura?"
+                        onConfirm={() => {
+                          dispatch({
+                            type: DELETE_SUBJECT_ADMIN,
+                            payload: asignatura.id,
+                          });
+                        }}
+                        okText="Si"
+                        cancelText="No"
+                      >
+                        <DeleteOutlined style={{ color: "red" }} />
+                      </Popconfirm>
+                      <EditOutlined
+                        onClick={() => {
+                          console.log("Editar");
+                        }}
+                      />
+                    </Col>
                     <Divider />
                   </Row>
-
                 )}
               ></List>
             </Card>
@@ -162,7 +210,7 @@ const ViewCourse = () => {
 
         <div>
           <SubTitleContent title="Estudiante(s)" action={<AppendStudent />} />
-          
+
           <AdminTableLayout
             tableContent={
               <ContentTable

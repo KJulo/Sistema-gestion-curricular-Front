@@ -4,22 +4,19 @@ import { call, put, takeLatest } from "redux-saga/effects";
 import {
   fetchAdmin,
   updateAdmin,
-
   updateCoursesAdmin,
   updateCourseAdmin,
   appendCourseAdmin,
-
   updateTeachersAdmin,
   updateTeacherAdmin,
   appendTeacherAdmin,
-
   updateStudentsAdmin,
   updateStudentAdmin,
   appendStudentAdmin,
-
   updateParentsAdmin,
   updateParentAdmin,
   appendParentAdmin,
+  filterSubjectCourseAdmin,
 } from "@slices/admin";
 
 import { updateUser } from "@slices/user";
@@ -49,6 +46,8 @@ import {
   DELETE_COURSE_STUDENT_ADMIN,
   APPEND_COURSE_TEACHER_ADMIN,
   DELETE_COURSE_TEACHER_ADMIN,
+
+  DELETE_SUBJECT_ADMIN,
 } from "./types/admin";
 
 // Network
@@ -58,6 +57,7 @@ import {
   curso,
   apoderado,
   profesor,
+  asignatura
 } from "@network/index";
 
 function* getAdmin() {
@@ -150,7 +150,7 @@ function* addStudent(action) {
 function* updateStudent(action) {
   try {
     const response = yield call(alumno.patchStudent, action.payload);
-    yield put(updateStudentAdmin(response.data.data))
+    yield put(updateStudentAdmin(response.data.data));
   } catch (error) {
     console.log(error);
   }
@@ -196,7 +196,7 @@ function* addParent(action) {
 function* updateParent(action) {
   try {
     const response = yield call(apoderado.patchParent, action.payload);
-    yield put(updateParentAdmin(response.data.data))
+    yield put(updateParentAdmin(response.data.data));
   } catch (error) {
     console.log(error);
   }
@@ -229,22 +229,20 @@ function* getCourse(action) {
   }
 }
 
-function* addCourse(action) { 
+function* addCourse(action) {
   try {
     const response = yield call(curso.addCourse, action.payload);
     yield put(appendCourseAdmin(response.data.data));
-  }
-  catch (error) { 
+  } catch (error) {
     console.log(error);
   }
 }
 
-function* updateCourse(action) { 
+function* updateCourse(action) {
   try {
     const response = yield call(curso.patchCourse, action.payload);
     yield put(updateCourseAdmin(response.data.data));
-  }
-  catch (error) { 
+  } catch (error) {
     console.log(error);
   }
 }
@@ -260,11 +258,31 @@ function* deleteCourse(action) {
 
 function* appendStudentCourse(action) {
   try {
-    console.log(action);
+    const response = yield call(profesor.patchTeacher, action.payload);
   } catch (error) {
     console.log(error);
   }
-};
+}
+
+function* appendTeacherCourse(action) {
+  try {
+    const response = yield call(curso.patchCourse, action.payload);
+    console.log(response);
+    yield put(updateCourseAdmin(response.data.data));
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+function* deleteSubject(action) {
+  try {
+    const response = yield call(asignatura.deleteSubject, action.payload);
+    console.log(response);
+    yield put(filterSubjectCourseAdmin(response.data.data));
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 function* watchGetAdminUser() {
   yield takeLatest(fetchAdmin, getAdmin);
@@ -330,28 +348,36 @@ function* watchDeleteParent() {
   yield takeLatest(DELETE_PARENT_ADMIN, deleteParent);
 }
 
-function* watchGetCourses() { 
+function* watchGetCourses() {
   yield takeLatest(FETCH_COURSES_ADMIN, getCourses);
 }
 
-function* watchGetCourse() { 
+function* watchGetCourse() {
   yield takeLatest(FETCH_COURSE_ADMIN, getCourse);
 }
 
-function* watchAddCourse() { 
+function* watchAddCourse() {
   yield takeLatest(ADD_COURSE_ADMIN, addCourse);
 }
 
-function* watchUpdateCourse() { 
+function* watchUpdateCourse() {
   yield takeLatest(UPDATE_COURSE_ADMIN, updateCourse);
 }
 
-function* watchDeleteCourse() { 
+function* watchDeleteCourse() {
   yield takeLatest(DELETE_COURSE_ADMIN, deleteCourse);
 }
 
 function* watchAppendStudentCourse() {
   yield takeLatest(APPEND_COURSE_STUDENT_ADMIN, appendStudentCourse);
+}
+
+function* watchAppendTeacherCourse() {
+  yield takeLatest(APPEND_COURSE_TEACHER_ADMIN, appendTeacherCourse);
+}
+
+function* watchDeleteSubject() {
+  yield takeLatest(DELETE_SUBJECT_ADMIN, deleteSubject);
 }
 
 export default [
@@ -381,4 +407,7 @@ export default [
   watchUpdateCourse(),
   watchDeleteCourse(),
   watchAppendStudentCourse(),
+  watchAppendTeacherCourse(),
+
+  watchDeleteSubject(),
 ];

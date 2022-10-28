@@ -14,7 +14,6 @@ export const adminSlice = createSlice({
     parent: {},
     students: [{}],
     student: {},
-    
   },
   reducers: {
     fetchAdmin: () => {},
@@ -60,6 +59,14 @@ export const adminSlice = createSlice({
     appendCourseAdmin: (state, action) => {
       state.courses = [action.payload, ...state.courses];
     },
+    filterSubjectCourseAdmin: (state, action) => {
+      state.course = {
+        ...state.course,
+        asignatura: state.course.asignatura.filter(
+          (item) => item.id !== action.payload.id
+        ),
+      };
+    },
   },
 });
 
@@ -80,6 +87,7 @@ export const {
   updateCoursesAdmin,
   updateCourseAdmin,
   appendCourseAdmin,
+  filterSubjectCourseAdmin,
 } = adminSlice.actions;
 
 // exportar reducer del slice para mandarlo a la store
