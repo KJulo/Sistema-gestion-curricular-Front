@@ -10,11 +10,13 @@ import {
   Table,
   TableRow,
   TableCell,
+  VerticalAlign,
+  ITableCellOptions,
 } from "docx";
 
 export class DocumentCreator {
   // tslint:disable-next-line: typedef
-  create(courseInformation) {
+  create(course, units, teacher) {
     const document = new Document({
       sections: [
         {
@@ -26,8 +28,8 @@ export class DocumentCreator {
                 line: 276,
               },
             }),
-            this.createContactInfo(courseInformation),
-            this.createTable(),
+            this.createContactInfo(course, teacher),
+            this.createTable(units),
           ]
         }
       ]
@@ -36,27 +38,32 @@ export class DocumentCreator {
     return document;
   }
 
-  createContactInfo({subject, course, teacher, date}) {
+  createContactInfo(course, teacher) {
     return new Paragraph({
       // alignment: AlignmentType.CENTER,
       children: [
         new TextRun({
-          text: "Asignatura "+subject,
+          text: "Asignatura: "+course.asignatura,
           bold: true,
           break: 1,
         }),
         new TextRun({
-          text: "Curso "+course,
+          text: "Curso: "+course.nombre,
           bold: true,
           break: 1,
         }),
         new TextRun({
-          text: "Profesor "+teacher,
+          text: "Paralelo: "+course.paralelo,
           bold: true,
           break: 1,
         }),
         new TextRun({
-          text: "Año "+date,
+          text: "Profesor: "+teacher.nombres + ' ' +teacher.apellidos,
+          bold: true,
+          break: 1,
+        }),
+        new TextRun({
+          text: "Año: "+course.anho,
           bold: true,
           break: 1,
         }),
@@ -64,19 +71,70 @@ export class DocumentCreator {
     });
   }
 
-  createTable() {
-    return new Table({
-      columnWidths: [4300, 2300, 2300],
-      rows: [
-        // Fila 1
-        this.createTableRow(["UNIDADES DE APRENDIZAJE", "TIEMPO (mes)", "VALOR"]),
-        this.createTableRow(["Unidad N°1: Diversidad e interacciones en los ecosistemas chilenos. Habilidades de investigación, experimentos, trabajo con tablas y gráficos. (24 horas)", "Tiempo en meses: Marzo a mayo ", "Responsabilidad"]),
-        this.createTableRow(["Unidad N°2: El cuerpo humano, sus sistemas de órganos y sus funciones básicas. Se aborda la estructura y funciones de los sistemas esquelético y nervioso. (33 horas)", "Tiempo en meses: mayo - julio", "Amor\nRespeto\nVerdad"]),
-        this.createTableRow(["Unidad N°3: Concepto de materia y sus estados, características y propiedades. Cuantificar magnitudes de masa, volumen y temperatura.", "Tiempo en meses: julio - septiembre", "Solidaridad\nPaz"]),
-        // Si no va esta fila adicional, se buguea la tabla
-        this.createTableRow(["", "", ""]),
-      ]
-    })
+  createTable(units) {
+    const columnWidth = [2300, 2300, 2300];
+    const titleRows = this.createTableRow(["UNIDADES DE APRENDIZAJE", "TIEMPO (mes)", "VALOR"]);
+
+    if (units.length > 0) {
+      return new Table({
+        columnWidths: columnWidth,
+        rows: [
+          // Fila 1
+          titleRows,
+          // Content
+          ...units.map((unit) => (
+            new TableRow({
+              children: [
+                // Unit description
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                      text: unit.nombre,
+                      bold: true,
+                    }),
+                    //Objetives
+                    ...unit.objetivos.map((obj) => {
+                      return new Paragraph({
+                        text: obj.descripcion
+                      })
+                    })
+                  ],
+                }),
+                // Date
+                new TableCell({
+                  children: [
+                    new Paragraph({
+                        text: 'desde ' + unit.dateRange[0]
+                    }),
+                    new Paragraph({
+                      text: 'hasta ' + unit.dateRange[1]
+                    })
+                  ],
+                }),
+                // Responsability
+                new TableCell({
+                  children: [
+                    ...unit.valores.map((val) => {
+                      return new Paragraph({
+                        text: val.descripcion
+                      })
+                    })
+                  ],
+                })
+              ],
+            })
+          ))
+        ]
+      })
+    } else {
+      return new Table({
+        columnWidths: columnWidth,
+        rows: [
+          titleRows,
+          this.createTableRow(["-", "-", "-"]),
+        ]
+      })
+    }
   }
 
   createTableRow(paragraphs) {
@@ -89,6 +147,14 @@ export class DocumentCreator {
           })],
         })
       )),
+    })
+  }
+
+  createParagraph (text) {
+    return new Paragraph({
+      children: [
+          new TextRun(text),
+      ],
     })
   }
 

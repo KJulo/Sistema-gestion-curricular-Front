@@ -13,8 +13,8 @@ export const errorSlice = createSlice({
             state.code = 0;
         },
         errorFetch: (state, action) => {
-          state.error = action.error;
-          state.code = action.code;
+          state.error = action.payload.error;
+          state.code = action.payload.code;
         }
     }
 })
