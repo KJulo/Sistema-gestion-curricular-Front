@@ -12,7 +12,7 @@ export const initState = {
     correo: '',
   },
   courses: {
-    basicInfo: [],
+    list: [],
     virtualClasses: courses,
     management: {
       course: {},

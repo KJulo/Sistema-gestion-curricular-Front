@@ -10,16 +10,18 @@ import {
   fetchStudents,
   fetchStudentsNotes,
   fetchAttendance,
+  fetchForumsAndContent,
   updateTeacher,
   updateCourses,
   updateStudents,
   updateStudentsNotes,
   setStudentsAttendance,
   addAttendance,
+  setForumsAndContent,
 } from '@slices/teachers';
 
 // Network
-import { profesor, curso, alumno, notas, asignatura, asistencia } from '@network/index';
+import { profesor, curso, alumno, notas, asignatura, asistencia, foro, contenido } from '@network/index';
 
 function* getTeacher() {
   try {
@@ -100,17 +102,34 @@ function* createAttendance(action) {
   try {
     /**
      * TODO
-     * ! Falta obtener id_asignatura
-     * * enviar
      * * id_asignatura,
      * * id_alumno,
      * * asistencia,
-     * * fecha
+     * ! fecha : problema con insertarla en el backend
      */
 
     const response = (yield call(asistencia.addAttendance, payload)).data.data;
     console.log("response: ", response);
 
+  } catch (e) {
+    console.log(e);
+    yield put(e);
+    yield put(errorFetch({ code: 500, error: 'Error en la respuesta del servidor.'}));
+  }
+}
+
+function* getForumsAndContent() {
+  try {
+    const forums = (yield call(foro.getForums)).data.data;
+    const contents = (yield call(contenido.getContents)).data.data;
+    // combinar arreglos
+    const forumsWithContent = forums.map((f) => {
+      return {
+        ...f,
+        contenidos: contents.filter(c => c.id_foro === f.id)
+      }
+    })
+    yield put(setForumsAndContent(forumsWithContent));
   } catch (e) {
     console.log(e);
     yield put(e);
@@ -136,6 +155,9 @@ function* watchGetStudentsAttendance() {
 function* watchCreateAttendance() {
   yield takeLatest(addAttendance, createAttendance);
 }
+function*  watchGetForumContent() {
+  yield takeLatest(fetchForumsAndContent, getForumsAndContent);
+}
 
 export default [
   watchGetTeacherUser(),
@@ -144,4 +166,5 @@ export default [
   watchGetStudentsNotes(),
   watchGetStudentsAttendance(),
   watchCreateAttendance(),
+  watchGetForumContent(),
 ]

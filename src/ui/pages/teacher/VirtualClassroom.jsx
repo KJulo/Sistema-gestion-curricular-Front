@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 // antd
-import { Typography, Space, Menu, Select, Modal, Input } from "antd";
+import { Typography, Space, Menu, Select, Modal, Input, Alert } from "antd";
 import {
   AppstoreOutlined,
   PlusSquareOutlined,
@@ -21,11 +21,18 @@ import { useGetCurrentMonth, useGetCurrentYear, useGetCurrentDay } from "@hooks/
 import { useEffect } from "react";
 
 // Redux
-import { fetchStudents, fetchCourses, fetchStudentsNotes, setIsLoading } from "@slices/teachers";
+import {
+  fetchStudents,
+  fetchCourses,
+  fetchStudentsNotes,
+  setIsLoading,
+  fetchForumsAndContent,
+} from "@slices/teachers";
 
 //components
 import {
   ForumContent,
+  FilterCourse,
   FilterButton,
   ContentTable,
   SearchContent,
@@ -38,11 +45,13 @@ import {
 const { Title } = Typography;
 const { Option } = Select;
 
-const defaultMenu = {
-  label: "No disponible",
-  key: "No disponible",
-  icon: <CloseSquareFilled />,
-};
+const defaultMenu = [
+  {
+    label: "No disponible",
+    key: "No disponible",
+    icon: <CloseSquareFilled />,
+  },
+];
 
 const Header = ({ title, filterOptions }) => {
   return (
@@ -58,61 +67,96 @@ const VitualClassroom = () => {
   const currentDate = useGetCurrentDay() + "-" + useGetCurrentMonth() + "-" + useGetCurrentYear();
   const [isAddOpen, setIsAddOpen] = useState(false);
 
-  const courses = useSelector((store) => store.teacher.courses.virtualClasses);
+  const courses = useSelector((store) => store.teacher.courses.list);
   const isLoading = useSelector((store) => store.teacher.isLoading);
-  const [currentCourse, setCurrentCourse] = useState(courses[0]);
+  const [currentCourse, setCurrentCourse] = useState(null);
   const [currentMenu, setCurrentMenu] = useState(null);
   const [currentSubMenu, setCurrentSubMenu] = useState(null);
-  const [isLoaded, setIsLoaded] = useState(false);
-
+  const [hasMenu, setHasMenu] = useState(false);
+  const [hasSubMenu, setHasSubMenu] = useState(false);
   useEffect(() => {
     dispatch(fetchCourses());
+    dispatch(fetchForumsAndContent());
   }, []);
 
   // El hook useState se actualiza al siguiente render, por ello, utilizar useEffect
   useEffect(() => {
-    setCurrentMenu(currentCourse.materias[0]);
-    setCurrentSubMenu(currentCourse.materias[0].menus[0]);
-    setIsLoaded(true);
+    if (courses.length > 0) setCurrentCourse(courses[0]);
+  }, [courses]);
+
+  useEffect(() => {
+    setHasMenu(false);
+    setHasSubMenu(false);
+    if (currentCourse) {
+      const menu = currentCourse.asignaturas[0];
+      if (menu) {
+        setCurrentMenu(menu);
+        if (menu.foros) {
+          setHasSubMenu(true);
+          const submenu = menu.foros[0];
+          if (submenu) {
+            setCurrentSubMenu(submenu);
+          }
+        }
+      }
+    }
   }, [currentCourse]);
 
-  // Optiones
-  const courseNames = courses.map((course) => course.nombre);
+  // Validación de asignaturas
+  useEffect(() => {
+    if (currentCourse && currentCourse.hasOwnProperty("asignaturas"))
+      setHasMenu(currentCourse.asignaturas.length > 0);
+  }, [currentCourse]);
 
-  // Materias del curso
+  // Validacion de foros
+  useEffect(() => {
+    if (currentMenu && currentMenu.hasOwnProperty("foros"))
+      setHasSubMenu(currentMenu.foros.length > 0);
+  }, [currentMenu]);
+
+  // Optiones
+  const courseNames = courses.map((course) => course.nombre + " - " + course.paralelo);
+
+  // Asignaturas del curso
   const subjects = currentCourse
-    ? currentCourse.materias.map((materia) => ({
-        label: materia.nombre,
-        key: materia.id,
+    ? currentCourse.asignaturas.map((asignatura) => ({
+        label: asignatura.nombre,
+        key: asignatura.id,
         icon: <AppstoreOutlined />,
       }))
     : defaultMenu;
 
-  // Unidades o Items de la materia
-  const subMenuItems = currentMenu
-    ? currentMenu.menus.map((menu) => ({
-        label: menu.nombre,
-        key: menu.id,
-        icon: <MoreOutlined />,
-      }))
-    : null;
+  // Unidades o Items de la asignatura
+  const subMenuItems =
+    currentMenu && currentMenu.hasOwnProperty("foros")
+      ? currentMenu.foros.map((foro) => ({
+          label: foro.titulo,
+          key: foro.id,
+          icon: <MoreOutlined />,
+        }))
+      : defaultMenu;
 
   const handleChange = (value) => {
-    let newCourse = courses[value];
-    setCurrentCourse(newCourse);
+    console.log("id curso: ", value);
+    if (courses[value] !== currentCourse) {
+      setCurrentCourse(courses[value]);
+    }
   };
 
   const onClickMenu = (e) => {
-    // buscar el materia del id y setearlo
-    let item = currentCourse.materias.find((materia) => materia.id == e.key);
+    // buscar el asignatura del id y setearlo
+    let item = currentCourse.asignaturas.find((asignatura) => asignatura.id == e.key);
+    setHasSubMenu(false);
     setCurrentMenu(item);
+    setCurrentSubMenu(item.foros.length > 0 ? item.foros[0] : null);
     console.log("item seleccionado: ", item);
   };
 
   const onClickSubMenu = (e) => {
-    // buscar el materia del id y setearlo
-    let item = currentMenu.menus.find((menu) => menu.id == e.key);
+    // buscar el asignatura del id y setearlo
+    let item = currentMenu.foros.find((foro) => foro.id == e.key);
     setCurrentSubMenu(item);
+    console.log("item seleccionado: ", item);
   };
 
   function onClickAdd() {
@@ -124,7 +168,7 @@ const VitualClassroom = () => {
     let textArea = document.getElementById("textArea");
   }
 
-  return isLoaded ? (
+  return (
     <div>
       <div
         style={{
@@ -141,31 +185,64 @@ const VitualClassroom = () => {
         </LoadingSpinner>
       </div>
 
-      <Menu
-        onClick={onClickMenu}
-        selectedKeys={[currentMenu.id]}
-        mode="horizontal"
-        items={subjects}
-        defaultSelectedKeys={currentMenu.id}
-      />
-      <Menu
-        onClick={onClickSubMenu}
-        selectedKeys={[currentSubMenu.id]}
-        mode="horizontal"
-        items={subMenuItems}
-        defaultSelectedKeys={currentMenu.menus[0].nombre}
-      />
+      {hasMenu ? (
+        <Menu
+          onClick={onClickMenu}
+          selectedKeys={[currentMenu.id]}
+          mode="horizontal"
+          items={subjects}
+          defaultSelectedKeys={currentMenu.id}
+        />
+      ) : (
+        <Alert
+          message="Si no le aparecen las asignaturas de este curso, contactarse con su administrador."
+          type="info"
+          showIcon
+        />
+      )}
+
+      {hasSubMenu ? (
+        <Menu
+          onClick={onClickSubMenu}
+          selectedKeys={[currentSubMenu.id]}
+          mode="horizontal"
+          items={subMenuItems}
+          defaultSelectedKeys={currentSubMenu.titulo}
+        />
+      ) : (
+        <Alert
+          message="Para añadir sub-menus, ir a inicios y añadir 'Unidades' en la planificación de este curso"
+          type="info"
+          showIcon
+        />
+      )}
 
       <div className="content-container">
-        {currentSubMenu.contenido.map((item) => (
-          <ForumContent content={item} />
-        ))}
+        {hasSubMenu ? (
+          <>
+            {currentSubMenu.contenidos.map((item) => (
+              <ForumContent content={item} isEdit={true} />
+            ))}
+            {currentSubMenu.contenidos.length === 0 ? (
+              <Alert
+                message="Para añadir material, hacer click en el botón de abajo."
+                type="info"
+                showIcon
+                style={{ marginBottom: 20 }}
+              />
+            ) : (
+              <></>
+            )}
+            <PlusSquareOutlined
+              onClick={() => {
+                onClickAdd();
+              }}
+            />
+          </>
+        ) : (
+          <></>
+        )}
 
-        <PlusSquareOutlined
-          onClick={() => {
-            onClickAdd();
-          }}
-        />
         <Modal
           title="Añadir nueva información o tarea"
           open={isAddOpen}
@@ -178,8 +255,6 @@ const VitualClassroom = () => {
         </Modal>
       </div>
     </div>
-  ) : (
-    <></>
   );
 };
 

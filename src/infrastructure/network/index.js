@@ -9,6 +9,8 @@ import notasNetwork from "./notas";
 import profesorNetwork from "./profesor";
 import administradorNetwork from "./administrador";
 import asignaturaNetwork from "./asignatura";
+import contenidoNetwork from "./contenido";
+import foroNetwork from "./foro";
 
 const clientApiApp = axios.create(/* Configuration */);
 
@@ -22,3 +24,5 @@ export const notas = notasNetwork(clientApiApp);
 export const profesor = profesorNetwork(clientApiApp);
 export const administrador = administradorNetwork(clientApiApp);
 export const asignatura = asignaturaNetwork(clientApiApp);
+export const contenido = contenidoNetwork(clientApiApp);
+export const foro = foroNetwork(clientApiApp);

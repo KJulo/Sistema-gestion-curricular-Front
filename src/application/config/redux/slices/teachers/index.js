@@ -13,13 +13,14 @@ export const teacherSlice = createSlice({
       fetchStudents: (state) => { state.isLoading = true },
       fetchStudentsNotes: (state) => { state.isLoading = true },
       fetchAttendance: (state) => { state.isLoading = true },
+      fetchForumsAndContent: (state) => {state.isLoading = true },
       addAttendance: (state) => { state.isLoading = true },
       updateTeacher: (state, action) => {
         state.teacher = { ...state.teacher, ...action.payload };
         state.isLoading = false;
       },
       updateCourses: (state, action) => {
-        state.courses.basicInfo = action.payload.filter((course) => course.id_profesor === state.teacher.id);
+        state.courses.list = action.payload.filter((course) => course.id_profesor === state.teacher.id);
         state.isLoading = false;
       },
       updateStudents: (state, action) => {
@@ -211,7 +212,22 @@ export const teacherSlice = createSlice({
       setStudentsAttendance: (state, action) => {
         console.log(action);
         return state;
-      }
+      },
+      setForumsAndContent: (state, action) => {
+        const { payload } = action;
+        const coursesWithForums = state.courses.list.map((course) => {
+          return {
+            ...course,
+            asignaturas: course.asignaturas.map((subject) => {
+              return {
+                ...subject,
+                foros: payload.filter(p => p.id_asignatura === subject.id)
+              }
+            })
+          }
+        })
+        state.courses.list = coursesWithForums;
+      },
     }
 })
 
@@ -244,6 +260,8 @@ export const {
   fetchAttendance,
   setStudentsAttendance,
   addAttendance,
+  fetchForumsAndContent,
+  setForumsAndContent,
 } = teacherSlice.actions;
 
 // exportar reducer del slice para mandarlo a la store
