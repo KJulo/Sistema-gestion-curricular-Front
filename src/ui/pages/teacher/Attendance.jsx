@@ -150,7 +150,7 @@ const Attendance = () => {
             <ContentTable
               content={studentsFiltered}
               columns={columns.concat(editColumn)}
-              type="course"
+              scroll={false}
             />
           }
         />

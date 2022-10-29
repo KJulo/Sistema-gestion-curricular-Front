@@ -1,8 +1,8 @@
 import React from "react";
 
 import { Avatar, Card, Divider, Typography, Button } from "antd";
-import { SubTitleContent, ContentTable, AddStudent,DefaultTitleContent } from "@components/index";
-import { EditOutlined,DeleteOutlined } from "@ant-design/icons";
+import { SubTitleContent, ContentTable, AddStudent, DefaultTitleContent } from "@components/index";
+import { EditOutlined, DeleteOutlined } from "@ant-design/icons";
 import { content, columns } from "@constants/admin/students";
 
 const { Text } = Typography;
@@ -11,9 +11,12 @@ const ViewStudent = () => {
   return (
     <>
       <DefaultTitleContent title="Alumno:" />
-      <Card style={{ textAlign: "center" }}       title={<div style={{ marginLeft: "210px" }}>Pedro Gutierrez</div>}      extra={
+      <Card
+        style={{ textAlign: "center" }}
+        title={<div style={{ marginLeft: "210px" }}>Pedro Gutierrez</div>}
+        extra={
           <div>
-            <Button style={{marginRight:"20px"}}>
+            <Button style={{ marginRight: "20px" }}>
               <EditOutlined /> Editar
             </Button>
             <Button>
@@ -21,7 +24,7 @@ const ViewStudent = () => {
               Eliminar
             </Button>
           </div>
-      }>
+        }>
         <div
           style={{
             display: "flex",
@@ -29,8 +32,7 @@ const ViewStudent = () => {
             justifyContent: "center",
             alignItems: "center",
             gap: "12px",
-          }}
-        >
+          }}>
           <Avatar size={128} src="https://joeschmoe.io/api/v1/random" />
           <Text strong>Nombre: Pedro Gutierrez</Text>
           <Text strong>Correo: example@example.com </Text>
@@ -39,7 +41,7 @@ const ViewStudent = () => {
         </div>
         <Divider />
         <SubTitleContent title="Apoderado(s)" action={AddStudent} />
-        <ContentTable content={content} columns={columns} type="student" />
+        <ContentTable content={content} columns={columns} scroll={false} />
       </Card>
     </>
   );

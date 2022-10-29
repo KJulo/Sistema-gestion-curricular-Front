@@ -1,13 +1,13 @@
-import React from 'react'
+import React from "react";
 
 //components
-import { DefaultTitleContent, ContentTable, SearchContent, AddTeacher } from '@components/index'
+import { DefaultTitleContent, ContentTable, SearchContent, AddTeacher } from "@components/index";
 
 //containers
-import { AdminTableLayout } from '@containers/index'
+import { AdminTableLayout } from "@containers/index";
 
 //constants
-import { content, columns } from '@constants/admin/teachers'
+import { content, columns } from "@constants/admin/teachers";
 
 const Teachers = () => {
   return (
@@ -16,11 +16,11 @@ const Teachers = () => {
       <div style={true ? {} : { pointerEvents: "none" }}>
         <AdminTableLayout
           searchInput={<SearchContent placeHolder="Buscar profesor" />}
-          tableContent={<ContentTable content={content} columns={columns} type="teachers" />}
+          tableContent={<ContentTable content={content} columns={columns} scroll={false} />}
         />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Teachers
+export default Teachers;

@@ -2,6 +2,17 @@ import React from "react";
 
 import { CheckCircleTwoTone, CloseCircleOutlined } from "@ant-design/icons";
 
+function getAttendanceStatus(record) {
+  switch (record) {
+    case "Si":
+      return <CheckCircleTwoTone twoToneColor="#52c41a" />;
+    case "Justificado":
+      return <CheckCircleTwoTone twoToneColor="#ffd400" />;
+    case "No":
+      return <CloseCircleOutlined twoToneColor="#ff4d4f" />;
+  }
+}
+
 export const columns = [
   {
     title: "Fecha",
@@ -10,17 +21,14 @@ export const columns = [
   },
   {
     title: "Asistencia",
-    dataIndex: "presente",
-    key: "presente",
+    dataIndex: "asistencia",
+    key: "asistencia",
     render: (record) => {
       return (
         <div>
-          {record ? "Si " : "No "}
-            {record
-            ? ( <CheckCircleTwoTone twoToneColor="#52c41a" />)
-            : <CloseCircleOutlined twoToneColor="#ee1111" /> }
+          {getAttendanceStatus(record)} {record}
         </div>
       );
     },
-  }
+  },
 ];

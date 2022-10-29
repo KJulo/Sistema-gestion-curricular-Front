@@ -50,11 +50,7 @@ const ViewCourse = () => {
         <SubTitleContent title="Profesor(es):" action={<AddTeacher />} />
         <AdminTableLayout
           tableContent={
-            <ContentTable
-              content={contentTeachers}
-              columns={columnsTeachers}
-              type="course"
-            />
+            <ContentTable content={contentTeachers} columns={columnsTeachers} scroll={false} />
           }
         />
       </div>
@@ -66,11 +62,7 @@ const ViewCourse = () => {
         <AdminTableLayout
           title="Alumnos"
           tableContent={
-            <ContentTable
-              content={contentStudents}
-              columns={columnsStudents}
-              type="student"
-            />
+            <ContentTable content={contentStudents} columns={columnsStudents} scroll={false} />
           }
         />
       </div>

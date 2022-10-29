@@ -1,8 +1,8 @@
-import { call, put, takeEvery, takeLatest } from 'redux-saga/effects';
+import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
 
 // Reducers
-import { errorClear, errorFetch } from '@slices/error';
-import { updateUser } from '@slices/user';
+import { errorClear, errorFetch } from "@slices/error";
+import { updateUser } from "@slices/user";
 import {
   setIsLoading,
   fetchTeacher,
@@ -18,21 +18,30 @@ import {
   // setStudentsAttendance,
   addAttendance,
   setForumsAndContent,
-} from '@slices/teachers';
+} from "@slices/teachers";
 
 // Network
-import { profesor, curso, alumno, notas, asignatura, asistencia, foro, contenido } from '@network/index';
+import {
+  profesor,
+  curso,
+  alumno,
+  notas,
+  asignatura,
+  asistencia,
+  foro,
+  contenido,
+} from "@network/index";
 
 function* getTeacher() {
   try {
     const response = yield call(profesor.getTeachers);
     const teacherList = response.data.data;
-    const userData = teacherList[0]
-    yield put(updateTeacher({...userData, tipo: 'profesor' }));
-    yield put(updateUser({...userData, tipo: 'profesor' }));
-  } catch(e) {
+    const userData = teacherList[0];
+    yield put(updateTeacher({ ...userData, tipo: "profesor" }));
+    yield put(updateUser({ ...userData, tipo: "profesor" }));
+  } catch (e) {
     console.log(e);
-    yield put(errorFetch({ code: e.response.status, error: e.message}));
+    yield put(errorFetch({ code: e.response.status, error: e.message }));
   }
 }
 
@@ -43,25 +52,27 @@ function* getCourses() {
 
     // Combinar las asignaturas con su correspondiente curso
     let merged = [];
-    for(let i=0; i < responseCourses.length; i++) {
+    for (let i = 0; i < responseCourses.length; i++) {
       // obtener lista de asignaturas
-      const subjectList = responseSubjects.filter((subject) => subject.id_curso === responseCourses[i].id)
+      const subjectList = responseSubjects.filter(
+        (subject) => subject.id_curso === responseCourses[i].id
+      );
       if (subjectList) {
         merged.push({
           ...responseCourses[i],
-          asignaturas: subjectList
-        })
+          asignaturas: subjectList,
+        });
       } else {
         merged.push({
           ...responseCourses[i],
-          asignaturas: []
-        })
+          asignaturas: [],
+        });
       }
     }
     yield put(updateCourses(merged));
   } catch (e) {
     console.log(e);
-    yield put(errorFetch({ code: e.response.status, error: e.message}));
+    yield put(errorFetch({ code: e.response.status, error: e.message }));
   }
 }
 
@@ -72,7 +83,7 @@ function* getStudents() {
     yield put(updateStudents(studentList));
   } catch (e) {
     console.log(e);
-    yield put(errorFetch({ code: e.response.status, error: e.message}));
+    yield put(errorFetch({ code: e.response.status, error: e.message }));
   }
 }
 
@@ -82,7 +93,7 @@ function* getStudentsNotes() {
     yield put(updateStudentsNotes(response));
   } catch (e) {
     console.log(e);
-    yield put(errorFetch({ code: e.response.status, error: e.message}));
+    yield put(errorFetch({ code: e.response.status, error: e.message }));
   }
 }
 
@@ -92,12 +103,12 @@ function* getStudentsAttendance() {
     // yield put(setStudentsAttendance(response));
   } catch (e) {
     console.log(e);
-    yield put(errorFetch({ code: e.response.status, error: e.message}));
+    yield put(errorFetch({ code: e.response.status, error: e.message }));
   }
 }
 
 function* createAttendance(action) {
-  const payload = action.payload
+  const payload = action.payload;
   console.log(payload);
   try {
     /**
@@ -110,11 +121,9 @@ function* createAttendance(action) {
 
     const response = (yield call(asistencia.addAttendance, payload)).data.data;
     console.log("response: ", response);
-
   } catch (e) {
     console.log(e);
-    yield put(e);
-    yield put(errorFetch({ code: 500, error: 'Error en la respuesta del servidor.'}));
+    yield put(errorFetch({ code: e.response.status, error: e.message }));
   }
 }
 
@@ -126,14 +135,13 @@ function* getForumsAndContent() {
     const forumsWithContent = forums.map((f) => {
       return {
         ...f,
-        contenidos: contents.filter(c => c.id_foro === f.id)
-      }
-    })
+        contenidos: contents.filter((c) => c.id_foro === f.id),
+      };
+    });
     yield put(setForumsAndContent(forumsWithContent));
   } catch (e) {
     console.log(e);
-    yield put(e);
-    yield put(errorFetch({ code: 500, error: 'Error en la respuesta del servidor.'}));
+    yield put(errorFetch({ code: e.response.status, error: e.message }));
   }
 }
 
@@ -144,18 +152,18 @@ function* watchGetCourses() {
   yield takeLatest(fetchCourses, getCourses);
 }
 function* watchGetStudents() {
-  yield takeLatest(fetchStudents, getStudents)
+  yield takeLatest(fetchStudents, getStudents);
 }
 function* watchGetStudentsNotes() {
-  yield takeLatest(fetchStudentsNotes, getStudentsNotes)
+  yield takeLatest(fetchStudentsNotes, getStudentsNotes);
 }
 function* watchGetStudentsAttendance() {
-  yield takeLatest(fetchAttendance, getStudentsAttendance)
+  yield takeLatest(fetchAttendance, getStudentsAttendance);
 }
 function* watchCreateAttendance() {
   yield takeLatest(addAttendance, createAttendance);
 }
-function*  watchGetForumContent() {
+function* watchGetForumContent() {
   yield takeLatest(fetchForumsAndContent, getForumsAndContent);
 }
 
@@ -167,4 +175,4 @@ export default [
   watchGetStudentsAttendance(),
   watchCreateAttendance(),
   watchGetForumContent(),
-]
+];
