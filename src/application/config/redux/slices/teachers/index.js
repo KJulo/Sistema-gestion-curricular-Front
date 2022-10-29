@@ -59,13 +59,7 @@ export const teacherSlice = createSlice({
           return student
         });
         state.isLoading = false;
-        return {
-          ...state,
-          students: {
-              ...state.students,
-              list: studentList
-          }
-        }
+        state.students.list = studentList;
       },
       updateCourseManagement: (state, action) => {
         state.courses.management.course = action.payload;
@@ -209,10 +203,10 @@ export const teacherSlice = createSlice({
         const data = action.payload;
         state.activeFilters = { ...state.activeFilters, ...data } ;
       },
-      setStudentsAttendance: (state, action) => {
-        console.log(action);
-        return state;
-      },
+      // setStudentsAttendance: (state, action) => {
+      //   console.log(action);
+      //   return state;
+      // },
       setForumsAndContent: (state, action) => {
         const { payload } = action;
         const coursesWithForums = state.courses.list.map((course) => {
@@ -258,7 +252,7 @@ export const {
   deleteValueManagement,
   setActiveFilter,
   fetchAttendance,
-  setStudentsAttendance,
+  // setStudentsAttendance,
   addAttendance,
   fetchForumsAndContent,
   setForumsAndContent,

@@ -15,7 +15,7 @@ import {
   updateCourses,
   updateStudents,
   updateStudentsNotes,
-  setStudentsAttendance,
+  // setStudentsAttendance,
   addAttendance,
   setForumsAndContent,
 } from '@slices/teachers';
@@ -89,7 +89,7 @@ function* getStudentsNotes() {
 function* getStudentsAttendance() {
   try {
     const response = (yield call(asistencia.getAttendance)).data.data;
-    yield put(setStudentsAttendance(response));
+    // yield put(setStudentsAttendance(response));
   } catch (e) {
     console.log(e);
     yield put(errorFetch({ code: e.response.status, error: e.message}));

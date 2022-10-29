@@ -75,7 +75,7 @@ const Attendance = () => {
   useEffect(() => {
     if (activeFilters.courseId)
       setStudentsFiltered(content.filter((c) => c.id_curso === activeFilters.courseId));
-  }, [activeFilters]);
+  }, [activeFilters, content]);
 
   // Al hacer click en el icono de switch, cambiar estado de asiste
   const handleClick = (record) => {
