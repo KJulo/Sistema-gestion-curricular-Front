@@ -6,14 +6,18 @@ export const studentSlice = createSlice({
   initialState: {
     student: {},
     attendance: [],
+    marks: [],
     filters: {},
-    isLoading: false,
+    isLoading: true,
   },
   reducers: {
     fetchStudent: (state) => {
       state.isLoading = true;
     },
     fetchAttendance: (state) => {
+      state.isLoading = true;
+    },
+    fetchMarks: (state) => {
       state.isLoading = true;
     },
     setIsLoading: (state, action) => {
@@ -29,6 +33,20 @@ export const studentSlice = createSlice({
       state.attendance = attendance;
       state.isLoading = false;
     },
+    updateMarks: (state, action) => {
+      const { marks, subjects } = action.payload;
+      state.marks = marks.map((m) => {
+        const subject = subjects.find((s) => s.id === m.id_asignatura);
+        return {
+          fecha: m.fecha.slice(0, 10),
+          asignatura: subject.nombre,
+          evaluacion: m.nombre,
+          nota: parseFloat(m.descripcion),
+          ponderacion: parseFloat(m.ponderacion),
+        };
+      });
+      state.isLoading = false;
+    },
     updateFilters: (state, action) => {
       state.filters = { ...state.filters, ...action.payload };
     },
@@ -37,11 +55,13 @@ export const studentSlice = createSlice({
 
 // exportar funciones individuales
 export const {
-  fetchStudent,
-  updateStudent,
-  fetchAttendance,
-  updateAttendance,
   setIsLoading,
+  fetchStudent,
+  fetchMarks,
+  fetchAttendance,
+  updateStudent,
+  updateAttendance,
+  updateMarks,
   updateFilters,
 } = studentSlice.actions;
 

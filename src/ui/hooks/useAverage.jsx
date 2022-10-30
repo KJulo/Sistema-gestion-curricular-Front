@@ -4,6 +4,8 @@ export function useAverage(marks, decimals) {
   let subjects = 0;
   let sumBySubjects = {};
 
+  if (!marks) return 0;
+
   // Hacer suma por cada asignatura
   marks.map((mark) => {
     if (mark.asignatura in sumBySubjects == false) {

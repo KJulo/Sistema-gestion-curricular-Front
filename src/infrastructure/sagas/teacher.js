@@ -41,7 +41,7 @@ function* getTeacher() {
     yield put(updateUser({ ...userData, tipo: "profesor" }));
   } catch (e) {
     console.log(e);
-    yield put(errorFetch({ code: e.response.status, error: e.message }));
+    yield put(errorFetch({ code: 500, error: "Error de servidor." }));
   }
 }
 
@@ -72,7 +72,7 @@ function* getCourses() {
     yield put(updateCourses(merged));
   } catch (e) {
     console.log(e);
-    yield put(errorFetch({ code: e.response.status, error: e.message }));
+    yield put(errorFetch({ code: 500, error: "Error de servidor." }));
   }
 }
 
@@ -83,7 +83,7 @@ function* getStudents() {
     yield put(updateStudents(studentList));
   } catch (e) {
     console.log(e);
-    yield put(errorFetch({ code: e.response.status, error: e.message }));
+    yield put(errorFetch({ code: 500, error: "Error de servidor." }));
   }
 }
 
@@ -93,7 +93,7 @@ function* getStudentsNotes() {
     yield put(updateStudentsNotes(response));
   } catch (e) {
     console.log(e);
-    yield put(errorFetch({ code: e.response.status, error: e.message }));
+    yield put(errorFetch({ code: 500, error: "Error de servidor." }));
   }
 }
 
@@ -103,7 +103,7 @@ function* getStudentsAttendance() {
     // yield put(setStudentsAttendance(response));
   } catch (e) {
     console.log(e);
-    yield put(errorFetch({ code: e.response.status, error: e.message }));
+    yield put(errorFetch({ code: 500, error: "Error de servidor." }));
   }
 }
 
@@ -123,7 +123,7 @@ function* createAttendance(action) {
     console.log("response: ", response);
   } catch (e) {
     console.log(e);
-    yield put(errorFetch({ code: e.response.status, error: e.message }));
+    yield put(errorFetch({ code: 500, error: "Error de servidor." }));
   }
 }
 
@@ -141,7 +141,7 @@ function* getForumsAndContent() {
     yield put(setForumsAndContent(forumsWithContent));
   } catch (e) {
     console.log(e);
-    yield put(errorFetch({ code: e.response.status, error: e.message }));
+    yield put(errorFetch({ code: 500, error: "Error de servidor." }));
   }
 }
 
