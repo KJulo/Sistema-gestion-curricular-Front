@@ -7,6 +7,9 @@ import {
   SubTitleContent,
   AppendStudent,
   EditCourse,
+  AddSubject,
+  EditSubject,
+  Warning,
 } from "@components/index";
 
 import { AdminTableLayout } from "@containers/index";
@@ -25,6 +28,8 @@ import {
 import {
   FETCH_COURSE_ADMIN,
   DELETE_COURSE_ADMIN,
+  APPEND_COURSE_TEACHER_ADMIN,
+  DELETE_SUBJECT_ADMIN,
 } from "@infrastructure/sagas/types/admin";
 
 import {
@@ -41,10 +46,7 @@ import {
   Result,
   List,
 } from "antd";
-import {
-  APPEND_COURSE_TEACHER_ADMIN,
-  DELETE_SUBJECT_ADMIN,
-} from "../../../../infrastructure/sagas/types/admin";
+
 const { Text } = Typography;
 
 const ViewCourse = () => {
@@ -169,15 +171,30 @@ const ViewCourse = () => {
             )}
           </Col>
           <Col span={12} style={{ display: "flex" }}>
-            <Card title="Asignaturas" style={{ flex: 1 }}>
+            <Card
+              title="Asignaturas"
+              style={{ flex: 1 }}
+              extra={<AddSubject courseId={course.id} />}
+            >
               <List
                 itemLayout="horizontal"
                 size="default"
                 dataSource={course.asignatura}
                 renderItem={(asignatura) => (
                   <Row style={{ justifyContent: "space-between" }}>
-                    <Col>
+                    <Col
+                      style={{
+                        display: "flex",
+                        gap: "10px",
+                        alignItems: "center",
+                      }}
+                    >
                       <Text>{asignatura.nombre}</Text>
+                      {asignatura.id_profesor ? (
+                        <></>
+                      ) : (
+                        <Warning text="No existe profesor asignado a esta asignatura" />
+                      )}
                     </Col>
                     <Col style={{ display: "flex", gap: "10px" }}>
                       <Popconfirm
@@ -193,11 +210,7 @@ const ViewCourse = () => {
                       >
                         <DeleteOutlined style={{ color: "red" }} />
                       </Popconfirm>
-                      <EditOutlined
-                        onClick={() => {
-                          console.log("Editar");
-                        }}
-                      />
+                      <EditSubject asignatura={asignatura} />
                     </Col>
                     <Divider />
                   </Row>

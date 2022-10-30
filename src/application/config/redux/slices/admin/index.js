@@ -59,6 +59,13 @@ export const adminSlice = createSlice({
     appendCourseAdmin: (state, action) => {
       state.courses = [action.payload, ...state.courses];
     },
+    updateSubjectAdmin: (state, action) => {
+      state.course = {
+        ...state.course, asignatura: state.course.asignatura.map((asignatura) =>
+          asignatura.id === action.payload.id ? action.payload : asignatura
+        )
+      }
+    },
     filterSubjectCourseAdmin: (state, action) => {
       state.course = {
         ...state.course,
@@ -88,6 +95,7 @@ export const {
   updateCourseAdmin,
   appendCourseAdmin,
   filterSubjectCourseAdmin,
+  updateSubjectAdmin,
 } = adminSlice.actions;
 
 // exportar reducer del slice para mandarlo a la store

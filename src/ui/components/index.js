@@ -10,6 +10,7 @@ export { default as SubTitleContent } from "@components/SubTitleContent";
 export { default as HandleError } from "@components/Error/HandleError";
 export { default as LoadingSpinner } from "@components/LoadingSpinner";
 export { default as DocumentGenerator } from "@components/DocumentGenerator";
+export { default as Warning } from "@components/Warning";
 
 //admin
 export { default as AdminMenu } from "@components/Admin/NavigationMenu";
@@ -18,6 +19,10 @@ export { default as AdminMenu } from "@components/Admin/NavigationMenu";
 export { default as AddCourse } from "@components/Course/AddCourse";
 export { default as EditCourse } from "@components/Course/EditCourse";
 export { default as AppendStudent } from "@components/Course/AppendStudent";
+
+//subject
+export { default as AddSubject } from "@components/Subject/AddSubject";
+export { default as EditSubject } from "@components/Subject/EditSubject";
 
 //teachers
 export { default as TeacherMenu } from "@components/Teachers/NavigationMenu.jsx";

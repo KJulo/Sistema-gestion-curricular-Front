@@ -17,6 +17,7 @@ import {
   updateParentAdmin,
   appendParentAdmin,
   filterSubjectCourseAdmin,
+  updateSubjectAdmin,
 } from "@slices/admin";
 
 import { updateUser } from "@slices/user";
@@ -48,6 +49,7 @@ import {
   DELETE_COURSE_TEACHER_ADMIN,
 
   DELETE_SUBJECT_ADMIN,
+  UPDATE_SUBJECT_ADMIN
 } from "./types/admin";
 
 // Network
@@ -240,6 +242,7 @@ function* addCourse(action) {
 
 function* updateCourse(action) {
   try {
+    console.log(action);
     const response = yield call(curso.patchCourse, action.payload);
     yield put(updateCourseAdmin(response.data.data));
   } catch (error) {
@@ -279,6 +282,16 @@ function* deleteSubject(action) {
     const response = yield call(asignatura.deleteSubject, action.payload);
     console.log(response);
     yield put(filterSubjectCourseAdmin(response.data.data));
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+function* updateSubject(action) {
+  try {
+    const response = yield call(asignatura.patchSubject, action.payload);
+    console.log(response);
+    yield put(updateSubjectAdmin(response.data.data));
   } catch (error) {
     console.log(error);
   }
@@ -380,6 +393,10 @@ function* watchDeleteSubject() {
   yield takeLatest(DELETE_SUBJECT_ADMIN, deleteSubject);
 }
 
+function* watchUpdateSubject() {
+  yield takeLatest(UPDATE_SUBJECT_ADMIN, updateSubject);
+}
+
 export default [
   watchGetAdminUser(),
 
@@ -410,4 +427,5 @@ export default [
   watchAppendTeacherCourse(),
 
   watchDeleteSubject(),
+  watchUpdateSubject(),
 ];
