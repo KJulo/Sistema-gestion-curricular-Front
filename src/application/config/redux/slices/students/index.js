@@ -7,6 +7,7 @@ export const studentSlice = createSlice({
     student: {},
     attendance: [],
     marks: [],
+    course: {},
     filters: {},
     isLoading: true,
   },
@@ -18,6 +19,12 @@ export const studentSlice = createSlice({
       state.isLoading = true;
     },
     fetchMarks: (state) => {
+      state.isLoading = true;
+    },
+    fetchCourse: (state) => {
+      state.isLoading = true;
+    },
+    fetchForumsAndContent: (state) => {
       state.isLoading = true;
     },
     setIsLoading: (state, action) => {
@@ -47,6 +54,26 @@ export const studentSlice = createSlice({
       });
       state.isLoading = false;
     },
+    updateForumsAndContent: (state, action) => {
+      const { payload } = action;
+      console.log(payload);
+      console.log(state.course);
+      state.course = {
+        ...state.course,
+        asignaturas: state.course.asignaturas.map((subject) => {
+          return {
+            ...subject,
+            foros: payload.filter((p) => p.id_asignatura === subject.id),
+          };
+        }),
+      };
+      state.isLoading = false;
+    },
+    updateCourse: (state, action) => {
+      const { payload } = action;
+      state.course = payload.find((p) => p.id === state.student.id_curso);
+      state.isLoading = false;
+    },
     updateFilters: (state, action) => {
       state.filters = { ...state.filters, ...action.payload };
     },
@@ -59,10 +86,14 @@ export const {
   fetchStudent,
   fetchMarks,
   fetchAttendance,
+  fetchCourse,
+  fetchForumsAndContent,
   updateStudent,
   updateAttendance,
   updateMarks,
   updateFilters,
+  updateForumsAndContent,
+  updateCourse,
 } = studentSlice.actions;
 
 // exportar reducer del slice para mandarlo a la store

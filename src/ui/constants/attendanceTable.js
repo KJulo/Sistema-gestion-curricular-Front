@@ -20,6 +20,11 @@ export const columns = [
     key: "fecha",
   },
   {
+    title: "Asignatura",
+    dataIndex: "asignatura",
+    key: "asignatura",
+  },
+  {
     title: "Asistencia",
     dataIndex: "asistencia",
     key: "asistencia",
