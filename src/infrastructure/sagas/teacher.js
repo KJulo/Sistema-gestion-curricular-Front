@@ -4,6 +4,9 @@ import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
 import { errorClear, errorFetch } from "@slices/error";
 import { updateUser } from "@slices/user";
 import {
+  initProcess,
+  cleanProcess,
+  finishProcess,
   setIsLoading,
   fetchTeacher,
   fetchCourses,
@@ -18,6 +21,12 @@ import {
   // setStudentsAttendance,
   addAttendance,
   setForumsAndContent,
+  deleteContent,
+  removeContent,
+  addContent,
+  contentAdded,
+  editContent,
+  contentEdited,
 } from "@slices/teachers";
 
 // Network
@@ -145,6 +154,36 @@ function* getForumsAndContent() {
   }
 }
 
+function* delContent(action) {
+  try {
+    const response = yield call(contenido.deleteContent, action.payload);
+    yield put(removeContent(response.data.data));
+  } catch (e) {
+    console.log(e);
+    yield put(errorFetch({ code: 500, error: "Error de servidor." }));
+  }
+}
+
+function* createContent(action) {
+  try {
+    const response = yield call(contenido.createContent, action.payload);
+    yield put(contentAdded(response.data.data));
+  } catch (e) {
+    console.log(e);
+    yield put(errorFetch({ code: 500, error: "Error de servidor." }));
+  }
+}
+
+function* goEdit(action) {
+  try {
+    const response = yield call(contenido.editContent, action.payload);
+    yield put(contentEdited(response.data.data));
+  } catch (e) {
+    console.log(e);
+    yield put(errorFetch({ code: 500, error: "Error de servidor." }));
+  }
+}
+
 function* watchGetTeacherUser() {
   yield takeLatest(fetchTeacher, getTeacher);
 }
@@ -166,6 +205,15 @@ function* watchCreateAttendance() {
 function* watchGetForumContent() {
   yield takeLatest(fetchForumsAndContent, getForumsAndContent);
 }
+function* watchDeleteContent() {
+  yield takeLatest(deleteContent, delContent);
+}
+function* watchCreateContent() {
+  yield takeLatest(addContent, createContent);
+}
+function* watchEditContent() {
+  yield takeLatest(editContent, goEdit);
+}
 
 export default [
   watchGetTeacherUser(),
@@ -175,4 +223,7 @@ export default [
   watchGetStudentsAttendance(),
   watchCreateAttendance(),
   watchGetForumContent(),
+  watchDeleteContent(),
+  watchCreateContent(),
+  watchEditContent(),
 ];

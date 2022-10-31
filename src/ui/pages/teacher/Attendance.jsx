@@ -101,12 +101,11 @@ const Attendance = () => {
       setIsLoading(true);
       students.map((student) => {
         const dateSplited = filters.selectedDate.split("-");
-        const date =
-          dateSplited[2] + "-" + dateSplited[1] + "-" + dateSplited[0] + "T00:00:00.000Z";
+        const date = dateSplited[2] + "-" + dateSplited[1] + "-" + dateSplited[0];
         const params = {
           id_asignatura: filters.subjectId,
           id_alumno: student.id,
-          asistencia: student.asistencia.asiste,
+          asistencia: student.asistencia.asiste ? "Si" : "No",
           fecha: date,
         };
         dispatch(addAttendance(params));

@@ -1,15 +1,15 @@
 // Constants
-import { courses } from '@constants/teacher/virtualClass.js';
+import { courses } from "@constants/teacher/virtualClass.js";
 
 export const initState = {
   teacher: {
-    id: '',
-    id_colegio: '',
-    nombres: '',
-    apellidos: '',
-    rut: '',
-    constrasena: '',
-    correo: '',
+    id: "",
+    id_colegio: "",
+    nombres: "",
+    apellidos: "",
+    rut: "",
+    constrasena: "",
+    correo: "",
   },
   courses: {
     list: [],
@@ -22,9 +22,13 @@ export const initState = {
   students: {
     list: [],
     marks: {
-      activeFilter: '',
+      activeFilter: "",
     },
   },
-  isLoading: false,
   activeFilters: {},
-}
+  isLoading: false,
+  process: {
+    name: "",
+    finish: "",
+  },
+};

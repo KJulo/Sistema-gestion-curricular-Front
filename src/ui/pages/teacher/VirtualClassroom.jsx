@@ -26,6 +26,7 @@ import {
   fetchCourses,
   fetchStudentsNotes,
   setIsLoading,
+  addContent,
   fetchForumsAndContent,
 } from "@slices/teachers";
 
@@ -67,8 +68,11 @@ const VitualClassroom = () => {
   const currentDate = useGetCurrentDay() + "-" + useGetCurrentMonth() + "-" + useGetCurrentYear();
   const [isAddOpen, setIsAddOpen] = useState(false);
 
-  const courses = useSelector((store) => store.teacher.courses.list);
-  const isLoading = useSelector((store) => store.teacher.isLoading);
+  const {
+    isLoading,
+    process,
+    courses: { list: courses },
+  } = useSelector((store) => store.teacher);
   const [currentCourse, setCurrentCourse] = useState(null);
   const [currentMenu, setCurrentMenu] = useState(null);
   const [currentSubMenu, setCurrentSubMenu] = useState(null);
@@ -164,8 +168,11 @@ const VitualClassroom = () => {
   }
   function handdleClose() {
     setIsAddOpen(false);
-    let input = document.getElementById("input");
-    let textArea = document.getElementById("textArea");
+    const title = document.getElementById("input").value;
+    const body = document.getElementById("textArea").value;
+    dispatch(
+      addContent({ id_foro: currentSubMenu.id, titulo: title, descripcion: body, tipo: "content" })
+    );
   }
 
   return (
@@ -221,7 +228,12 @@ const VitualClassroom = () => {
         {hasSubMenu ? (
           <>
             {currentSubMenu.contenidos.map((item) => (
-              <ForumContent content={item} isEdit={true} />
+              <ForumContent
+                content={item}
+                isEdit={true}
+                process={process}
+                forumId={currentSubMenu.id}
+              />
             ))}
             {currentSubMenu.contenidos.length === 0 ? (
               <Alert
