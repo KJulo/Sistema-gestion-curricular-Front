@@ -19,6 +19,7 @@ export { default as AdminMenu } from "@components/Admin/NavigationMenu";
 export { default as AddCourse } from "@components/Course/AddCourse";
 export { default as EditCourse } from "@components/Course/EditCourse";
 export { default as AppendStudent } from "@components/Course/AppendStudent";
+export { default as DeleteStudentCourse } from "@components/Course/DeleteStudentCourse";
 
 //subject
 export { default as AddSubject } from "@components/Subject/AddSubject";

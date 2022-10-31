@@ -18,6 +18,8 @@ import {
   appendParentAdmin,
   filterSubjectCourseAdmin,
   updateSubjectAdmin,
+  updateCourseStudentAdmin,
+  deleteCourseStudentAdmin
 } from "@slices/admin";
 
 import { updateUser } from "@slices/user";
@@ -261,7 +263,9 @@ function* deleteCourse(action) {
 
 function* appendStudentCourse(action) {
   try {
-    const response = yield call(profesor.patchTeacher, action.payload);
+    console.log(action)
+    const response = yield call(alumno.patchStudent, action.payload);
+    yield put(updateCourseStudentAdmin(response.data.data));
   } catch (error) {
     console.log(error);
   }
@@ -272,6 +276,17 @@ function* appendTeacherCourse(action) {
     const response = yield call(curso.patchCourse, action.payload);
     console.log(response);
     yield put(updateCourseAdmin(response.data.data));
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+function* deleteStudentCourse(action) {
+  try {
+    console.log(action);
+    const response = yield call(alumno.patchStudent, action.payload);
+    console.log(response);
+    yield put(deleteCourseStudentAdmin(response.data.data));
   } catch (error) {
     console.log(error);
   }
@@ -397,6 +412,10 @@ function* watchUpdateSubject() {
   yield takeLatest(UPDATE_SUBJECT_ADMIN, updateSubject);
 }
 
+function* watchDeleteStudentCourse() {
+  yield takeLatest(DELETE_COURSE_STUDENT_ADMIN, deleteStudentCourse);
+}
+
 export default [
   watchGetAdminUser(),
 
@@ -425,6 +444,7 @@ export default [
   watchDeleteCourse(),
   watchAppendStudentCourse(),
   watchAppendTeacherCourse(),
+  watchDeleteStudentCourse(),
 
   watchDeleteSubject(),
   watchUpdateSubject(),

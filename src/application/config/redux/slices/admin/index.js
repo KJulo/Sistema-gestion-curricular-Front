@@ -74,6 +74,18 @@ export const adminSlice = createSlice({
         ),
       };
     },
+    updateCourseStudentAdmin: (state, action) => { 
+      state.course = {
+        ...state.course,
+        alumno: [...state.course.alumno, action.payload]
+      };
+    },
+    deleteCourseStudentAdmin: (state, action) => {
+      state.course = {
+        ...state.course,
+        alumno: state.course.alumno.filter((alumno) => alumno.id !== action.payload.id)
+      }
+    }
   },
 });
 
@@ -96,6 +108,8 @@ export const {
   appendCourseAdmin,
   filterSubjectCourseAdmin,
   updateSubjectAdmin,
+  updateCourseStudentAdmin,
+  deleteCourseStudentAdmin
 } = adminSlice.actions;
 
 // exportar reducer del slice para mandarlo a la store

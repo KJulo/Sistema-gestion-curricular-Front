@@ -2,6 +2,7 @@ import React from "react";
 import { EyeOutlined, DeleteOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { Col, Row, Tooltip, Typography } from "antd";
+import { DeleteStudentCourse } from "@components/index";
 const { Paragraph } = Typography;
 export const content = [
   {
@@ -96,13 +97,13 @@ export const columns = [
 export const columnsCourse = [
   {
     title: "Nombres",
-    dataIndex: "name",
+    dataIndex: "nombres",
     key: "name",
   },
   {
     title: "Apellidos",
-    dataIndex: "surname",
-    key: "surname",
+    dataIndex: "apellidos",
+    key: "apellidos",
   },
   {
     title: "Rut",
@@ -120,21 +121,25 @@ export const columnsCourse = [
     key: "correo",
   },
   {
-    title: "Fecha de nacimiento",
-    dataIndex: "anho",
-    key: "anho",
-  },
-  {
     title: "Acciones",
+    dataIndex: "id",
+    key: "id",
     render: (record) => (
-      <span>
-        <Link to={`/administrador/alumnos/${record}`} state={{ id: record }}>
-          <EyeOutlined style={{ marginRight: "8px" }} />
-        </Link>
-        <a>
-          <DeleteOutlined />
-        </a>
-      </span>
+      <Row>
+        <Col>
+          <Tooltip title="Ver información del alumno">
+            <Link
+              to={`/administrador/alumnos/${record}`}
+              state={{ id: record }}
+            >
+              <EyeOutlined style={{ marginRight: "8px" }} />
+            </Link>
+          </Tooltip>
+        </Col>
+        <Col>
+          <DeleteStudentCourse id={record} />
+        </Col>
+      </Row>
     ),
   },
 ];

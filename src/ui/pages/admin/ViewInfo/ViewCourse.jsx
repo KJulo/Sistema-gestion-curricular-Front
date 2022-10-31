@@ -17,13 +17,9 @@ import { DeleteOutlined, EditOutlined, UserOutlined } from "@ant-design/icons";
 
 //constants
 import {
-  content as contentStudents,
-  columnsCourse as columnsStudents,
+  columnsCourse
 } from "@constants/admin/students";
-import {
-  content as contentTeachers,
-  columnsCourse as columnsTeachers,
-} from "@constants/admin/teachers";
+
 
 import {
   FETCH_COURSE_ADMIN,
@@ -222,13 +218,15 @@ const ViewCourse = () => {
         <Divider />
 
         <div>
-          <SubTitleContent title="Estudiante(s)" action={<AppendStudent />} />
-
+          <SubTitleContent
+            title="Estudiante(s)"
+            action={<AppendStudent type="course" data={course.id} />}
+          />
           <AdminTableLayout
             tableContent={
               <ContentTable
                 content={course.alumno}
-                columns={columnsStudents}
+                columns={columnsCourse}
                 type="student"
               />
             }
