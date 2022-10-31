@@ -37,12 +37,15 @@ export { default as StudentContent } from "@components/Students/HomeContent.jsx"
 export { default as StudentMenu } from "@components/Students/NavigationMenu.jsx";
 export { default as AddStudent } from "@components/Students/AddStudent";
 export { default as EditStudent } from "@components/Students/EditStudent";
-export { default as AddPupilo } from "@components/Students/AddPupilo";
+export { default as AddStudentParent } from "@components/Students/AddStudentParent";
+export { default as DeleteStudentParent } from "@components/Students/DeleteStudentParent";
 
 //Parents
 export { default as ParentsMenu } from "@components/Parents/NavigationMenu.jsx";
 export { default as AddParent } from "@components/Parents/AddParent";
 export { default as EditParent } from "@components/Parents/EditParent";
+export { default as AddParentStudent } from "@components/Parents/AddParentStudent";
+export { default as DeleteParentStudent } from "@components/Parents/DeleteParentStudent";
 
 //Forum
 export { default as ForumContent } from "@components/ForumContent";

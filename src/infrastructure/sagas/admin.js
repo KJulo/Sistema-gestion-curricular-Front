@@ -16,10 +16,13 @@ import {
   updateParentsAdmin,
   updateParentAdmin,
   appendParentAdmin,
+  
   filterSubjectCourseAdmin,
   updateSubjectAdmin,
   updateCourseStudentAdmin,
-  deleteCourseStudentAdmin
+  deleteCourseStudentAdmin,
+  updateParentStudentsAdmin,
+  deleteParentStudentsAdmin,
 } from "@slices/admin";
 
 import { updateUser } from "@slices/user";
@@ -35,6 +38,7 @@ import {
   ADD_STUDENT_ADMIN,
   UPDATE_STUDENT_ADMIN,
   DELETE_STUDENT_ADMIN,
+  APPEND_STUDENT_PARENT_ADMIN,
   FETCH_TEACHERS_ADMIN,
   FETCH_TEACHER_ADMIN,
   ADD_TEACHER_ADMIN,
@@ -49,9 +53,10 @@ import {
   DELETE_COURSE_STUDENT_ADMIN,
   APPEND_COURSE_TEACHER_ADMIN,
   DELETE_COURSE_TEACHER_ADMIN,
-
   DELETE_SUBJECT_ADMIN,
-  UPDATE_SUBJECT_ADMIN
+  UPDATE_SUBJECT_ADMIN,
+  UPDATE_PARENT_STUDENTS_ADMIN,
+  DELETE_PARENT_STUDENT_ADMIN,
 } from "./types/admin";
 
 // Network
@@ -61,7 +66,7 @@ import {
   curso,
   apoderado,
   profesor,
-  asignatura
+  asignatura,
 } from "@network/index";
 
 function* getAdmin() {
@@ -153,7 +158,9 @@ function* addStudent(action) {
 
 function* updateStudent(action) {
   try {
+    console.log(action);
     const response = yield call(alumno.patchStudent, action.payload);
+    console.log(response);
     yield put(updateStudentAdmin(response.data.data));
   } catch (error) {
     console.log(error);
@@ -263,7 +270,7 @@ function* deleteCourse(action) {
 
 function* appendStudentCourse(action) {
   try {
-    console.log(action)
+    console.log(action);
     const response = yield call(alumno.patchStudent, action.payload);
     yield put(updateCourseStudentAdmin(response.data.data));
   } catch (error) {
@@ -307,6 +314,25 @@ function* updateSubject(action) {
     const response = yield call(asignatura.patchSubject, action.payload);
     console.log(response);
     yield put(updateSubjectAdmin(response.data.data));
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+function* appendParentStudents(action) {
+  try {
+    const response = yield call(alumno.patchStudent, action.payload);
+    yield put(updateParentStudentsAdmin(response.data.data));
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+function* deleteParentStudent(action) {
+  try {
+    const response = yield call(alumno.patchStudent, action.payload);
+    console.log(response);
+    yield put(deleteParentStudentsAdmin(response.data.data));
   } catch (error) {
     console.log(error);
   }
@@ -416,6 +442,14 @@ function* watchDeleteStudentCourse() {
   yield takeLatest(DELETE_COURSE_STUDENT_ADMIN, deleteStudentCourse);
 }
 
+function* watchAppendParentStudents() {
+  yield takeLatest(UPDATE_PARENT_STUDENTS_ADMIN, appendParentStudents);
+}
+
+function* watchDeleteParentStudent() {
+  yield takeLatest(DELETE_PARENT_STUDENT_ADMIN, deleteParentStudent);
+}
+
 export default [
   watchGetAdminUser(),
 
@@ -436,15 +470,17 @@ export default [
   watchAddParent(),
   watchUpdateParent(),
   watchDeleteParent(),
+  watchAppendParentStudents(),
+  watchDeleteParentStudent(),
 
   watchGetCourses(),
   watchGetCourse(),
   watchAddCourse(),
   watchUpdateCourse(),
   watchDeleteCourse(),
-  watchAppendStudentCourse(),
   watchAppendTeacherCourse(),
   watchDeleteStudentCourse(),
+  watchAppendStudentCourse(),
 
   watchDeleteSubject(),
   watchUpdateSubject(),

@@ -10,7 +10,7 @@ import {
   message,
 } from "antd";
 const { Text } = Typography;
-import { EditOutlined, DeleteOutlined, UserOutlined } from "@ant-design/icons";
+import { DeleteOutlined, UserOutlined } from "@ant-design/icons";
 
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -18,9 +18,9 @@ import { useDispatch, useSelector } from "react-redux";
 
 import {
   SubTitleContent,
-  ContentTable,
-  AddStudent,
+  DeleteStudentParent,
   EditStudent,
+  AddStudentParent,
 } from "@components/index";
 
 import { content, columns } from "@constants/admin/students";
@@ -93,8 +93,41 @@ const ViewStudent = () => {
             <Text strong>Rut: {student.rut}</Text>
           </div>
           <Divider />
-          <SubTitleContent title="Apoderado(s)" action={AddStudent} />
-          <ContentTable content={content} columns={columns} type="student" />
+          <SubTitleContent
+            title="Apoderado"
+            action={
+              student.apoderado ? (
+                <DeleteStudentParent data={student.id} />
+              ) : (
+                <AddStudentParent data={student.id} />
+              )
+            }
+          />
+          {student.apoderado ? (
+            <div
+              style={{
+                display: "flex",
+                flexFlow: "column",
+                alignItems: "center",
+                gap: "8px",
+              }}
+            >
+              <Avatar size={128} icon={<UserOutlined />} />
+              <Text strong>Nombre(s): {student.nombres}</Text>
+              <Text strong>Apellido(s): {student.apellidos}</Text>
+              <Text strong>Correo: {student.correo}</Text>
+              <Text strong>Rut: {student.rut}</Text>
+              <Text strong>Telofono celular: {student.telefono}</Text>
+              {student.telefonoEmergencia && (
+                <Text strong>
+                  Telefono emergencia: {student.telefonoEmergencia}
+                </Text>
+              )}
+              <Text strong>Dirección: {student.direccion}</Text>
+            </div>
+          ) : (
+            <></>
+          )}
         </Card>
       </>
     );

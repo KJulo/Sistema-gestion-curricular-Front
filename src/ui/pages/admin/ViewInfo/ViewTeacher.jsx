@@ -1,15 +1,24 @@
 import React, { useEffect } from "react";
 
-import { Avatar, Card, Button, Typography, Popconfirm, message } from "antd";
+import {
+  Avatar,
+  Card,
+  Button,
+  Typography,
+  Popconfirm,
+  message,
+  Row,
+  Col,
+  List,
+  Divider,
+} from "antd";
 import { DeleteOutlined, UserOutlined } from "@ant-design/icons";
 import { useNavigate, useLocation } from "react-router-dom";
-const { Text } = Typography;
+const { Text, Title } = Typography;
 
 import "@styles/AdminViewInfo.less";
 
-import {
-  EditTeacher
-} from "@components/index";
+import { EditTeacher } from "@components/index";
 
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -37,46 +46,85 @@ const ViewTeacher = () => {
   };
   if (teacher) {
     return (
-      <Card
-        style={{ textAlign: "center" }}
-        title={
-          <div style={{ marginLeft: "210px" }}>
-            <Text strong>Información personal</Text>
-          </div>
-        }
-        extra={
-          <div>
-            <EditTeacher teacher={teacher} />
-            <Popconfirm
-              title="¿Estás seguro de que quieres eliminar a este usuario?"
-              onConfirm={confirm}
-              okText="Si"
-              cancelText="No"
+      <Row style={{ display: "flex", flexFlow: "column" }}>
+        <Col>
+          <Card
+            style={{ textAlign: "center" }}
+            title={
+              <div style={{ marginLeft: "210px" }}>
+                <Text strong>Información personal</Text>
+              </div>
+            }
+            extra={
+              <div>
+                <EditTeacher teacher={teacher} />
+                <Popconfirm
+                  title="¿Estás seguro de que quieres eliminar a este usuario?"
+                  onConfirm={confirm}
+                  okText="Si"
+                  cancelText="No"
+                >
+                  <Button type="danger">
+                    <DeleteOutlined />
+                    Eliminar
+                  </Button>
+                </Popconfirm>
+              </div>
+            }
+          >
+            <div
+              style={{
+                display: "flex",
+                flexFlow: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: "12px",
+              }}
             >
-              <Button type="danger" >
-                <DeleteOutlined />
-                Eliminar
-              </Button>
-            </Popconfirm>
-          </div>
-        }
-      >
-        <div
-          style={{
-            display: "flex",
-            flexFlow: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: "12px",
-          }}
-        >
-          <Avatar size={128} icon={<UserOutlined />} />
-          <Text strong>Nombre(s): {teacher.nombres}</Text>
-          <Text strong>Apellido(s): {teacher.apellidos}</Text>
-          <Text strong>Correo: {teacher.correo}</Text>
-          <Text strong>Rut: {teacher.rut}</Text>
-        </div>
-      </Card>
+              <Avatar size={128} icon={<UserOutlined />} />
+              <Text strong>Nombre(s): {teacher.nombres}</Text>
+              <Text strong>Apellido(s): {teacher.apellidos}</Text>
+              <Text strong>Correo: {teacher.correo}</Text>
+              <Text strong>Rut: {teacher.rut}</Text>
+            </div>
+            {/* {teacher.asignatura && teacher.asignatura.length > 0 ? (
+              <Card style={{ marginTop: "20px" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    flexFlow: "column",
+                    alignItems: "center",
+                  }}
+                >
+                  <Title level={5} underline={true}>
+                    Asignatura(s)
+                  </Title>
+                  <List
+                    itemLayout="horizontal"
+                    size="default"
+                    dataSource={teacher.asignatura}
+                    renderItem={(asignatura) => (
+                      <Row style={{ justifyContent: "space-between" }}>
+                        <Col
+                          style={{
+                            display: "flex",
+                            gap: "10px",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Text>{asignatura.nombre}</Text>
+                        </Col>
+                        <Divider />
+                      </Row>
+                    )}
+                  ></List>
+                </div>
+              </Card>
+            ) : null} */}
+          </Card>
+        </Col>
+        <Col></Col>
+      </Row>
     );
   } else {
     return <div>loading...</div>;

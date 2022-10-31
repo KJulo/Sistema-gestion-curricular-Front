@@ -61,10 +61,11 @@ export const adminSlice = createSlice({
     },
     updateSubjectAdmin: (state, action) => {
       state.course = {
-        ...state.course, asignatura: state.course.asignatura.map((asignatura) =>
+        ...state.course,
+        asignatura: state.course.asignatura.map((asignatura) =>
           asignatura.id === action.payload.id ? action.payload : asignatura
-        )
-      }
+        ),
+      };
     },
     filterSubjectCourseAdmin: (state, action) => {
       state.course = {
@@ -74,18 +75,39 @@ export const adminSlice = createSlice({
         ),
       };
     },
-    updateCourseStudentAdmin: (state, action) => { 
+    updateCourseStudentAdmin: (state, action) => {
       state.course = {
         ...state.course,
-        alumno: [...state.course.alumno, action.payload]
+        alumno: [...state.course.alumno, action.payload],
       };
     },
     deleteCourseStudentAdmin: (state, action) => {
       state.course = {
         ...state.course,
-        alumno: state.course.alumno.filter((alumno) => alumno.id !== action.payload.id)
-      }
-    }
+        alumno: state.course.alumno.filter(
+          (alumno) => alumno.id !== action.payload.id
+        ),
+      };
+    },
+    updateParentStudentsAdmin: (state, action) => {
+      console.log(action);
+      state.parent = {
+        ...state.parent,
+        alumno:
+          state.parent.alumno.findIndex((e) => e.id === action.payload.id) ===
+          -1
+            ? [...state.parent.alumno, action.payload]
+            : state.parent.alumno,
+      };
+    },
+    deleteParentStudentsAdmin: (state, action) => {
+      state.parent = {
+        ...state.parent,
+        alumno: state.parent.alumno.filter(
+          (alumno) => alumno.id !== action.payload.id
+        ),
+      };
+    },
   },
 });
 
@@ -100,6 +122,8 @@ export const {
   updateParentsAdmin,
   updateParentAdmin,
   appendParentAdmin,
+  updateParentStudentsAdmin,
+  deleteParentStudentsAdmin,
   updateStudentsAdmin,
   updateStudentAdmin,
   appendStudentAdmin,
@@ -109,7 +133,7 @@ export const {
   filterSubjectCourseAdmin,
   updateSubjectAdmin,
   updateCourseStudentAdmin,
-  deleteCourseStudentAdmin
+  deleteCourseStudentAdmin,
 } = adminSlice.actions;
 
 // exportar reducer del slice para mandarlo a la store

@@ -13,12 +13,12 @@ import {
 import {
   SubTitleContent,
   ContentTable,
-  AddPupilo,
   EditParent,
+  AddParentStudent,
 } from "@components/index";
 import { DeleteOutlined, UserOutlined } from "@ant-design/icons";
 
-import { content, columns } from "@constants/admin/students";
+import { columnsParent } from "@constants/admin/students";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -97,8 +97,11 @@ const ViewParent = () => {
             <Text strong>Dirección: {parent.direccion}</Text>
           </div>
           <Divider />
-          <SubTitleContent title="Pupilos" action={<AddPupilo />} />
-          <ContentTable content={content} columns={columns} type="student" />
+          <SubTitleContent
+            title="Pupilos"
+            action={<AddParentStudent data={parent.id} />}
+          />
+          <ContentTable content={parent.alumno} columns={columnsParent} type="student" />
         </Card>
       </>
     );
