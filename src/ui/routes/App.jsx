@@ -13,6 +13,7 @@ import store from '@redux';
 import {
   NotFound,
   Login,
+  Recover,
 
   ParentsHome,
   ParentsAttendance,
@@ -62,6 +63,7 @@ const App = () => {
               <Route path='*' element={<NotFound />} />
               <Route path='/' element={<Navigate to='/login' />} />
               <Route path='login' element={<Login />} />
+              <Route path='recover' element={<Recover />} />
 
               <Route path="administrador" element={<MainLayout userType='admin' />}>
                 <Route path="" element={<AdminHome />} />

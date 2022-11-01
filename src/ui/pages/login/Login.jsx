@@ -1,19 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import {Button, Checkbox, Form, Input, Anchor} from 'antd';
+
+import { Button, Checkbox, Form, Input, message, Typography } from 'antd';
+import { LockOutlined, UserOutlined } from '@ant-design/icons';
+const { Title } = Typography;
+
 import '@styles/LoginPage.less'
-
-const { Link } = Anchor;
-
-const styleForm = {
-  margin: '20%',
-  marginTop: 0
-};
-const styleFormItem = {
-  margin: '0 0 10px 0',
-};
 
 const Login = () => {
   const [auth, setAuth] = useState(false);
+  const [errorCount, setErrorCount] = useState(0);
 
   // Redirect
   useEffect(() => {
@@ -23,75 +18,81 @@ const Login = () => {
   }, [auth])
 
   const onFinish = (values) => {
-    console.log('Exito:', values);
+    console.log('Received values of form: ', values);
+    // error()
     setAuth(true);
   };
 
-  const onFinishFailed = (errorInfo) => {
-    console.log('Fallo:', errorInfo);
+  const error = () => {
+    setErrorCount(errorCount+1);
+    if (errorCount < 2)
+      message.error('Algo a salido mal, inténtelo de nuevo.');
+    else
+      message.warning('Demasiados intentos fallidos, compruebe su conexión a internet ' +
+                      'o contacte a su institución educativa.', 10);
+  };
+
+  const info = () => {
+    message.info('Lo sentimos, el registro no se encuentra habilitado, ' +
+                 'contacte a su institución educativa en caso de presentar ' +
+                 'problemas al momento de ingresar a la plataforma. ', 10);
   };
 
   return (
-    <div>
-      <h1 className='login-title'> Bienvenidos! </h1>
-
+    <div className='login-container'>
+      <Title level={2}>Iniciar Sesión</Title>
       <Form
-        name='basic'
+        name="normal_login"
+        className="login-form"
         initialValues={{
           remember: true,
-          layout: 'vertical',
-        }}
-        labelCol={{
-          span: 5,
         }}
         onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
-        autoComplete='off'
-        style={styleForm}>
+        layout="vertical"
+        >
         <Form.Item
-          label='Usuario'
-          name='usuario'
+          name="username"
+          label="Usuario"
           rules={[
             {
               required: true,
-              message: 'Ingrese un usuario válido',
+              message: 'Porfavor, ingrese su usuario.',
             },
           ]}
-          style={styleFormItem}>
-          <Input />
+          >
+          <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="12345678-9" />
         </Form.Item>
-
         <Form.Item
-          label='Contraseña'
-          name='contraseña'
+          name="password"
+          label="Contraseña"
           rules={[
             {
               required: true,
-              message: 'Ingrese una contraseña válida',
+              message: 'Porfavor, ingrese su contraseña.',
             },
           ]}
-          style={styleFormItem}>
-          <Input.Password />
+          >
+          <Input
+            prefix={<LockOutlined className="site-form-item-icon" />}
+            type="password"
+            placeholder="********"
+          />
+        </Form.Item>
+        <Form.Item>
+          <Form.Item name="remember" valuePropName="checked" noStyle>
+            <Checkbox>Recordarme</Checkbox>
+          </Form.Item>
+
+          <a className="login-form-forgot" href="recover">
+            Olvidé mi contraseña
+          </a>
         </Form.Item>
 
-        <Form.Item
-          name='remember'
-          valuePropName='checked'
-          wrapperCol={{
-            offset: 5,
-            span: 22,
-          }}>
-          <Checkbox>Recordarme</Checkbox>
-        </Form.Item>
-
-        <Form.Item
-          wrapperCol={{
-            offset: 5,
-            span: 22,
-          }}>
-          <Button type='primary' htmlType='submit'>
+        <Form.Item>
+          <Button type="primary" htmlType="submit" className="login-form-button">
             Ingresar
           </Button>
+          o ir a <a href="#" onClick={info} >Registrarse</a>
         </Form.Item>
       </Form>
     </div>

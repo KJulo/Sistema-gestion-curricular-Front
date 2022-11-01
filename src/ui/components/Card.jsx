@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Card as CardAntd } from 'antd';
+import { Card as CardAntd, Col } from 'antd';
 const { Meta } = CardAntd;
 import { UserOutlined } from '@ant-design/icons';
 
@@ -11,14 +11,16 @@ const Card = ({ title, content, icon }) => {
   const courseIcon = <div style={{...iconStyle, marginLeft:20}}> {icon} </div>;
 
   return (
-    <CardAntd
-      hoverable
-      size='large'
-      style={{ width: 300 }}
-      cover={icon === "user" ? userIcon : courseIcon}
-      >
-        <Meta title={title} description={content} />
-    </CardAntd>
+    <Col span={8} style={{ marginBottom: 20 }}>
+      <CardAntd
+        hoverable
+        size='large'
+        style={{ width: 250 }}
+        cover={icon === "user" ? userIcon : courseIcon}
+        >
+          <Meta title={title} description={content} />
+      </CardAntd>
+    </Col>
   );
 };
 
