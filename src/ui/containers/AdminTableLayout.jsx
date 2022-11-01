@@ -3,7 +3,7 @@ import React from "react";
 //antd
 import { Row, Col } from "antd";
 
-const AdminTableLayout = ({ searchInput, selectFilter, tableContent }) => {
+const AdminTableLayout = ({ searchInput, selectFilter, tableContent, extraFilter }) => {
 
   const allSpan2 = searchInput === '' ? 18 : 14;
 
@@ -12,7 +12,13 @@ const AdminTableLayout = ({ searchInput, selectFilter, tableContent }) => {
       <Row style={{ display: "flex", justifyContent:"space-between" }}>
         <Col span={8} >{searchInput}</Col>
         <Col span={allSpan2} >{selectFilter}</Col>
+        {extraFilter ?? (
+          <Col>
+            {extraFilter}
+          </Col>
+        )}
       </Row>
+
 
       <div
         style={{
@@ -24,6 +30,7 @@ const AdminTableLayout = ({ searchInput, selectFilter, tableContent }) => {
       >
         {tableContent}
       </div>
+      
     </div>
   );
 };

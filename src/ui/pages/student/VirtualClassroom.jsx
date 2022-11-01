@@ -1,168 +1,159 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 
 // antd
-import { Typography, Space, Menu } from 'antd';
-import { AppstoreOutlined, CalendarOutlined, CloseSquareFilled, MoreOutlined } from '@ant-design/icons';
-const { Title } = Typography;
+import { Typography, Space, Menu, Select, Modal, Input, Alert } from "antd";
+import {
+  AppstoreOutlined,
+  PlusSquareOutlined,
+  CloseSquareFilled,
+  MoreOutlined,
+  RightOutlined,
+} from "@ant-design/icons";
+const { TextArea } = Input;
 
 // styles
-import '@styles/Home.less';
-import '@styles/VirtualClass.less';
+import "@styles/Home.less";
+import "@styles/VirtualClass.less";
 
 // hooks
-import { useGetCurrentMonth, useGetCurrentYear, useGetCurrentDay } from '@hooks/useDate';
+import { useGetCurrentMonth, useGetCurrentYear, useGetCurrentDay } from "@hooks/useDate";
+import { useEffect } from "react";
 
-const course = {
-  id: '41kd2fj94fi32fui',
-  nombre: '1ro Básico',
-  materias: [
-    {
-      id: 'jd128d3912',
-      nombre: 'Lenguaje',
-      menus: [
-        { 
-          id: 'cwqiecejcjw',
-          nombre: 'Unidad 1',
-          contenido: [
-            {
-              titulo: 'Modulo 1',
-              cuerpo: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod'+'\n'+
-              'tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,'+'\n'+
-              'quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
-            },{
-              titulo: 'Modulo 2',
-              cuerpo: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod'+'\n'+
-              'tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,'+'\n'+
-              'quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
-            }
-          ]
-        },{ 
-          id: 'dj312938d12j83',
-          nombre: 'Unidad 2',
-          contenido: [
-            {
-              titulo: 'Primera tarea lenguaje',
-              cuerpo: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod'
-            }
-          ]
-        }
-      ]
-    },
-    {
-      id: 'ej21vn21ff',
-      nombre: 'Matemáticas',
-      menus: [
-        { 
-          id: '21duj3jd13d3d21',
-          nombre: 'Tarea 1',
-          contenido: [
-            {
-              titulo: 'Modulo 1',
-              cuerpo: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod'+'\n'+
-              'tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,'+'\n'+
-              'quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
-            },{
-              titulo: 'Modulo 2',
-              cuerpo: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod'+'\n'+
-              'tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,'+'\n'+
-              'quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
-            }
-          ]
-        }
-      ],
-    },
-    {
-      id: 'jf12f4124j',
-      nombre: 'Historia',
-      menus: [
-        { 
-          id: 'j3d12j3dj12j3',
-          nombre: 'Bievenida',
-          contenido: [
-            {
-              titulo: 'Hola !',
-              cuerpo: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod'+'\n'+
-              'tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,'
-            },{
-              titulo: 'Modulo 1 ',
-              cuerpo: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod'+'\n'+
-              'tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,'+'\n'+
-              'quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
-            }
-          ]
-        }
-      ],
-    },
-  ]
-}
+// Redux
+import { fetchCourse, setIsLoading, fetchForumsAndContent } from "@slices/students";
 
-const defaultMenu = {
-  label: 'No disponible',
-  key: 'No disponible',
-  icon: <CloseSquareFilled />,
-}
+//components
+import {
+  ForumContent,
+  FilterCourse,
+  FilterButton,
+  ContentTable,
+  SearchContent,
+  TeacherFilterCourse,
+  DefaultTitleContent,
+  LoadingSpinner,
+} from "@components/index";
 
-const Header = ({title, date}) => {
+//constants
+const { Title } = Typography;
+const { Option } = Select;
+
+const defaultMenu = [
+  {
+    label: "No disponible",
+    key: "No disponible",
+    icon: <CloseSquareFilled />,
+  },
+];
+
+const Header = ({ title, filterOptions }) => {
   return (
-    <div className='header-container'>
+    <div className="header-container">
       <Title>{title}</Title>
-      <Space direction='vertical'>
-        <div className='date-container'>
-          <Title level={5} style={{ marginBottom: 5 }}>
-            {date}
-          </Title>
-          <CalendarOutlined twoToneColor='#bfbfbf' style={{ fontSize: 'large' }} />
-        </div>
-      </Space>
+      <Space direction="vertical">{filterOptions}</Space>
     </div>
-  )
-}
-
-const MenuContent = ({content}) => {
-  return (
-    <div className='content-container'>
-        {content.map((item) => (
-          <div className='item-container'>
-          <h3>{'> ' + item.titulo}</h3>
-          <p>{item.cuerpo}</p>
-        </div>
-      ))}
-    </div>
-  )
-}
+  );
+};
 
 const VitualClassroom = () => {
-  const currentDate = useGetCurrentDay() + '-' + useGetCurrentMonth() + '-' + useGetCurrentYear();
-  const [currentMenu, setCurrentMenu] = useState(course.materias[0]);
-  const [currentSubMenu, setCurrentSubMenu] = useState(course.materias[0].menus[0])
+  const dispatch = useDispatch();
+  const currentDate = useGetCurrentDay() + "-" + useGetCurrentMonth() + "-" + useGetCurrentYear();
+  const [isAddOpen, setIsAddOpen] = useState(false);
 
-  // Materias del curso
-  const menuItems = course ? course.materias.map((materia) => ({
-    label: materia.nombre,
-    key: materia.id,
-    icon: <AppstoreOutlined />,
-  })) : defaultMenu;
+  const { student, isLoading, filters, course } = useSelector((store) => store.student);
+  const [courseHasData, setCourseHasData] = useState(false);
+  const [currentMenu, setCurrentMenu] = useState(null);
+  const [currentSubMenu, setCurrentSubMenu] = useState(null);
+  const [hasMenu, setHasMenu] = useState(false);
+  const [hasSubMenu, setHasSubMenu] = useState(false);
 
-  // Unidades o Items de la materia
-  const subMenuItems = currentMenu ? currentMenu.menus.map((menu) => ({
-    label: menu.nombre,
-    key: menu.id,
-    icon: <MoreOutlined />,
-  })) : null
+  useEffect(() => {
+    dispatch(fetchCourse());
+  }, []);
+
+  useEffect(() => {
+    if (courseHasData) {
+      dispatch(fetchForumsAndContent());
+    }
+  }, [courseHasData]);
+
+  useEffect(() => {
+    if (course.hasOwnProperty("id")) setCourseHasData(true);
+  }, [course]);
+
+  useEffect(() => {
+    setHasMenu(false);
+    setHasSubMenu(false);
+    if (course && course.hasOwnProperty("asignaturas")) {
+      const menu = course.asignaturas[0];
+      if (menu) {
+        setCurrentMenu(menu);
+        if (menu.foros) {
+          setHasSubMenu(true);
+          const submenu = menu.foros[0];
+          if (submenu) {
+            setCurrentSubMenu(submenu);
+          }
+        }
+      }
+    }
+  }, [course]);
+
+  // Validación de asignaturas
+  useEffect(() => {
+    if (course && course.hasOwnProperty("asignaturas")) setHasMenu(course.asignaturas.length > 0);
+  }, [course]);
+
+  // Validacion de foros
+  useEffect(() => {
+    if (currentMenu && currentMenu.hasOwnProperty("foros"))
+      setHasSubMenu(currentMenu.foros.length > 0);
+  }, [currentMenu]);
+
+  // Asignaturas del curso
+  const subjects = course
+    ? course.asignaturas?.map((asignatura) => ({
+        label: asignatura.nombre,
+        key: asignatura.id,
+        icon: <AppstoreOutlined />,
+      }))
+    : defaultMenu;
+
+  // Unidades o Items de la asignatura
+  const subMenuItems =
+    currentMenu && currentMenu.hasOwnProperty("foros")
+      ? currentMenu.foros.map((foro) => ({
+          label: foro.titulo,
+          key: foro.id,
+          icon: <MoreOutlined />,
+        }))
+      : defaultMenu;
 
   const onClickMenu = (e) => {
-    // buscar el materia del id y setearlo
-    let item = course.materias.find((materia) => materia.id == e.key)
+    // buscar el asignatura del id y setearlo
+    let item = course.asignaturas.find((asignatura) => asignatura.id == e.key);
+    setHasSubMenu(false);
     setCurrentMenu(item);
-    console.log("item seleccionado: ",item);
+    setCurrentSubMenu(item.foros.length > 0 ? item.foros[0] : null);
+    console.log("item seleccionado: ", item);
   };
 
   const onClickSubMenu = (e) => {
-    console.log('click ', e.key);
-    // buscar el materia del id y setearlo
-    let item = currentMenu.menus.find((menu) => menu.id == e.key)
+    // buscar el asignatura del id y setearlo
+    let item = currentMenu.foros.find((foro) => foro.id == e.key);
     setCurrentSubMenu(item);
+    console.log("item seleccionado: ", item);
   };
+
+  function onClickAdd() {
+    setIsAddOpen(true);
+  }
+  function handdleClose() {
+    setIsAddOpen(false);
+    let input = document.getElementById("input");
+    let textArea = document.getElementById("textArea");
+  }
 
   return (
     <div>
@@ -172,18 +163,60 @@ const VitualClassroom = () => {
           marginTop: "6px",
           alignItems: "flex-start",
           display: "flex",
-          marginBottom: "10px",
-          flexDirection: 'column',
-      }}>
+          marginBottom: "20px",
+          flexDirection: "column",
+        }}>
         <Title>Aula Virtual</Title>
       </div>
 
-      <Menu onClick={onClickMenu} selectedKeys={[currentMenu.id]} mode="horizontal" items={menuItems} defaultSelectedKeys={currentMenu.id} />
-      <Menu onClick={onClickSubMenu} selectedKeys={[currentSubMenu.id]} mode="horizontal" items={subMenuItems} defaultSelectedKeys={currentMenu.menus[0].nombre} />
+      {hasMenu ? (
+        <Menu
+          onClick={onClickMenu}
+          selectedKeys={[currentMenu.id]}
+          mode="horizontal"
+          items={subjects}
+          defaultSelectedKeys={currentMenu.id}
+        />
+      ) : (
+        <Alert message="No se le han añadido asignaturas actualmente." type="info" showIcon />
+      )}
 
-      <MenuContent content={currentSubMenu.contenido} />
+      {hasSubMenu ? (
+        <Menu
+          onClick={onClickSubMenu}
+          selectedKeys={[currentSubMenu.id]}
+          mode="horizontal"
+          items={subMenuItems}
+          defaultSelectedKeys={currentSubMenu.titulo}
+        />
+      ) : (
+        <></>
+      )}
+
+      <div className="content-container">
+        {hasSubMenu ? (
+          <>
+            {currentSubMenu.contenidos.map((item) => (
+              <ForumContent content={item} isEdit={false} />
+            ))}
+          </>
+        ) : (
+          <></>
+        )}
+
+        <Modal
+          title="Añadir nueva información o tarea"
+          open={isAddOpen}
+          onOk={handdleClose}
+          onCancel={handdleClose}>
+          <Input.Group>
+            <Input size="large" placeholder="Titulo." prefix={<RightOutlined />} id="input" />
+            <TextArea rows={6} placeholder="Contenido." id="textArea" />
+          </Input.Group>
+        </Modal>
+      </div>
     </div>
-  )
-}
+  );
+};
 
 export default VitualClassroom;

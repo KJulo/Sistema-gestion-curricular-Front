@@ -45,7 +45,7 @@ module.exports = {
       ),
       "@services": path.resolve(__dirname, "src/application/config/services"),
 
-      "@domain": path.resolve(__dirname, "src/domain/"),
+      "@domain": path.resolve(__dirname, "src/application/config/redux/domain"),
       "@entities": path.resolve(__dirname, "src/domain/entities"),
     },
   },

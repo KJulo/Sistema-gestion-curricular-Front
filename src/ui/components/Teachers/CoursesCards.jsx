@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 
 // antd
-import { Typography, Button, Modal, Row } from 'antd';
+import { Typography, Button, Modal, Row, Space } from 'antd';
 const { Title } = Typography;
 
 // styles
@@ -9,8 +10,6 @@ import '@styles/Home.less';
 
 // components
 import { Card, Planification } from '@components';
-
-import { courseInformation } from "@constants/document/data";
 
 const CoursesCards = ({courses}) => {
   // Modal
@@ -35,7 +34,6 @@ const CoursesCards = ({courses}) => {
   };
 
   const handleCancel = () => {
-    console.log('Clicked cancel button');
     setOpen(false);
   };
 
@@ -45,24 +43,27 @@ const CoursesCards = ({courses}) => {
         {courses.map((course) => (
           <div onClick={() => showModal(course)}>
             <Card
-              title={course.nombre}
+              title={course.nombre + ' - ' + course.paralelo}
               content={course.año}
-              icon={course.nombre.split(' ')[0] + ' ' + course.nombre.split(' ')[1][0]}
+              icon={course.nombre.split(' ')[0] + ' ' + course.nombre.split(' ')[1][0] + course.paralelo}
               />
           </div>
         ))}
       </Row>
 
       <Modal
-        title={"Planificación " + selectedCourse.nombre}
+        title={<Title level={4}>Planificación {selectedCourse.nombre} </Title>}
         open={open}
         onOk={handleOk}
         confirmLoading={confirmLoading}
         onCancel={handleCancel}
         width={800}
         style={{ top: 20 }}
+        footer={[]}
       >
-        <Planification course={courseInformation}/>
+        <Planification course={selectedCourse}/>
+        <br></br>
+        <Button onClick={handleOk}type="primary" shape="round">Guardar Cambios</Button>
       </Modal>
     </div>
   )

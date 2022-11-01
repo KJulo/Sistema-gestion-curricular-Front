@@ -1,40 +1,87 @@
-import { call, put, takeEvery, takeLatest } from 'redux-saga/effects';
+import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
 
 // Reducers
-import { updateUser } from '@slices/user';
+import { errorClear, errorFetch } from "@slices/error";
+import { updateUser } from "@slices/user";
 import {
+  initProcess,
+  cleanProcess,
+  finishProcess,
+  setIsLoading,
   fetchTeacher,
   fetchCourses,
   fetchStudents,
   fetchStudentsNotes,
+  fetchAttendance,
+  fetchForumsAndContent,
   updateTeacher,
   updateCourses,
   updateStudents,
   updateStudentsNotes,
-} from '@slices/teachers';
+  // setStudentsAttendance,
+  addAttendance,
+  setForumsAndContent,
+  deleteContent,
+  removeContent,
+  addContent,
+  contentAdded,
+  editContent,
+  contentEdited,
+} from "@slices/teachers";
 
 // Network
-import { profesor, curso, alumno, notas } from '@network/index';
+import {
+  profesor,
+  curso,
+  alumno,
+  notas,
+  asignatura,
+  asistencia,
+  foro,
+  contenido,
+} from "@network/index";
 
 function* getTeacher() {
   try {
     const response = yield call(profesor.getTeachers);
     const teacherList = response.data.data;
-    const userData = teacherList[0]
-    yield put(updateTeacher({...userData, tipo: 'profesor' }));
-    yield put(updateUser({...userData, tipo: 'profesor' }));
-  } catch(e) {
+    const userData = teacherList[0];
+    yield put(updateTeacher({ ...userData, tipo: "profesor" }));
+    yield put(updateUser({ ...userData, tipo: "profesor" }));
+  } catch (e) {
     console.log(e);
+    yield put(errorFetch({ code: 500, error: "Error de servidor." }));
   }
 }
 
 function* getCourses() {
   try {
-    const response = yield call(curso.getCourses);
-    const courseList = response.data.data;
-    yield put(updateCourses(courseList));
+    const responseCourses = (yield call(curso.getCourses)).data.data;
+    const responseSubjects = (yield call(asignatura.getAsignaturas)).data.data;
+
+    // Combinar las asignaturas con su correspondiente curso
+    let merged = [];
+    for (let i = 0; i < responseCourses.length; i++) {
+      // obtener lista de asignaturas
+      const subjectList = responseSubjects.filter(
+        (subject) => subject.id_curso === responseCourses[i].id
+      );
+      if (subjectList) {
+        merged.push({
+          ...responseCourses[i],
+          asignaturas: subjectList,
+        });
+      } else {
+        merged.push({
+          ...responseCourses[i],
+          asignaturas: [],
+        });
+      }
+    }
+    yield put(updateCourses(merged));
   } catch (e) {
     console.log(e);
+    yield put(errorFetch({ code: 500, error: "Error de servidor." }));
   }
 }
 
@@ -45,17 +92,95 @@ function* getStudents() {
     yield put(updateStudents(studentList));
   } catch (e) {
     console.log(e);
+    yield put(errorFetch({ code: 500, error: "Error de servidor." }));
   }
 }
 
 function* getStudentsNotes() {
   try {
-    const response = yield call(notas.getNotas);
-    const notesList = response.data.data;
-    console.log(notesList);
-    yield put(updateStudentsNotes(notesList));
+    const response = (yield call(notas.getNotas)).data.data;
+    yield put(updateStudentsNotes(response));
   } catch (e) {
     console.log(e);
+    yield put(errorFetch({ code: 500, error: "Error de servidor." }));
+  }
+}
+
+function* getStudentsAttendance() {
+  try {
+    const response = (yield call(asistencia.getAttendance)).data.data;
+    // yield put(setStudentsAttendance(response));
+  } catch (e) {
+    console.log(e);
+    yield put(errorFetch({ code: 500, error: "Error de servidor." }));
+  }
+}
+
+function* createAttendance(action) {
+  const payload = action.payload;
+  console.log(payload);
+  try {
+    /**
+     * TODO
+     * * id_asignatura,
+     * * id_alumno,
+     * * asistencia,
+     * ! fecha : problema con insertarla en el backend
+     */
+
+    const response = (yield call(asistencia.addAttendance, payload)).data.data;
+    console.log("response: ", response);
+  } catch (e) {
+    console.log(e);
+    yield put(errorFetch({ code: 500, error: "Error de servidor." }));
+  }
+}
+
+function* getForumsAndContent() {
+  try {
+    const forums = (yield call(foro.getForums)).data.data;
+    const contents = (yield call(contenido.getContents)).data.data;
+    // combinar arreglos
+    const forumsWithContent = forums.map((f) => {
+      return {
+        ...f,
+        contenidos: contents.filter((c) => c.id_foro === f.id),
+      };
+    });
+    yield put(setForumsAndContent(forumsWithContent));
+  } catch (e) {
+    console.log(e);
+    yield put(errorFetch({ code: 500, error: "Error de servidor." }));
+  }
+}
+
+function* delContent(action) {
+  try {
+    const response = yield call(contenido.deleteContent, action.payload);
+    yield put(removeContent(response.data.data));
+  } catch (e) {
+    console.log(e);
+    yield put(errorFetch({ code: 500, error: "Error de servidor." }));
+  }
+}
+
+function* createContent(action) {
+  try {
+    const response = yield call(contenido.createContent, action.payload);
+    yield put(contentAdded(response.data.data));
+  } catch (e) {
+    console.log(e);
+    yield put(errorFetch({ code: 500, error: "Error de servidor." }));
+  }
+}
+
+function* goEdit(action) {
+  try {
+    const response = yield call(contenido.editContent, action.payload);
+    yield put(contentEdited(response.data.data));
+  } catch (e) {
+    console.log(e);
+    yield put(errorFetch({ code: 500, error: "Error de servidor." }));
   }
 }
 
@@ -66,10 +191,28 @@ function* watchGetCourses() {
   yield takeLatest(fetchCourses, getCourses);
 }
 function* watchGetStudents() {
-  yield takeLatest(fetchStudents, getStudents)
+  yield takeLatest(fetchStudents, getStudents);
 }
 function* watchGetStudentsNotes() {
-  yield takeLatest(fetchStudentsNotes, getStudentsNotes)
+  yield takeLatest(fetchStudentsNotes, getStudentsNotes);
+}
+function* watchGetStudentsAttendance() {
+  yield takeLatest(fetchAttendance, getStudentsAttendance);
+}
+function* watchCreateAttendance() {
+  yield takeLatest(addAttendance, createAttendance);
+}
+function* watchGetForumContent() {
+  yield takeLatest(fetchForumsAndContent, getForumsAndContent);
+}
+function* watchDeleteContent() {
+  yield takeLatest(deleteContent, delContent);
+}
+function* watchCreateContent() {
+  yield takeLatest(addContent, createContent);
+}
+function* watchEditContent() {
+  yield takeLatest(editContent, goEdit);
 }
 
 export default [
@@ -77,4 +220,10 @@ export default [
   watchGetCourses(),
   watchGetStudents(),
   watchGetStudentsNotes(),
-]
+  watchGetStudentsAttendance(),
+  watchCreateAttendance(),
+  watchGetForumContent(),
+  watchDeleteContent(),
+  watchCreateContent(),
+  watchEditContent(),
+];

@@ -31,6 +31,7 @@ export { default as AddTeacher } from "@components/Teachers/AddTeacher";
 export { default as TeacherFilterCourse } from "@components/Teachers/FilterCourse";
 export { default as CoursesCards } from "@components/Teachers/CoursesCards";
 export { default as EditTeacher } from "@components/Teachers/EditTeacher";
+export { default as FilterSubject } from "@components/Teachers/FilterSubject";
 
 //students
 export { default as StudentContent } from "@components/Students/HomeContent.jsx";
@@ -53,4 +54,7 @@ export { default as FilterButton } from "@components/FilterButton";
 
 //Forms
 export { default as Planification } from "@components/Forms/Planification";
-export { default as PlanificationPanelHeader } from "@components/Forms/PlanificationPanelHeader";
+export { default as UnitHeader } from "@components/Forms/UnitHeader";
+export { default as UnitBody } from "@components/Forms/UnitBody";
+export { default as Objetive } from "@components/Forms/Objetive";
+export { default as Value } from "@components/Forms/Value";

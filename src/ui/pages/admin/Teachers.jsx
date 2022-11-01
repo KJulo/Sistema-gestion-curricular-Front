@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 //components
 import {
@@ -16,8 +16,9 @@ import { columns } from "@constants/admin/teachers";
 
 //redux
 import { useDispatch, useSelector } from "react-redux";
+
+//actions
 import { FETCH_TEACHERS_ADMIN } from "@infrastructure/sagas/types/admin";
-import { useEffect } from "react";
 
 const Teachers = () => {
   const dispatch = useDispatch();
@@ -27,7 +28,7 @@ const Teachers = () => {
   }, []);
 
   const { teachers } = useSelector((store) => store.admin);
-  
+
   return (
     <div>
       <DefaultTitleContent
@@ -36,9 +37,9 @@ const Teachers = () => {
       />
       <div style={true ? {} : { pointerEvents: "none" }}>
         <AdminTableLayout
-          //searchInput={<SearchContent placeHolder="Buscar profesor" />}
+          searchInput={<SearchContent placeHolder="Buscar profesor" />}
           tableContent={
-            <ContentTable content={teachers} columns={columns} type="teachers" />
+            <ContentTable content={teachers} columns={columns} scroll={false} />
           }
         />
       </div>

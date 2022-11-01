@@ -30,7 +30,7 @@ const Parents = () => {
     <div>
       <DefaultTitleContent title={"Apoderados"} action={<AddParent />} />
       <div style={true ? {} : { pointerEvents: "none" }}>
-        <AdminTableLayout    
+        <AdminTableLayout
           //searchInput={<SearchContent placeHolder="Buscar apoderado" />}
           tableContent={
             <ContentTable content={parents} columns={columns} type="Parents" />

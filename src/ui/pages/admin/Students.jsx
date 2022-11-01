@@ -16,6 +16,8 @@ import { columns } from "@constants/admin/students";
 
 //redux
 import { useDispatch, useSelector } from "react-redux";
+
+//actions
 import { FETCH_STUDENTS_ADMIN } from "@infrastructure/sagas/types/admin";
 
 const Students = () => {
@@ -31,13 +33,9 @@ const Students = () => {
       <DefaultTitleContent title={"Alumnos"} action={<AddStudent />} />
       <div style={true ? {} : { pointerEvents: "none" }}>
         <AdminTableLayout
-          //searchInput={<SearchContent placeHolder="Buscar alumno" />}
+          searchInput={<SearchContent placeHolder="Buscar alumno" />}
           tableContent={
-            <ContentTable
-              content={students}
-              columns={columns}
-              type="students"
-            />
+            <ContentTable content={students} columns={columns} scroll={false} />
           }
         />
       </div>

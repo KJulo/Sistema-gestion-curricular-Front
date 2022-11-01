@@ -46,7 +46,7 @@ const ViewStudent = () => {
       type: DELETE_STUDENT_ADMIN,
       payload: { id: id },
     });
-    navigate("administrador/alumnos");
+    navigate("/administrador/alumnos");
   };
   const { student } = useSelector((store) => store.admin);
 
@@ -113,17 +113,17 @@ const ViewStudent = () => {
               }}
             >
               <Avatar size={128} icon={<UserOutlined />} />
-              <Text strong>Nombre(s): {student.nombres}</Text>
-              <Text strong>Apellido(s): {student.apellidos}</Text>
-              <Text strong>Correo: {student.correo}</Text>
-              <Text strong>Rut: {student.rut}</Text>
-              <Text strong>Telofono celular: {student.telefono}</Text>
-              {student.telefonoEmergencia && (
+              <Text strong>Nombre(s): {student.apoderado.nombres}</Text>
+              <Text strong>Apellido(s): {student.apoderado.apellidos}</Text>
+              <Text strong>Correo: {student.apoderado.correo}</Text>
+              <Text strong>Rut: {student.apoderado.rut}</Text>
+              <Text strong>Telofono celular: {student.apoderado.telefono}</Text>
+              {student.apoderado.telefonoEmergencia && (
                 <Text strong>
-                  Telefono emergencia: {student.telefonoEmergencia}
+                  Telefono emergencia: {student.apoderado.telefonoEmergencia}
                 </Text>
               )}
-              <Text strong>Dirección: {student.direccion}</Text>
+              <Text strong>Dirección: {student.apoderado.direccion}</Text>
             </div>
           ) : (
             <></>
