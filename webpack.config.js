@@ -112,7 +112,7 @@ module.exports = {
     historyApiFallback: true,
     proxy: {
       "/api": {
-        target: `${process.env.SERVER_URL}`,
+        target: `${process.env.SERVER_URL}:${process.env.SERVER_PORT}`,
         pathRewrite: { "^/api": "" },
         changeOrigin: true,
       },

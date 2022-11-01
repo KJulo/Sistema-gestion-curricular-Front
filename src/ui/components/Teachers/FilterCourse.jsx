@@ -23,7 +23,8 @@ const FilterCourse = () => {
 
   useEffect(() => {
     dispatch(setActiveFilter({ selectedDate: useGetCurrentDate() }));
-  }, []);
+    if (courses.length > 0) dispatch(setActiveFilter({ courseId: courses[0].id }));
+  }, [courses]);
 
   return (
     <div style={{ display: "flex", flexDirection: "row-revers", flexWrap: "wrap", gap: "12px" }}>
@@ -33,13 +34,18 @@ const FilterCourse = () => {
         defaultValue={moment()}
         format={"DD/MM/YYYY"}
       />
-      <Select size="large" defaultValue={"Cambiar curso"} onChange={handleChange}>
-        {courses.map((course) => (
-          <Option value={course.id}>
-            {course.nombre} - {course.paralelo}
-          </Option>
-        ))}
-      </Select>
+
+      {courses.length > 0 ? (
+        <Select size="large" defaultValue={courses[0].id} onChange={handleChange}>
+          {courses.map((course) => (
+            <Option value={course.id}>
+              {course.nombre} - {course.paralelo}
+            </Option>
+          ))}
+        </Select>
+      ) : (
+        <></>
+      )}
     </div>
   );
 };

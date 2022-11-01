@@ -1,45 +1,134 @@
-import React from "react";
+import React, { useEffect } from "react";
 
-import { Avatar, Card, Button, Typography } from "antd";
-import { EditOutlined,DeleteOutlined } from "@ant-design/icons";
-const { Text } = Typography;
+import {
+  Avatar,
+  Card,
+  Button,
+  Typography,
+  Popconfirm,
+  message,
+  Row,
+  Col,
+  List,
+  Divider,
+} from "antd";
+import { DeleteOutlined, UserOutlined } from "@ant-design/icons";
+import { useNavigate, useLocation } from "react-router-dom";
+const { Text, Title } = Typography;
 
 import "@styles/AdminViewInfo.less";
 
+import { EditTeacher } from "@components/index";
+
+import { useDispatch, useSelector } from "react-redux";
+import {
+  FETCH_TEACHER_ADMIN,
+  DELETE_TEACHER_ADMIN,
+} from "@infrastructure/sagas/types/admin";
+
 const ViewTeacher = () => {
-  return (
-    <Card
-      style={{ textAlign: "center" }}
-      title={<div style={{ marginLeft: "210px" }}>Pedro Gutierrez</div>}
-      extra={
-          <div>
-            <Button style={{marginRight:"20px"}}>
-              <EditOutlined /> Editar
-            </Button>
-            <Button>
-              <DeleteOutlined />
-              Eliminar
-            </Button>
-          </div>
-      }
-    >
-      <div
-        style={{
-          display: "flex",
-          flexFlow: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          gap: "12px",
-        }}
-      >
-        <Avatar size={128} src="https://joeschmoe.io/api/v1/random" />
-        <Text strong>Nombre: Pedro Gutierrez</Text>
-        <Text strong>Correo: example@example.com </Text>
-        <Text strong>Telefono: +569 12345678</Text>
-        <Text strong>Dirección: Av.SiempreVida 3844</Text>
-      </div>
-    </Card>
-  );
+  const location = useLocation();
+  const { id } = location.state;
+  const navigate = useNavigate();
+
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch({ type: FETCH_TEACHER_ADMIN, payload: id });
+  }, []);
+
+  const { teacher } = useSelector((store) => store.admin);
+  const confirm = async (e) => {
+    await dispatch({
+      type: DELETE_TEACHER_ADMIN,
+      payload: { id: id },
+    });
+    navigate("/administrador/profesores");
+  };
+  if (teacher) {
+    return (
+      <Row style={{ display: "flex", flexFlow: "column" }}>
+        <Col>
+          <Card
+            style={{ textAlign: "center" }}
+            title={
+              <div style={{ marginLeft: "210px" }}>
+                <Text strong>Información personal</Text>
+              </div>
+            }
+            extra={
+              <div>
+                <EditTeacher teacher={teacher} />
+                <Popconfirm
+                  title="¿Estás seguro de que quieres eliminar a este usuario?"
+                  onConfirm={confirm}
+                  okText="Si"
+                  cancelText="No"
+                >
+                  <Button type="danger">
+                    <DeleteOutlined />
+                    Eliminar
+                  </Button>
+                </Popconfirm>
+              </div>
+            }
+          >
+            <div
+              style={{
+                display: "flex",
+                flexFlow: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: "12px",
+              }}
+            >
+              <Avatar size={128} icon={<UserOutlined />} />
+              <Text strong>Nombre(s): {teacher.nombres}</Text>
+              <Text strong>Apellido(s): {teacher.apellidos}</Text>
+              <Text strong>Correo: {teacher.correo}</Text>
+              <Text strong>Rut: {teacher.rut}</Text>
+            </div>
+            {/* {teacher.asignatura && teacher.asignatura.length > 0 ? (
+              <Card style={{ marginTop: "20px" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    flexFlow: "column",
+                    alignItems: "center",
+                  }}
+                >
+                  <Title level={5} underline={true}>
+                    Asignatura(s)
+                  </Title>
+                  <List
+                    itemLayout="horizontal"
+                    size="default"
+                    dataSource={teacher.asignatura}
+                    renderItem={(asignatura) => (
+                      <Row style={{ justifyContent: "space-between" }}>
+                        <Col
+                          style={{
+                            display: "flex",
+                            gap: "10px",
+                            alignItems: "center",
+                          }}
+                        >
+                          <Text>{asignatura.nombre}</Text>
+                        </Col>
+                        <Divider />
+                      </Row>
+                    )}
+                  ></List>
+                </div>
+              </Card>
+            ) : null} */}
+          </Card>
+        </Col>
+        <Col></Col>
+      </Row>
+    );
+  } else {
+    return <div>loading...</div>;
+  }
 };
 
 export default ViewTeacher;

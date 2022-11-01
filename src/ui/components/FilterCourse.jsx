@@ -4,7 +4,6 @@ import moment from "moment";
 import { DatePicker, Select } from "antd";
 const { Option } = Select;
 
-
 const Options = ({ options }) => {
   return (
     <Select size="large" defaultValue={options[0]}>
@@ -12,16 +11,23 @@ const Options = ({ options }) => {
         <Option value={index}>{filter}</Option>
       ))}
     </Select>
-  )
-}
+  );
+};
 
 const FilterCourse = () => {
-  const courses = useSelector((store) => store.admin.courses);
+  const { courses } = useSelector((store) => store.admin);
   const courseFilters = courses.filters.courses;
   const subjectFilters = courses.filters.subjects;
 
   return (
-    <div style={{ display: "flex", flexDirection: "row-reverse",flexWrap:"wrap", gap: "12px" }}>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "row-reverse",
+        flexWrap: "wrap",
+        gap: "12px",
+      }}
+    >
       <DatePicker
         onChange={(date, dateString) => console.log(date, dateString)}
         picker="year"

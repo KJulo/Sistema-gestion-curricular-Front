@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 import "@styles/VirtualClass.less";
 
+import { deleteContent } from "@slices/teachers";
+import { useDispatch } from "react-redux";
+
+// Redux
+import { editContent } from "@slices/teachers";
+
 import { EditOutlined, DeleteOutlined, CalendarOutlined, RightOutlined } from "@ant-design/icons";
 import {
   Col,
@@ -18,11 +24,13 @@ import {
 const { Option } = Select;
 const { TextArea } = Input;
 
-const ForumContent = ({ content, isEdit }) => {
+const ForumContent = ({ content, isEdit, process, forumId }) => {
+  const dispatch = useDispatch();
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const messageTime = 2000;
 
-  const text = "¿Desea eliminar esto?";
+  const onDeleteText = "¿Desea eliminar esto?";
 
   const rowStyle = {
     display: "flex",
@@ -43,21 +51,41 @@ const ForumContent = ({ content, isEdit }) => {
   function onClickCalendar() {
     setIsCalendarOpen(true);
   }
-  function handdleClose() {
+  function handdleOkContent() {
+    setIsEditOpen(false);
+    const title = document.getElementById("input").value;
+    const body = document.getElementById("textArea").value;
+    dispatch(
+      editContent({
+        id: content.id,
+        id_foro: forumId,
+        titulo: title,
+        descripcion: body,
+        tipo: "content",
+      })
+    );
+  }
+  function handdleOkCalendar() {
+    /**
+     * TODO editar o crear notificaciones
+     * * crear un useEffect para los onChange de los datePicker
+     */
+    const input = document.getElementsByTagName("input");
+    console.log(input);
+    setIsCalendarOpen(false);
+  }
+  function onClose() {
     setIsEditOpen(false);
     setIsCalendarOpen(false);
-    let input = document.getElementById("input");
-    let textArea = document.getElementById("textArea");
   }
 
-  const confirm = () => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve(true);
-        message.info("Se ha eliminado.");
-      }, 3000);
+  function onConfirmDelete(content) {
+    // TODO comprobación de la eliminación (feedback)
+    dispatch(deleteContent(content.id));
+    return new Promise((resolve, reject) => {
+      resolve(true);
     });
-  };
+  }
 
   return (
     <>
@@ -69,8 +97,8 @@ const ForumContent = ({ content, isEdit }) => {
               <EditOutlined onClick={() => onClickEdit(content)} />
               <Popconfirm
                 placement="rightTop"
-                title={text}
-                onConfirm={confirm}
+                title={onDeleteText}
+                onConfirm={() => onConfirmDelete(content)}
                 okText="Eliminar"
                 cancelText="Cancelar">
                 <DeleteOutlined />
@@ -84,7 +112,7 @@ const ForumContent = ({ content, isEdit }) => {
         <p>{content.descripcion}</p>
       </div>
 
-      <Modal title="Editar" open={isEditOpen} onOk={handdleClose} onCancel={handdleClose}>
+      <Modal title="Editar" open={isEditOpen} onOk={handdleOkContent} onCancel={onClose}>
         <Input.Group>
           <Input
             defaultValue={content.titulo}
@@ -102,11 +130,7 @@ const ForumContent = ({ content, isEdit }) => {
         </Input.Group>
       </Modal>
 
-      <Modal
-        title="Añadir tiempo"
-        open={isCalendarOpen}
-        onOk={handdleClose}
-        onCancel={handdleClose}>
+      <Modal title="Añadir tiempo" open={isCalendarOpen} onOk={onClose} onCancel={onClose}>
         <Input.Group style={modalStyle}>
           <DatePicker onChange={(value) => console.log(value)} />
           <TimePicker onChange={(value) => console.log(value)} />

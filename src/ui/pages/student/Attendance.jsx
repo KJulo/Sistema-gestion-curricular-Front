@@ -1,19 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import '@styles/Attendance.less';
+import React, { useState, useEffect } from "react";
+import "@styles/Attendance.less";
 
 // antd
-import { Checkbox, Collapse, Typography, Space, DatePicker, Button } from 'antd';
-import { CalendarOutlined } from '@ant-design/icons';
-import moment from 'moment';
+import { Checkbox, Collapse, Typography, Space, DatePicker, Button } from "antd";
+import { CalendarOutlined } from "@ant-design/icons";
+import moment from "moment";
 const { Title } = Typography;
 const { Panel } = Collapse;
 
 // hooks
-import {
-  useGetCurrentMonth,
-  useGetCurrentYear,
-  useGetDateMonthFirst,
-} from '@hooks/useDate';
+import { useGetCurrentMonth, useGetCurrentYear, useGetDateMonthFirst } from "@hooks/useDate";
 
 //components
 import {
@@ -21,87 +17,85 @@ import {
   SearchContent,
   TeacherFilterCourse,
   DefaultTitleContent,
-} from '@components/index';
+} from "@components/index";
 
 //containers
 import { AdminTableLayout } from "@containers/index";
 
+//components
+import { LoadingSpinner } from "@components";
+
 //constants
 import { columns } from "@constants/attendanceTable";
-
-const student = {
-  id: '2k1928d9218',
-  nombres: 'John',
-  apellidos: 'Brown',
-  tipo: 'estudiante',
-  idCurso: '12s21ksjh2j12k4',
-  asistencia: [
-    { fecha: '2022-09-02', presente: true },
-    { fecha: '2022-09-03', presente: true },
-    { fecha: '2022-09-04', presente: true },
-    { fecha: '2022-09-05', presente: true },
-    { fecha: '2022-09-06', presente: false },
-    { fecha: '2022-09-07', presente: true },
-    { fecha: '2022-09-08', presente: true },
-    { fecha: '2022-09-09', presente: false },
-    { fecha: '2022-09-10', presente: false },
-    { fecha: '2022-09-11', presente: true },
-    { fecha: '2022-10-06', presente: false },
-    { fecha: '2022-10-07', presente: true },
-    { fecha: '2022-10-08', presente: true },
-    { fecha: '2022-11-09', presente: false },
-    { fecha: '2022-11-10', presente: false },
-    { fecha: '2022-11-11', presente: true },
-  ],
-};
+import { setIsLoading, fetchAttendance, updateFilters } from "@slices/students";
+import { useDispatch, useSelector } from "react-redux";
 
 const Attendance = () => {
-  const currentDate = useGetCurrentMonth() + '-' + useGetCurrentYear();
-  const [userState, setUserState] = useState(student);
-  const [selectedDate, setSelectedDate] = useState(currentDate);
+  const currentDate = useGetCurrentMonth() + "-" + useGetCurrentYear();
+  const dispatch = useDispatch();
+  const { student, isLoading, attendance, filters } = useSelector((store) => store.student);
+  const [attendanceFiltered, setAttendanceFiltered] = useState([]);
 
-  // Esto se hace porque el useState se actuliza por renderizado
+  // Recuperar data
   useEffect(() => {
-    setSelectedDate(selectedDate);
-  }, [currentDate])
+    dispatch(setIsLoading(true));
+    dispatch(fetchAttendance());
+    dispatch(setIsLoading(false));
+  }, [student]);
 
+  // Se initializa la variable de estado al cambiar la data de la store
   useEffect(() => {
-    // Cuando se elimina la fecha, la fecha por defecto queda en formato YYYY-MM
-    if (selectedDate.split('-')[0].length == 4)
-      console.log('la fecha fue borrada, no hacer busqueda aun');
-  }, [selectedDate]);
+    updateAttendance(attendance, null);
+  }, [attendance]);
 
+  // Se ejecuta cuando se cambia la fecha
   const onChange = (objDate, dateString) => {
-    if (dateString != '') setSelectedDate(useGetDateMonthFirst(dateString));
+    if (dateString != "") dispatch(updateFilters({ fecha: useGetDateMonthFirst(dateString) }));
   };
+
+  // Filtro por fecha
+  useEffect(() => {
+    if (filters.hasOwnProperty("fecha")) {
+      const dateFilter = filters.fecha.split("-")[1] + "-" + filters.fecha.split("-")[0];
+      updateAttendance(attendance, dateFilter);
+    } else {
+      updateAttendance(attendance, null);
+    }
+  }, [filters]);
+
+  function updateAttendance(attendance, dateFilter) {
+    if (!dateFilter) dateFilter = useGetDateMonthFirst(currentDate);
+    setAttendanceFiltered(
+      attendance.filter((a) => {
+        const dateStore = a.fecha.split("-")[0] + "-" + a.fecha.split("-")[1];
+        return dateStore === dateFilter;
+      })
+    );
+  }
 
   return (
     <div>
       <div style={{ marginBottom: 20 }}>
         <Title>Asistencia</Title>
-        <Space direction='vertical'>
+        <Space direction="vertical">
           <DatePicker
-            defaultValue={moment(currentDate, 'MM-YYYY')}
-            picker='month'
+            defaultValue={moment(currentDate, "MM-YYYY")}
+            picker="month"
             onChange={onChange}
           />
         </Space>
       </div>
 
-      <div
-        style={true ? {} : { pointerEvents: "none" }}
-      >
-        <AdminTableLayout
-          searchInput={""}
-          // selectFilter={<TeacherFilterCourse />}
-          tableContent={
-            <ContentTable
-              content={userState.asistencia}
-              columns={columns}
-              type="course"
-            />
-          }
-        />
+      <div style={true ? {} : { pointerEvents: "none" }}>
+        <LoadingSpinner isLoading={isLoading}>
+          <AdminTableLayout
+            searchInput={""}
+            // selectFilter={<TeacherFilterCourse />}
+            tableContent={
+              <ContentTable content={attendanceFiltered} columns={columns} scroll={false} />
+            }
+          />
+        </LoadingSpinner>
       </div>
     </div>
   );

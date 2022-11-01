@@ -32,15 +32,27 @@ const mockiProxy = proxy(process.env.MOCKI_URL, {
   },
 });
 
-app.use('/api/*', async function (req, res, next) {
-  var response
-  if (req.method === "POST" || "PATCH") {
-    response = await axios[req.method.toLowerCase()](`${process.env.SERVER_URL}${req.originalUrl.replace("/api", "")}`, req.body);
-  } else {
-    response = await axios[req.method.toLowerCase()](`${process.env.SERVER_URL}${req.originalUrl.replace("/api", "")}`);
+app.use("/api/*", async function (req, res, next) {
+  var response;
+  const uri = `${process.env.SERVER_URL}${req.originalUrl.replace(
+    "/api/",
+    ""
+  )}`;
+  // Se distribuyen los metodos en secciones especificas para hacer uso de las funciones de axios.
+  if (req.method === "GET") {
+    response = await axios.get(uri);
+  } else if (req.method === "POST") {
+    response = await axios.post(uri, req.body);
+  } else if (req.method === "PUT") {
+    response = await axios.put(uri, req.body);
+  } else if (req.method === "PATCH") {
+    response = await axios.patch(uri, req.body);
+  } else if (req.method === "DELETE") {
+    response = await axios.delete(uri, { data: req.body });
   }
   res.json(response.data);
 });
+
 
 
 app.use("/mocki/*", mockiProxy);

@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { Button, Modal, Form, Input, message } from "antd";
-import { useDispatch, useSelector } from "react-redux";
-import { ADD_TEACHER_ADMIN } from "@infrastructure/sagas/types/admin";
+import { EditOutlined } from "@ant-design/icons";
+import { useDispatch } from "react-redux";
+import { UPDATE_STUDENT_ADMIN } from "@infrastructure/sagas/types/admin";
 
-const AddTeacher = () => {
+const EditStudent = ({ student }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [form] = Form.useForm();
   const dispatch = useDispatch();
@@ -11,16 +12,12 @@ const AddTeacher = () => {
     setIsModalVisible(true);
   };
 
-  const { admin } = useSelector((store) => store.admin);
-
   const handleOk = (values) => {
     setIsModalVisible(false);
-    
     dispatch({
-      type: ADD_TEACHER_ADMIN,
-      payload: { ...values, id_colegio: admin.id_colegio },
+      type: UPDATE_STUDENT_ADMIN,
+      payload: { ...values, id: student.id },
     });
-    form.resetFields();
   };
 
   const handleCancel = () => {
@@ -29,23 +26,23 @@ const AddTeacher = () => {
 
   return (
     <>
-      <Button type="primary" onClick={showModal}>
-        Agregar profesor
+      <Button onClick={showModal}>
+        <EditOutlined /> Editar
       </Button>
       <Modal
-        title="Agregar profesor"
+        title="Editar estudiante"
         visible={isModalVisible}
         onOk={form.submit}
         onCancel={handleCancel}
       >
-        <Form form={form} onFinish={handleOk}>
+        <Form form={form} onFinish={handleOk} initialValues={student}>
           <Form.Item
             label="Nombre(s)"
             name="nombres"
             rules={[
               {
                 required: true,
-                message: "Por favor ingrese el o los nombres del profesor",
+                message: "Por favor ingrese el o los nombres del estudiante",
               },
             ]}
           >
@@ -58,7 +55,7 @@ const AddTeacher = () => {
             rules={[
               {
                 required: true,
-                message: "Por favor ingrese el o los apellidos del profesor",
+                message: "Por favor ingrese el o los apellidos del estudiante",
               },
             ]}
           >
@@ -71,12 +68,12 @@ const AddTeacher = () => {
             rules={[
               {
                 required: true,
-                message: "Por favor ingrese el rut del profesor",
+                message: "Por favor ingrese el rut del estudiante",
               },
               {
                 pattern: /^\d{1,2}\.\d{3}\.\d{3}[-][0-9kK]{1}$/,
                 message: "Rut invalido",
-              }
+              },
             ]}
           >
             <Input />
@@ -94,7 +91,7 @@ const AddTeacher = () => {
             rules={[
               {
                 required: true,
-                message: "Por favor ingrese la contraseña del profesor",
+                message: "Por favor ingrese la contraseña del estudiante",
               },
             ]}
           >
@@ -106,4 +103,4 @@ const AddTeacher = () => {
   );
 };
 
-export default AddTeacher;
+export default EditStudent;

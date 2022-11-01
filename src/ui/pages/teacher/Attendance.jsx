@@ -75,7 +75,7 @@ const Attendance = () => {
   useEffect(() => {
     if (activeFilters.courseId)
       setStudentsFiltered(content.filter((c) => c.id_curso === activeFilters.courseId));
-  }, [activeFilters]);
+  }, [activeFilters, content]);
 
   // Al hacer click en el icono de switch, cambiar estado de asiste
   const handleClick = (record) => {
@@ -101,12 +101,11 @@ const Attendance = () => {
       setIsLoading(true);
       students.map((student) => {
         const dateSplited = filters.selectedDate.split("-");
-        const date =
-          dateSplited[2] + "-" + dateSplited[1] + "-" + dateSplited[0] + "T00:00:00.000Z";
+        const date = dateSplited[2] + "-" + dateSplited[1] + "-" + dateSplited[0];
         const params = {
           id_asignatura: filters.subjectId,
           id_alumno: student.id,
-          asistencia: student.asistencia.asiste,
+          asistencia: student.asistencia.asiste ? "Si" : "No",
           fecha: date,
         };
         dispatch(addAttendance(params));
@@ -150,7 +149,7 @@ const Attendance = () => {
             <ContentTable
               content={studentsFiltered}
               columns={columns.concat(editColumn)}
-              type="course"
+              scroll={false}
             />
           }
         />
