@@ -36,7 +36,7 @@ const Teachers = () => {
       />
       <div style={true ? {} : { pointerEvents: "none" }}>
         <AdminTableLayout
-          searchInput={<SearchContent placeHolder="Buscar profesor" />}
+          //searchInput={<SearchContent placeHolder="Buscar profesor" />}
           tableContent={
             <ContentTable content={teachers} columns={columns} type="teachers" />
           }

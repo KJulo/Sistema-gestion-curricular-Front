@@ -18,15 +18,13 @@ const EditCourse = ({ course }) => {
       type: UPDATE_COURSE_ADMIN,
       payload: { ...values, id: course.id },
     });
-    message.success("Alumno editado con exito.");
-    window.location.reload();
   };
 
   const handleCancel = () => {
     setIsModalVisible(false);
   };
 
-   return (
+  return (
     <>
       <Button onClick={showModal}>
         <EditOutlined /> Editar
@@ -58,15 +56,12 @@ const EditCourse = ({ course }) => {
               {
                 required: true,
                 message: "Por favor ingrese el paralelo del curso",
-              }
+              },
             ]}
           >
             <Input />
           </Form.Item>
-          <Form.Item
-            label="Rut del profesor jefe"
-            name="id_profesor"
-          >
+          <Form.Item label="Rut del profesor jefe" name="id_profesor">
             <Input.Password />
           </Form.Item>
         </Form>

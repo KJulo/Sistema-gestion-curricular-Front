@@ -18,8 +18,6 @@ const EditStudent = ({ student }) => {
       type: UPDATE_STUDENT_ADMIN,
       payload: { ...values, id: student.id },
     });
-    message.success("Alumno editado con exito.");
-    window.location.reload();
   };
 
   const handleCancel = () => {

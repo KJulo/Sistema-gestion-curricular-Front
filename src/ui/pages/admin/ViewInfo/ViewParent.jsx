@@ -39,12 +39,12 @@ const ViewParent = () => {
 
   const { parent } = useSelector((store) => store.admin);
 
-  const confirm = (e) => {
-    dispatch({
+  const confirm = async (e) => {
+    await dispatch({
       type: DELETE_PARENT_ADMIN,
-      payload: { id: id, navigate },
+      payload: { id: id },
     });
-    message.success("Apoderado eliminado con exito.");
+    navigate("/administrador/apoderados");
   };
 
   if (parent) {

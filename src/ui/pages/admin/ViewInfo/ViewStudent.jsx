@@ -41,12 +41,12 @@ const ViewStudent = () => {
     dispatch({ type: FETCH_STUDENT_ADMIN, payload: id });
   }, []);
 
-  const confirm = (e) => {
-    dispatch({
+  const confirm = async (e) => {
+    await dispatch({
       type: DELETE_STUDENT_ADMIN,
-      payload: { id: id, navigate },
+      payload: { id: id },
     });
-    message.success("Estudiante eliminado con exito.");
+    navigate("administrador/alumnos");
   };
   const { student } = useSelector((store) => store.admin);
 

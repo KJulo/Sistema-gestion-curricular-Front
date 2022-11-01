@@ -23,8 +23,6 @@ const EditSubject = ({ asignatura }) => {
         id_curso: asignatura.id_curso,
       },
     });
-    message.success("Asignatura editado con exito.");
-    //window.location.reload();
   };
 
   const handleCancel = () => {

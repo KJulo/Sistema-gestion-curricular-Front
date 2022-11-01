@@ -37,12 +37,12 @@ const ViewTeacher = () => {
   }, []);
 
   const { teacher } = useSelector((store) => store.admin);
-  const confirm = (e) => {
-    dispatch({
+  const confirm = async (e) => {
+    await dispatch({
       type: DELETE_TEACHER_ADMIN,
-      payload: { id: id, navigate },
+      payload: { id: id },
     });
-    message.success("Profesor eliminado con exito.");
+    navigate("/administrador/profesores");
   };
   if (teacher) {
     return (

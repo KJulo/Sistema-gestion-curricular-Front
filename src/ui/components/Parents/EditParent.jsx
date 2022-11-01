@@ -18,8 +18,6 @@ const EditParent = ({ parent }) => {
       type: UPDATE_PARENT_ADMIN,
       payload: { ...values, id: parent.id },
     });
-    message.success("Apoderado editado con exito.");
-    window.location.reload();
   };
 
   const handleCancel = () => {

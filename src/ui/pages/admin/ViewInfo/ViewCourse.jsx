@@ -57,12 +57,12 @@ const ViewCourse = () => {
     dispatch({ type: FETCH_COURSE_ADMIN, payload: id });
   }, []);
 
-  const confirm = (e) => {
-    dispatch({
+  const confirm = async (e) => {
+    await dispatch({
       type: DELETE_COURSE_ADMIN,
-      payload: { id: id, navigate },
+      payload: { id: id, },
     });
-    message.success("Curso eliminado con exito.");
+    navigate("/administrador/cursos");
   };
 
   const agregarProfesor = () => {

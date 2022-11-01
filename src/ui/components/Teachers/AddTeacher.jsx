@@ -21,7 +21,6 @@ const AddTeacher = () => {
       payload: { ...values, id_colegio: admin.id_colegio },
     });
     form.resetFields();
-    message.success("Profesor creado con exito.")
   };
 
   const handleCancel = () => {

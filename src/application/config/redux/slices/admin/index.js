@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { message } from "antd";
 
 export const adminSlice = createSlice({
   name: "admin",
@@ -97,10 +98,11 @@ export const adminSlice = createSlice({
           state.parent.alumno.findIndex((e) => e.id === action.payload.id) ===
           -1
             ? [...state.parent.alumno, action.payload]
-            : state.parent.alumno,
+            : state.parent.alumno ,
       };
     },
     deleteParentStudentsAdmin: (state, action) => {
+      
       state.parent = {
         ...state.parent,
         alumno: state.parent.alumno.filter(

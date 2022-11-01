@@ -1,43 +1,9 @@
 import React from "react";
-import { EyeOutlined, DeleteOutlined } from "@ant-design/icons";
+import { EyeOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import { Col, Row, Tooltip, Typography } from "antd";
 import { DeleteStudentCourse, DeleteParentStudent } from "@components/index";
 const { Paragraph } = Typography;
-export const content = [
-  {
-    key: "1",
-    name: "Ignacio",
-    surname: "Silva",
-    rut: "12345678-9",
-    correo: "example@example.com",
-    anho: "25/11/1999",
-  },
-  {
-    key: "2",
-    name: "Juan",
-    surname: "Perez",
-    rut: "12345678-9",
-    correo: "example@example.com",
-    anho: "25/11/1999",
-  },
-  {
-    key: "3",
-    name: "Pedro",
-    surname: "Gomez",
-    rut: "12345678-9",
-    correo: "example@example.com",
-    anho: "25/11/1999",
-  },
-  {
-    key: "4",
-    name: "Maria",
-    surname: "Lopez",
-    rut: "12345678-9",
-    correo: "example@example.com",
-    anho: "1/2/1962",
-  },
-];
 
 export const columns = [
   {

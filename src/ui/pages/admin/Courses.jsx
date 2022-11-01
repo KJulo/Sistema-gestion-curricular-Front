@@ -33,7 +33,7 @@ const Courses = () => {
       <DefaultTitleContent title={"Cursos"} action={<AddCourse />} />
       <div style={true ? {} : { pointerEvents: "none" }}>
         <AdminTableLayout
-          searchInput={<SearchContent placeHolder="Buscar curso" />}
+          //searchInput={<SearchContent placeHolder="Buscar curso" />}
           //selectFilter={<FilterCourse />}
           tableContent={
             <ContentTable content={courses} columns={columns} type="course" />

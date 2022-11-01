@@ -20,7 +20,6 @@ const AddCourse = () => {
       payload: { ...values, anho: moment().format("yyyy") },
     });
     form.resetFields();
-    message.success("Curso creado con exito");
   };
 
   const handleCancel = () => {
@@ -64,8 +63,8 @@ const AddCourse = () => {
           >
             <Input />
           </Form.Item>
-          <Form.Item label="Rut del profesor jefe" name="id_profesor">
-            <Input.Password />
+          <Form.Item label="ID del profesor jefe" name="id_profesor">
+            <Input/>
           </Form.Item>
         </Form>
       </Modal>

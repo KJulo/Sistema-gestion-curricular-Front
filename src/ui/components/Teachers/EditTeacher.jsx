@@ -19,8 +19,6 @@ const EditTeacher = ({ teacher }) => {
       type: UPDATE_TEACHER_ADMIN,
       payload: { ...values, id: teacher.id },
     });
-    message.success("Alumno editado con exito.");
-    window.location.reload();
   };
 
   const handleCancel = () => {

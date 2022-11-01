@@ -1,7 +1,7 @@
 import React from "react";
 import { DeleteOutlined } from "@ant-design/icons";
 import { useDispatch } from "react-redux";
-import { Tooltip } from "antd";
+import { Popconfirm } from "antd";
 import { DELETE_COURSE_STUDENT_ADMIN } from "@infrastructure/sagas/types/admin";
 
 const DeleteStudentCourse = ({ id }) => {
@@ -14,9 +14,14 @@ const DeleteStudentCourse = ({ id }) => {
     });
   };
   return (
-    <Tooltip title="Eliminar alumno del curso.">
-      <DeleteOutlined style={{ color: "red" }} onClick={deleteStudentCourse} />
-    </Tooltip>
+    <Popconfirm
+      title="Eliminar alumno del curso"
+      onConfirm={deleteStudentCourse}
+      okText="Si"
+      cancelText="No"
+    >
+      <DeleteOutlined style={{ color: "red" }} />
+    </Popconfirm>
   );
 };
 

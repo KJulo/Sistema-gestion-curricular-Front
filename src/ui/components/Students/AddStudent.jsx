@@ -20,7 +20,6 @@ const AddTeacher = () => {
       payload: { ...values, id_colegio: admin.id_colegio },
     });
     form.resetFields();
-    message.success("Alumno agregado con exito.");
   };
 
   const handleCancel = () => {

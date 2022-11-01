@@ -13,7 +13,7 @@ const ContentTable = ({ content, columns, type }) => {
         columns={columns}
         dataSource={content}
         style={{ tableLayout: "fixed" }}
-        rowKey={(record) => record.id}
+        rowKey="id"
         pagination={{
           position: ['none'],
         }}
@@ -28,7 +28,7 @@ const ContentTable = ({ content, columns, type }) => {
         columns={columns}
         dataSource={content}
         style={{ tableLayout: "fixed" }}
-        rowKey={(record) => record.id}
+        rowKey="id"
         pagination={{
           position: ['none'],
         }}
