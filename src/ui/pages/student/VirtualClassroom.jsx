@@ -89,7 +89,7 @@ const VitualClassroom = () => {
       const menu = course.asignaturas[0];
       if (menu) {
         setCurrentMenu(menu);
-        if (menu.foros) {
+        if (menu.foros && menu.foros.length > 0) {
           setHasSubMenu(true);
           const submenu = menu.foros[0];
           if (submenu) {

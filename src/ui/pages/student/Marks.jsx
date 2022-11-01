@@ -39,22 +39,22 @@ const Marks = () => {
         {student.hasOwnProperty("nombres") ? (
           <Statistic
             title={student.nombres.split(" ")[0] + " " + student.apellidos[0]}
-            value={"Promedio: " + useAverage(marks, 2)}
+            value={"Promedio: " + (useAverage(marks, 2) === "NaN" ? "-" : useAverage(marks, 2))}
           />
         ) : (
           <></>
         )}
       </LoadingSpinner>
 
-      <LoadingSpinner isLoading={marks.length === 0}>
-        <div style={true ? {} : { pointerEvents: "none" }}>
-          <AdminTableLayout
-            searchInput={""}
-            // selectFilter={<TeacherFilterCourse />}
-            tableContent={<ContentTable content={marks} columns={columns} scroll={false} />}
-          />
-        </div>
-      </LoadingSpinner>
+      <div style={true ? {} : { pointerEvents: "none" }}>
+        <AdminTableLayout
+          searchInput={""}
+          // selectFilter={<TeacherFilterCourse />}
+          tableContent={<ContentTable content={marks} columns={columns} scroll={false} />}
+        />
+      </div>
+      {/* <LoadingSpinner isLoading={marks.length === 0}>
+      </LoadingSpinner> */}
     </div>
   );
 };
