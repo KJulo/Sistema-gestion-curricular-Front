@@ -9,24 +9,6 @@ export const teacherSlice = createSlice({
     resetStore: (state) => {
       state = initState;
     },
-    initProcess: (state, action) => {
-      state.process = {
-        name: action.payload,
-        finish: "",
-      };
-    },
-    finishProcess: (state, action) => {
-      state.process = {
-        ...state.process,
-        finish: action.payload,
-      };
-    },
-    cleanProcess: (state) => {
-      state.process = {
-        name: "",
-        finish: "",
-      };
-    },
     setIsLoading: (state, action) => {
       state.isLoading = action.payload;
     },
@@ -58,6 +40,9 @@ export const teacherSlice = createSlice({
       state.isLoading = true;
     },
     editContent: (state) => {
+      state.isLoading = true;
+    },
+    addForums: (state) => {
       state.isLoading = true;
     },
     updateTeacher: (state, action) => {
@@ -115,6 +100,10 @@ export const teacherSlice = createSlice({
     },
     updateCourseManagement: (state, action) => {
       state.courses.management.course = action.payload;
+      state.isLoading = false;
+    },
+    cleanUnitsManagement: (state) => {
+      state.courses.management.units = [];
       state.isLoading = false;
     },
     appendUnitsManagement: (state, action) => {
@@ -342,15 +331,28 @@ export const teacherSlice = createSlice({
       state.courses.list = coursesWithForums;
       state.isLoading = false;
     },
+    forumsAdded: (state, action) => {
+      const { payload } = action;
+      const coursesWithForums = state.courses.list.map((course) => {
+        return {
+          ...course,
+          asignaturas: course.asignaturas.map((subject) => {
+            return {
+              ...subject,
+              foros: payload,
+            };
+          }),
+        };
+      });
+      state.courses.list = coursesWithForums;
+      state.isLoading = false;
+    },
   },
 });
 
 // exportar funciones individuales
 export const {
   resetStore,
-  initProcess,
-  cleanProcess,
-  finishProcess,
   setIsLoading,
   courseFiltersUpdate,
   updateStudentAttendance,
@@ -364,6 +366,7 @@ export const {
   updateStudents,
   updateStudentsNotes,
   updateCourseManagement,
+  cleanUnitsManagement,
   appendUnitsManagement,
   deleteUnitManagement,
   updateUnitManagement,
@@ -385,6 +388,8 @@ export const {
   contentAdded,
   editContent,
   contentEdited,
+  addForums,
+  forumsAdded,
 } = teacherSlice.actions;
 
 // exportar reducer del slice para mandarlo a la store

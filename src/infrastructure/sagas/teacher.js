@@ -1,12 +1,10 @@
 import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
+import { message } from "antd";
 
 // Reducers
 import { errorClear, errorFetch } from "@slices/error";
 import { updateUser } from "@slices/user";
 import {
-  initProcess,
-  cleanProcess,
-  finishProcess,
   setIsLoading,
   fetchTeacher,
   fetchCourses,
@@ -27,6 +25,8 @@ import {
   contentAdded,
   editContent,
   contentEdited,
+  addForums,
+  forumsAdded,
 } from "@slices/teachers";
 
 // Network
@@ -158,6 +158,7 @@ function* delContent(action) {
   try {
     const response = yield call(contenido.deleteContent, action.payload);
     yield put(removeContent(response.data.data));
+    message.success("Eliminado con éxito.");
   } catch (e) {
     console.log(e);
     yield put(errorFetch({ code: 500, error: "Error de servidor." }));
@@ -168,6 +169,7 @@ function* createContent(action) {
   try {
     const response = yield call(contenido.createContent, action.payload);
     yield put(contentAdded(response.data.data));
+    message.success("Creado con éxito.");
   } catch (e) {
     console.log(e);
     yield put(errorFetch({ code: 500, error: "Error de servidor." }));
@@ -178,6 +180,29 @@ function* goEdit(action) {
   try {
     const response = yield call(contenido.editContent, action.payload);
     yield put(contentEdited(response.data.data));
+    message.success("Editado con éxito.");
+  } catch (e) {
+    console.log(e);
+    yield put(errorFetch({ code: 500, error: "Error de servidor." }));
+  }
+}
+
+function* createForums(action) {
+  const { course, forums } = action.payload;
+  try {
+    for (let i = 0; i < forums.length; i++) {
+      const subject = course.asignaturas.find((a) => a.nombre === course.asignatura);
+      yield call(foro.createForum, {
+        id_asignatura: subject.id,
+        titulo: forums[i].nombre,
+      });
+    }
+    message.success(
+      "Se han creado las unidades con éxito en el Aula Virtual de " +
+        course.nombre +
+        " " +
+        course.paralelo
+    );
   } catch (e) {
     console.log(e);
     yield put(errorFetch({ code: 500, error: "Error de servidor." }));
@@ -214,6 +239,9 @@ function* watchCreateContent() {
 function* watchEditContent() {
   yield takeLatest(editContent, goEdit);
 }
+function* watchAddForums() {
+  yield takeLatest(addForums, createForums);
+}
 
 export default [
   watchGetTeacherUser(),
@@ -226,4 +254,5 @@ export default [
   watchDeleteContent(),
   watchCreateContent(),
   watchEditContent(),
+  watchAddForums(),
 ];

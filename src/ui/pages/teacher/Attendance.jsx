@@ -143,7 +143,7 @@ const Attendance = () => {
       <div style={true ? {} : { pointerEvents: "none" }}>
         <AdminTableLayout
           searchInput={""}
-          selectFilter={<TeacherFilterCourse />}
+          selectFilter={<TeacherFilterCourse courses={courses} includeDate={true} />}
           extraFilter={<FilterSubject subjects={selectedCourseSubjects} />}
           tableContent={
             <ContentTable

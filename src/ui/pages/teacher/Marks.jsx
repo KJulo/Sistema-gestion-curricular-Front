@@ -58,8 +58,11 @@ const getColumns = (content) => {
 const Marks = () => {
   const dispatch = useDispatch();
   const content = useSelector((store) => store.teacher.students.list);
-  const activeFilter = useSelector((store) => store.teacher.activeFilters);
-  const isLoading = useSelector((store) => store.teacher.isLoading);
+  const {
+    activeFilter,
+    isLoading,
+    courses: { list: courses },
+  } = useSelector((store) => store.teacher);
   const [studentsFiltered, setStudentsFiltered] = useState(content);
   const [tableColumns, setTableColumns] = useState(getColumns(content));
 
@@ -78,7 +81,8 @@ const Marks = () => {
 
   // Filtro de curso
   useEffect(() => {
-    setStudentsFiltered(content.filter((c) => c.id_curso === activeFilter.courseId));
+    if (activeFilter)
+      setStudentsFiltered(content.filter((c) => c.id_curso === activeFilter.courseId));
   }, [activeFilter]);
 
   useEffect(() => {
@@ -97,7 +101,7 @@ const Marks = () => {
         <LoadingSpinner isLoading={isLoading}>
           <AdminTableLayout
             searchInput={""}
-            selectFilter={<TeacherFilterCourse />}
+            selectFilter={<TeacherFilterCourse courses={courses} includeDate={false} />}
             tableContent={
               <ContentTable content={studentsFiltered} columns={tableColumns} scroll={false} />
             }

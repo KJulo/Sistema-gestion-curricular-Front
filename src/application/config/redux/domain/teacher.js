@@ -27,8 +27,4 @@ export const initState = {
   },
   activeFilters: {},
   isLoading: false,
-  process: {
-    name: "",
-    finish: "",
-  },
 };
