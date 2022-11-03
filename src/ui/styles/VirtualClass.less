@@ -11,8 +11,8 @@
 }
 
 .custom-row {
-  display: 'flex',;
-  align-items: 'center';
+  display: "flex";
+  align-items: "center";
   margin-bottom: 5;
   gap: 20;
 }
@@ -21,4 +21,29 @@
   gap: 10px;
   display: flex;
   justify-content: flex-start;
+}
+
+.vertical-flex {
+  display: flex !important;
+  flex-direction: column !important;
+  flex-wrap: nowrap !important;
+}
+
+@media only screen and (min-width: 1000px) {
+  .flex {
+    flex-direction: row !important;
+  }
+  .side-objetives {
+    margin-left: 50px;
+  }
+}
+
+@media only screen and (max-width: 1000px) {
+  .flex {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+  }
+  .side-objetives {
+    margin-left: 0px;
+  }
 }
