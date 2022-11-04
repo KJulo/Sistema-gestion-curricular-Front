@@ -16,7 +16,7 @@ import {
   updateCourses,
   updateStudents,
   updateStudentsNotes,
-  // setStudentsAttendance,
+  setStudentsAttendance,
   addAttendance,
   setForumsAndContent,
   deleteContent,
@@ -109,27 +109,37 @@ function* getStudentsNotes() {
 function* getStudentsAttendance() {
   try {
     const response = (yield call(asistencia.getAttendance)).data.data;
-    // yield put(setStudentsAttendance(response));
+    yield put(setStudentsAttendance(response));
   } catch (e) {
     console.log(e);
     yield put(errorFetch({ code: 500, error: "Error de servidor." }));
   }
 }
 
+// TODO
 function* createAttendance(action) {
   const payload = action.payload;
-  console.log(payload);
   try {
-    /**
-     * TODO
-     * * id_asignatura,
-     * * id_alumno,
-     * * asistencia,
-     * ! fecha : problema con insertarla en el backend
-     */
+    setIsLoading(true);
+    // const response = yield call(asistencia.addAttendance, payload);
+    setIsLoading(false);
+  } catch (e) {
+    console.log(e);
+    yield put(errorFetch({ code: 500, error: "Error de servidor." }));
+  }
+}
 
-    const response = (yield call(asistencia.addAttendance, payload)).data.data;
-    console.log("response: ", response);
+// TODO
+function* editAttendance(action) {
+  const payload = action.payload;
+  try {
+    setIsLoading(true);
+    const response = yield call(asistencia.editAttendance, {
+      payload: payload.data,
+      id: payload.id,
+    });
+
+    setIsLoading(false);
   } catch (e) {
     console.log(e);
     yield put(errorFetch({ code: 500, error: "Error de servidor." }));

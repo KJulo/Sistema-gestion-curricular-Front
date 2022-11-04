@@ -30,7 +30,7 @@ import {
 import { AdminTableLayout } from "@containers/index";
 
 //constants
-import { columns } from "@constants/teacher/attendanceTable";
+import { columns, status } from "@constants/teacher/attendanceTable";
 
 const Attendance = () => {
   const dispatch = useDispatch();
@@ -51,39 +51,55 @@ const Attendance = () => {
 
   // Inicializar las asistencias de los estudiantes al cambiar la fecha
   useEffect(() => {
-    if (activeFilters) {
-      initAttendance();
-      if (activeFilters.courseId) {
-        const selectedCourse = courses.find((c) => c.id === activeFilters.courseId);
-        setSelectedCourseSubjects(selectedCourse.asignaturas);
-      }
+    if (activeFilters && activeFilters.courseId) {
+      const selectedCourse = courses.find((c) => c.id === activeFilters.courseId);
+      setSelectedCourseSubjects(selectedCourse.asignaturas);
     }
   }, [activeFilters, content.length > 0]);
 
-  function initAttendance() {
-    content.map((student) => {
-      dispatch(
-        updateStudentAttendance({
-          id: student.id,
-          asistencia: { fecha: activeFilters.selectedDate, asiste: false },
-        })
-      );
-    });
-  }
-
-  // Filtro de curso
+  // Filtro de curso y fecha
   useEffect(() => {
-    if (activeFilters.courseId)
-      setStudentsFiltered(content.filter((c) => c.id_curso === activeFilters.courseId));
+    const condition =
+      activeFilters.hasOwnProperty("courseId") && activeFilters.hasOwnProperty("selectedDate");
+    if (condition) {
+      const studentsByCourse = content.filter((c) => c.id_curso === activeFilters.courseId);
+      const studentsByDate = studentsByCourse.map((student) => {
+        // Retorno en caso que todo falle
+        const defaultReturn = {
+          ...student,
+          asistencia: {},
+        };
+
+        // Buscar en el arreglo de asistencia la asistencia con fecha correspondiente
+        const attendanceFinded = student.asistencia.find(
+          (a) => a.fecha === activeFilters.selectedDate
+        );
+        if (attendanceFinded) {
+          return {
+            ...student,
+            asistencia: attendanceFinded,
+          };
+        } else {
+          return defaultReturn;
+        }
+      });
+      setStudentsFiltered(studentsByDate);
+    }
   }, [activeFilters, content]);
 
   // Al hacer click en el icono de switch, cambiar estado de asiste
   const handleClick = (record) => {
-    const cambio = record.asistencia.asiste ? false : true;
+    const lengthStatus = status.length;
+    const nextStatusIndex = status.indexOf(record.asistencia.asistencia) + 1;
+    const newStatusIndex = nextStatusIndex <= lengthStatus - 1 ? nextStatusIndex : 0;
     dispatch(
       updateStudentAttendance({
         id: record.id,
-        asistencia: { fecha: activeFilters.selectedDate, asiste: cambio },
+        asistencia: {
+          fecha: activeFilters.selectedDate,
+          asistencia: status[newStatusIndex],
+          id: record.asistencia.asistencia.id,
+        },
       })
     );
   };
@@ -98,19 +114,16 @@ const Attendance = () => {
 
     if (condition || condition !== undefined) {
       setAlertActive(false);
-      setIsLoading(true);
+      // TODO comprobar si existe o no asistencia registrada para no regitrarla solo 2 veces y solo editarla
       students.map((student) => {
-        const dateSplited = filters.selectedDate.split("-");
-        const date = dateSplited[2] + "-" + dateSplited[1] + "-" + dateSplited[0];
         const params = {
           id_asignatura: filters.subjectId,
           id_alumno: student.id,
-          asistencia: student.asistencia.asiste ? "Si" : "No",
-          fecha: date,
+          asistencia: student.asistencia.asistencia ?? "No",
+          fecha: filters.selectedDate,
         };
         dispatch(addAttendance(params));
       });
-      setIsLoading(false);
     } else {
       setAlertActive(true);
     }

@@ -16,12 +16,18 @@ const FilterCourse = ({ courses, includeDate }) => {
     dispatch(setActiveFilter({ courseId: value }));
   };
 
-  const onChange = (date, dateString) => {
-    dispatch(setActiveFilter({ selectedDate: dateString }));
+  const onChange = (_, dateString) => {
+    console.log(dateString);
+    const dateSplited = dateString.split("/");
+    const date = dateSplited[2] + "-" + dateSplited[1] + "-" + dateSplited[0];
+    console.log(date);
+    dispatch(setActiveFilter({ selectedDate: date }));
   };
 
   useEffect(() => {
-    dispatch(setActiveFilter({ selectedDate: useGetCurrentDate() }));
+    const dateSplited = useGetCurrentDate().split("-");
+    const date = dateSplited[2] + "-" + dateSplited[1] + "-" + dateSplited[0];
+    dispatch(setActiveFilter({ selectedDate: date }));
     if (courses.length > 0) dispatch(setActiveFilter({ courseId: courses[0].id }));
   }, [courses]);
 
@@ -29,7 +35,7 @@ const FilterCourse = ({ courses, includeDate }) => {
     <div style={{ display: "flex", flexDirection: "row-revers", flexWrap: "wrap", gap: "12px" }}>
       {includeDate ? (
         <DatePicker
-          onChange={(date, dateString) => onChange(date, dateString)}
+          onChange={onChange}
           size="large"
           defaultValue={moment()}
           format={"DD/MM/YYYY"}
