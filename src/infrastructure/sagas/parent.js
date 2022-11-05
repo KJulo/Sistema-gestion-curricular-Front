@@ -1,28 +1,117 @@
-import { call, put, takeLatest } from 'redux-saga/effects';
+import { call, put, takeLatest } from "redux-saga/effects";
 
 // Reducers
-import { fetchParent, updateParent } from '@slices/parents';
-import { updateUser } from '@slices/user';
+import { errorClear, errorFetch } from "@slices/error";
+import { updateUser } from "@slices/user";
+import {
+  fetchParent,
+  updateParent,
+  fetchStudents,
+  updateStudents,
+  updateCourses,
+} from "@slices/parents";
 
 // Network
-import { apoderado } from '@network/index';
+import { profesor, curso, alumno, notas, asignatura, asistencia, apoderado } from "@network/index";
 
 function* getParent() {
   try {
     const response = yield call(apoderado.getParents);
     const parentList = response.data.data;
-    const userData = parentList[0]
-    yield put(updateParent({...userData, tipo: 'apoderado' }));
-    yield put(updateUser({...userData, tipo: 'apoderado' }));
-  } catch(e) {
+    const userData = parentList[0];
+    yield put(updateParent({ ...userData, tipo: "apoderado" }));
+    yield put(updateUser({ ...userData, tipo: "apoderado" }));
+  } catch (e) {
     console.log(e);
+    yield put(errorFetch({ code: 500, error: "Error de servidor." }));
+  }
+}
+
+function* getStudents() {
+  try {
+    const response = (yield call(alumno.getStudents)).data.data;
+    yield put(updateStudents(response));
+  } catch (e) {
+    console.log(e);
+    yield put(errorFetch({ code: 500, error: "Error de servidor." }));
+  }
+}
+
+function* getCourses() {
+  try {
+    const responseCourses = (yield call(curso.getCourses)).data.data;
+    const responseSubjects = (yield call(asignatura.getAsignaturas)).data.data;
+
+    // Combinar las asignaturas con su correspondiente curso
+    let merged = [];
+    for (let i = 0; i < responseCourses.length; i++) {
+      // obtener lista de asignaturas
+      const subjectList = responseSubjects.filter(
+        (subject) => subject.id_curso === responseCourses[i].id
+      );
+      if (subjectList) {
+        merged.push({
+          ...responseCourses[i],
+          asignaturas: subjectList,
+        });
+      } else {
+        merged.push({
+          ...responseCourses[i],
+          asignaturas: [],
+        });
+      }
+    }
+    yield put(updateCourses(merged));
+  } catch (e) {
+    console.log(e);
+    yield put(errorFetch({ code: 500, error: "Error de servidor." }));
+  }
+}
+
+//TODO
+function* getStudentsNotes() {
+  try {
+    const response = (yield call(notas.getNotas)).data.data;
+    // yield put(updateStudentsNotes(response));
+  } catch (e) {
+    console.log(e);
+    yield put(errorFetch({ code: 500, error: "Error de servidor." }));
+  }
+}
+
+// TODO
+function* getStudentsAttendance() {
+  try {
+    const response = (yield call(asistencia.getAttendance)).data.data;
+    // yield put(setStudentsAttendance(response));
+  } catch (e) {
+    console.log(e);
+    yield put(errorFetch({ code: 500, error: "Error de servidor." }));
+  }
+}
+
+//TODO
+function* getTeacher() {
+  try {
+    const response = yield call(profesor.getTeachers);
+    const teacherList = response.data.data;
+    const userData = teacherList[0];
+    // yield put(updateTeacher({ ...userData, tipo: "profesor" }));
+    // yield put(updateUser({ ...userData, tipo: "profesor" }));
+  } catch (e) {
+    console.log(e);
+    yield put(errorFetch({ code: 500, error: "Error de servidor." }));
   }
 }
 
 function* watchGetParentUser() {
   yield takeLatest(fetchParent, getParent);
 }
+function* watchGetStudents() {
+  yield takeLatest(fetchStudents, getStudents);
+}
+function* watchGetCourses() {
+  yield takeLatest(fetchStudents, getCourses);
+}
 
-export default [
-  watchGetParentUser(),
-]
+export default [watchGetParentUser(), watchGetStudents(), watchGetCourses()];

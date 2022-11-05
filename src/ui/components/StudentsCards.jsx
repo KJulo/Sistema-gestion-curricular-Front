@@ -2,7 +2,8 @@ import React, { useState } from "react";
 
 import Card from "@components/Card";
 
-import { Modal } from "antd";
+import { Modal, Typography } from "antd";
+const { Title, Paragraph } = Typography;
 
 const StudentsCards = ({ students }) => {
   const [modalOpen, setModalOpen] = useState(false);
@@ -15,9 +16,6 @@ const StudentsCards = ({ students }) => {
   function handdleOkModal() {
     setModalOpen(false);
   }
-  const handleCancel = () => {
-    setModalOpen(false);
-  };
 
   return (
     <>
@@ -26,7 +24,7 @@ const StudentsCards = ({ students }) => {
           <Card
             onClick={() => handdleOpenModal(student)}
             title={student.nombres + " " + student.apellidos}
-            content={student.curso}
+            content={student.curso.nombre + " " + student.curso.paralelo}
             icon="user"
           />
         ))}
@@ -36,8 +34,13 @@ const StudentsCards = ({ students }) => {
         title="Información del alumno"
         open={modalOpen}
         onOk={handdleOkModal}
-        onCancel={handleCancel}>
-        Modal
+        onCancel={handdleOkModal}
+        cancelButtonProps={{ style: { display: "none" } }}>
+        <Title level={4}>Notas</Title>
+        <Paragraph>
+          <blockquote>bloque</blockquote>
+        </Paragraph>
+        <Title level={4}>Asistencia</Title>
       </Modal>
     </>
   );

@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
 
+// Redux
+import { useDispatch, useSelector } from "react-redux";
+import { fetchStudents } from "@slices/parents";
+
 // antd
 import { Layout, Typography } from "antd";
 const { Title } = Typography;
@@ -14,18 +18,15 @@ import "@styles/Home.less";
 import Notifications from "@components/Notifications";
 import { StudentsCards } from "@components";
 
-// constants
-import { parents } from "@constants/users";
-
-// no funcionando, faltan endpoints
+// TODO notifications
 const Home = () => {
-  const [parent, setParent] = useState(parents.parents[0]);
-  const [students, setStudents] = useState(parents.students);
+  const dispatch = useDispatch();
+  const { parentData, students, notification, isLoading } = useSelector((store) => store.parent);
 
   // Seleccionar un padre cualquiera
   useEffect(() => {
-    setParent(parents.parents[0]);
-  }, []);
+    dispatch(fetchStudents());
+  }, [parentData]);
 
   return (
     <div
@@ -36,7 +37,7 @@ const Home = () => {
       }}>
       <Title>
         {" "}
-        Hola, {parent.nombres} {parent.apellidos} !
+        Hola, {parentData.nombres} {parentData.apellidos} !
       </Title>
 
       <div className="flex-container" style={{ padding: "1rem", justifyContent: "space-around" }}>
