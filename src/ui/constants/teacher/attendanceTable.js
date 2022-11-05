@@ -44,7 +44,15 @@ export const columns = [
     render: (record) => {
       return (
         <div>
-          {getAttendanceStatus(record.asistencia)} {record.asistencia}
+          {record.asistencia ? (
+            <>
+              {getAttendanceStatus(record.asistencia)} {record.asistencia}
+            </>
+          ) : (
+            <>
+              {getAttendanceStatus(status[0])} {status[0]}
+            </>
+          )}
         </div>
       );
     },

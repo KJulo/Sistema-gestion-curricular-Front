@@ -33,6 +33,9 @@ export const teacherSlice = createSlice({
     addAttendance: (state) => {
       state.isLoading = true;
     },
+    editAttendance: (state) => {
+      state.isLoading = true;
+    },
     deleteContent: (state) => {
       state.isLoading = true;
     },
@@ -88,21 +91,32 @@ export const teacherSlice = createSlice({
     updateStudentAttendance: (state, action) => {
       const payload = action.payload;
       const studentList = state.students.list.map((student) => {
+        // Buscar al estudiante que corresponse la fecha
         if (payload.id === student.id) {
-          return {
-            ...student,
-            asistencia: student.asistencia.map((a) => {
-              if (a.fecha === payload.asistencia.fecha) {
-                return {
-                  ...a,
-                  asistencia: payload.asistencia.asistencia,
-                  fecha: payload.asistencia.fecha,
-                };
-              } else {
-                return a;
-              }
-            }),
-          };
+          // Verificar si la fecha fue registrada por parte el endpoint
+          if (payload.asistencia.registrado === "Si") {
+            return {
+              ...student,
+              asistencia: student.asistencia.map((a) => {
+                // Editar la asistencia en funcion la fecha
+                if (a.fecha === payload.asistencia.fecha) {
+                  return {
+                    ...a,
+                    asistencia: payload.asistencia.asistencia,
+                    fecha: payload.asistencia.fecha,
+                  };
+                } else {
+                  return a;
+                }
+              }),
+            };
+          } else {
+            // Caso no registrado
+            return {
+              ...student,
+              asistencia: student.asistencia.concat(payload.asistencia),
+            };
+          }
         } else {
           return student;
         }
@@ -265,6 +279,7 @@ export const teacherSlice = createSlice({
               return {
                 ...a,
                 fecha: a.fecha.slice(0, 10),
+                registrado: "Si",
               };
             }),
           };
@@ -387,6 +402,7 @@ export const {
   setIsLoading,
   courseFiltersUpdate,
   updateStudentAttendance,
+  editAttendance,
   fetchTeacher,
   fetchCourses,
   fetchStudents,

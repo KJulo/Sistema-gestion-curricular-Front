@@ -17,10 +17,8 @@ const FilterCourse = ({ courses, includeDate }) => {
   };
 
   const onChange = (_, dateString) => {
-    console.log(dateString);
     const dateSplited = dateString.split("/");
     const date = dateSplited[2] + "-" + dateSplited[1] + "-" + dateSplited[0];
-    console.log(date);
     dispatch(setActiveFilter({ selectedDate: date }));
   };
 

@@ -10,11 +10,12 @@ import {
   fetchCourses,
   fetchAttendance,
   addAttendance,
+  editAttendance,
   resetStore,
 } from "@slices/teachers";
 
 // antd
-import { Button, Alert } from "antd";
+import { Button, Alert, message } from "antd";
 import { SwapOutlined, CheckOutlined } from "@ant-design/icons";
 
 //components
@@ -39,7 +40,6 @@ const Attendance = () => {
   const { activeFilters, isLoading } = useSelector((store) => store.teacher);
   const [studentsFiltered, setStudentsFiltered] = useState(content);
   const [selectedCourseSubjects, setSelectedCourseSubjects] = useState([]);
-  const [alertActive, setAlertActive] = useState(false);
 
   useEffect(() => {
     // TODO: se cae cuando se entre desde otro modulo a este de asistencia
@@ -64,12 +64,6 @@ const Attendance = () => {
     if (condition) {
       const studentsByCourse = content.filter((c) => c.id_curso === activeFilters.courseId);
       const studentsByDate = studentsByCourse.map((student) => {
-        // Retorno en caso que todo falle
-        const defaultReturn = {
-          ...student,
-          asistencia: {},
-        };
-
         // Buscar en el arreglo de asistencia la asistencia con fecha correspondiente
         const attendanceFinded = student.asistencia.find(
           (a) => a.fecha === activeFilters.selectedDate
@@ -77,12 +71,20 @@ const Attendance = () => {
         if (attendanceFinded) {
           return {
             ...student,
-            asistencia: attendanceFinded,
+            asistencia: { ...attendanceFinded, registrado: "Si" },
           };
         } else {
-          return defaultReturn;
+          return {
+            ...student,
+            asistencia: {
+              fecha: activeFilters.selectedDate,
+              asistencia: status[0],
+              registrado: "No",
+            },
+          };
         }
       });
+
       setStudentsFiltered(studentsByDate);
     }
   }, [activeFilters, content]);
@@ -92,28 +94,32 @@ const Attendance = () => {
     const lengthStatus = status.length;
     const nextStatusIndex = status.indexOf(record.asistencia.asistencia) + 1;
     const newStatusIndex = nextStatusIndex <= lengthStatus - 1 ? nextStatusIndex : 0;
-    dispatch(
-      updateStudentAttendance({
-        id: record.id,
-        asistencia: {
-          fecha: activeFilters.selectedDate,
-          asistencia: status[newStatusIndex],
-          id: record.asistencia.asistencia.id,
-        },
-      })
+    updateAttendance(
+      record.id,
+      activeFilters.selectedDate,
+      status[newStatusIndex],
+      record.asistencia.registrado
     );
   };
 
+  function updateAttendance(studentId, date, status, registered) {
+    dispatch(
+      updateStudentAttendance({
+        id: studentId,
+        asistencia: {
+          fecha: date,
+          asistencia: status,
+          registrado: registered,
+        },
+      })
+    );
+  }
+
   const onSaveChanges = (content) => {
     const { students, filters } = content;
-    const condition =
-      activeFilters &&
-      activeFilters.courseId &&
-      activeFilters.selectedDate &&
-      activeFilters.subjectId;
 
-    if (condition || condition !== undefined) {
-      setAlertActive(false);
+    if (hasAllConditions(activeFilters)) {
+      message.destroy();
       // TODO comprobar si existe o no asistencia registrada para no regitrarla solo 2 veces y solo editarla
       students.map((student) => {
         const params = {
@@ -122,12 +128,42 @@ const Attendance = () => {
           asistencia: student.asistencia.asistencia ?? "No",
           fecha: filters.selectedDate,
         };
-        dispatch(addAttendance(params));
+        // verificar si la fecha ya fue registrada
+        if (hasBeenRegistered(filters.selectedDate)) {
+          dispatch(editAttendance(params));
+        } else {
+          dispatch(addAttendance(params));
+        }
+        // dispatch(addAttendance(params));
       });
-    } else {
-      setAlertActive(true);
     }
   };
+
+  function hasAllConditions(filters) {
+    const condition = filters && filters.courseId && filters.selectedDate && filters.subjectId;
+    // Si no se cumple con algo
+    if (!condition) {
+      message.destroy();
+      if (!filters.courseId) message.warning("Seleccione el curso a registrar.");
+      if (!filters.selectedDate) message.warning("Seleccione una fecha para registrar.");
+      if (!filters.subjectId) message.warning("Seleccione la asignatura a registrar.");
+    } else {
+      return true;
+    }
+  }
+
+  function hasBeenRegistered(filterDate) {
+    if (studentsFiltered) {
+      let dateFound = false;
+      for (let i = 0; i < content.length; i++) {
+        if (content[i].asistencia.find((a) => a.fecha === filterDate)) {
+          dateFound = true;
+          break;
+        }
+      }
+      return dateFound;
+    }
+  }
 
   // Columna de edición, se agrega ahora con un concat
   const editColumn = [
@@ -176,16 +212,6 @@ const Attendance = () => {
           loading={isLoading}>
           Guardar Cambios
         </Button>
-        {alertActive ? (
-          <Alert
-            style={{ marginTop: 20 }}
-            message="Porfavor, seleccione un curso, asignatura y fecha."
-            type="warning"
-            showIcon
-          />
-        ) : (
-          <></>
-        )}
       </div>
     </div>
   );

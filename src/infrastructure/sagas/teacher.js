@@ -27,6 +27,7 @@ import {
   contentEdited,
   addForums,
   forumsAdded,
+  editAttendance,
 } from "@slices/teachers";
 
 // Network
@@ -130,14 +131,14 @@ function* createAttendance(action) {
 }
 
 // TODO
-function* editAttendance(action) {
+function* goEditAttendance(action) {
   const payload = action.payload;
   try {
     setIsLoading(true);
-    const response = yield call(asistencia.editAttendance, {
-      payload: payload.data,
-      id: payload.id,
-    });
+    // const response = yield call(asistencia.editAttendance, {
+    //   payload: payload.data,
+    //   id: payload.id,
+    // });
 
     setIsLoading(false);
   } catch (e) {
@@ -186,7 +187,7 @@ function* createContent(action) {
   }
 }
 
-function* goEdit(action) {
+function* goEditContent(action) {
   try {
     const response = yield call(contenido.editContent, action.payload);
     yield put(contentEdited(response.data.data));
@@ -247,7 +248,10 @@ function* watchCreateContent() {
   yield takeLatest(addContent, createContent);
 }
 function* watchEditContent() {
-  yield takeLatest(editContent, goEdit);
+  yield takeLatest(editContent, goEditContent);
+}
+function* watchGoEditAttendance() {
+  yield takeLatest(editAttendance, goEditAttendance);
 }
 function* watchAddForums() {
   yield takeLatest(addForums, createForums);
@@ -265,4 +269,5 @@ export default [
   watchCreateContent(),
   watchEditContent(),
   watchAddForums(),
+  watchGoEditAttendance(),
 ];
