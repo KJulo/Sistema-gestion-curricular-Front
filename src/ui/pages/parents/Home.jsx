@@ -16,7 +16,7 @@ import "@styles/Home.less";
 
 //components
 import Notifications from "@components/Notifications";
-import { StudentsCards, DefaultTitleContent } from "@components";
+import { StudentCards, DefaultTitleContent } from "@components";
 
 // TODO notifications
 const Home = () => {
