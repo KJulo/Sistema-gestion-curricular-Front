@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import Card from "@components/Card";
 
 import { Modal, Typography } from "antd";
+import { getAverage } from "@utils/maths";
 const { Title, Paragraph, Text } = Typography;
 
 const StudentCards = ({ student }) => {
@@ -33,30 +34,41 @@ const StudentCards = ({ student }) => {
         cancelButtonProps={{ style: { display: "none" } }}>
         <Title level={4}>Notas</Title>
         <Paragraph>
-          <blockquote>{getMarks(student)}</blockquote>
+          <blockquote>
+            <StudentMarks student={student} />
+          </blockquote>
         </Paragraph>
         <Title level={4}>Asistencia</Title>
         <Paragraph>
-          <blockquote>{getAttendance(student)}</blockquote>
+          <blockquote>
+            <StudentAttendance student={student} />
+          </blockquote>
         </Paragraph>
       </Modal>
     </>
   );
 };
 
-function getMarks(student) {
-  /**
-   * TODO mostrar
-   * * promedio alumno, promedio curso, peor y mejor
-   */
+const StudentMarks = ({ student }) => {
   if (student.notas.length > 0) {
-    return <Text>n</Text>;
+    const total = student.notas.length;
+    const studentAverage = getAverage(student.notas);
+    return (
+      <>
+        Total de notas:
+        <Text style={{ color: "black" }}>{` ${total}`}</Text>
+        <br></br>
+        Promedio del alumno:
+        <Text style={{ color: studentAverage < 4 ? "red" : "blue" }}>{` ${studentAverage}`}</Text>
+        <br></br>
+      </>
+    );
   } else {
     return <Text>Sin notas aún.</Text>;
   }
-}
+};
 
-function getAttendance(student) {
+const StudentAttendance = ({ student }) => {
   const attendance = student.asistencia;
   if (attendance.length > 0) {
     const total = attendance.length;
@@ -65,17 +77,20 @@ function getAttendance(student) {
     }, 0);
     return (
       <>
-        <Text style={{ color: "black" }}>Clases totales: {total}</Text>
+        Clases totales:
+        <Text style={{ color: "black" }}>{` ${total}`}</Text>
         <br></br>
-        <Text style={{ color: "blue" }}>Días asistidos: {sum}</Text>
+        Días asistidos:
+        <Text style={{ color: "blue" }}>{` ${sum}`}</Text>
         <br></br>
-        <Text style={{ color: "red" }}>Dias inasistidos: {total - sum}</Text>
+        Dias inasistidos:
+        <Text style={{ color: "red" }}>{` ${total - sum}`}</Text>
         <br></br>
       </>
     );
   } else {
     return <Text>Sin notas aún.</Text>;
   }
-}
+};
 
 export default StudentCards;
