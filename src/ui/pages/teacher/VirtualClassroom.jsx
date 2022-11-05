@@ -32,16 +32,7 @@ import {
 } from "@slices/teachers";
 
 //components
-import {
-  ForumContent,
-  FilterCourse,
-  FilterButton,
-  ContentTable,
-  SearchContent,
-  TeacherFilterCourse,
-  DefaultTitleContent,
-  LoadingSpinner,
-} from "@components/index";
+import { ForumContent, FilterButton, LoadingSpinner, DefaultTitleContent } from "@components/index";
 
 //constants
 const { Title } = Typography;
@@ -55,18 +46,8 @@ const defaultMenu = [
   },
 ];
 
-const Header = ({ title, filterOptions }) => {
-  return (
-    <div className="header-container">
-      <Title>{title}</Title>
-      <Space direction="vertical">{filterOptions}</Space>
-    </div>
-  );
-};
-
 const VitualClassroom = () => {
   const dispatch = useDispatch();
-  const currentDate = useGetCurrentDay() + "-" + useGetCurrentMonth() + "-" + useGetCurrentYear();
   const [isAddOpen, setIsAddOpen] = useState(false);
 
   const {
@@ -192,7 +173,10 @@ const VitualClassroom = () => {
           marginBottom: "20px",
           flexDirection: "column",
         }}>
-        <Title>Aula Virtual</Title>
+        <DefaultTitleContent
+          title={"Módulo Aula Virtual"}
+          subtitle="¡Haz click abajo para cambiar de curso! Recuerda que tu administrador designa tus cursos."
+        />
         <LoadingSpinner isLoading={isLoading}>
           <FilterButton options={courseNames} onChange={handleChange} />
         </LoadingSpinner>

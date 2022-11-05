@@ -38,7 +38,7 @@ const Home = () => {
       }}>
       <DefaultTitleContent
         title={"Mis Cursos"}
-        subtitle="Haz click en uno de los cursos para realizar la planificación."
+        subtitle="Haz click en uno de los cursos para ir a la planificación."
         action=""
       />
       <div className="flex-container">

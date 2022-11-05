@@ -57,7 +57,10 @@ const Marks = () => {
 
   return (
     <div>
-      <DefaultTitleContent title={"Notas"} action="" />
+      <DefaultTitleContent
+        title={"Notas"}
+        subtitle="Aquí podrás revisar las notas con más detalle de tus pupilos."
+      />
       <StudentsAverage students={familyState.students} />
 
       <div style={{ marginTop: 22 }}>

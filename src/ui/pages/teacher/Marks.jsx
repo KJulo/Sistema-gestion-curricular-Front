@@ -11,6 +11,7 @@ import {
   TeacherFilterCourse,
   DefaultTitleContent,
   LoadingSpinner,
+  AddMark,
 } from "@components/index";
 
 //containers
@@ -96,12 +97,14 @@ const Marks = () => {
 
   return (
     <div>
-      <DefaultTitleContent title={"Módulo Notas"} action="" />
+      <DefaultTitleContent
+        title={"Módulo Notas"}
+        subtitle="En este módulo podrás ver y añadir las notas de tus alumnos."
+      />
       <div style={true ? {} : { pointerEvents: "none" }}>
         <LoadingSpinner isLoading={isLoading}>
           <AdminTableLayout
-            searchInput={""}
-            selectFilter={<TeacherFilterCourse courses={courses} includeDate={false} />}
+            filters={[<TeacherFilterCourse courses={courses} includeDate={false} />, <AddMark />]}
             tableContent={
               <ContentTable content={studentsFiltered} columns={tableColumns} scroll={false} />
             }

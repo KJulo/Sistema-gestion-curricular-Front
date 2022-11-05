@@ -6,6 +6,7 @@ export { default as HomeNavBar } from "@components/HomeNavBar";
 export { default as DefaultTitleContent } from "@components/DefaultTitleContent";
 export { default as SearchContent } from "@components/SearchContent";
 export { default as FilterCourse } from "@components/FilterCourse";
+export { default as DatePicker } from "@components/DatePicker";
 export { default as SubTitleContent } from "@components/SubTitleContent";
 export { default as HandleError } from "@components/Error/HandleError";
 export { default as LoadingSpinner } from "@components/LoadingSpinner";
@@ -33,6 +34,7 @@ export { default as TeacherFilterCourse } from "@components/Teachers/FilterCours
 export { default as CoursesCards } from "@components/Teachers/CoursesCards";
 export { default as EditTeacher } from "@components/Teachers/EditTeacher";
 export { default as FilterSubject } from "@components/Teachers/FilterSubject";
+export { default as AddMark } from "@components/Teachers/AddMark";
 
 //students
 export { default as StudentContent } from "@components/Students/HomeContent.jsx";

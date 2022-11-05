@@ -128,7 +128,10 @@ const Attendance = () => {
 
   return (
     <div>
-      <DefaultTitleContent title={"Asistencia"} action="" />
+      <DefaultTitleContent
+        title={"Asistencia"}
+        subtitle="Aquí podras revisar la asistencia con más detalle que llevan tus pupilos."
+      />
       <Space direction="vertical">
         <DatePicker
           defaultValue={moment(currentDate, "MM-YYYY")}

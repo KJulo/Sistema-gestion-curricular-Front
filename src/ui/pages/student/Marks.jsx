@@ -33,7 +33,10 @@ const Marks = () => {
 
   return (
     <div>
-      <DefaultTitleContent title={"Notas"} action="" />
+      <DefaultTitleContent
+        title={"Notas"}
+        subtitle="Aquí podrás revisar tu promedio y notas que llevas hasta el momento."
+      />
 
       <LoadingSpinner isLoading={isLoading}>
         {student.hasOwnProperty("nombres") ? (
@@ -48,13 +51,9 @@ const Marks = () => {
 
       <div style={true ? {} : { pointerEvents: "none" }}>
         <AdminTableLayout
-          searchInput={""}
-          // selectFilter={<TeacherFilterCourse />}
           tableContent={<ContentTable content={marks} columns={columns} scroll={false} />}
         />
       </div>
-      {/* <LoadingSpinner isLoading={marks.length === 0}>
-      </LoadingSpinner> */}
     </div>
   );
 };

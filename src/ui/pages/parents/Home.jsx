@@ -16,7 +16,7 @@ import "@styles/Home.less";
 
 //components
 import Notifications from "@components/Notifications";
-import { StudentCards } from "@components";
+import { StudentsCards, DefaultTitleContent } from "@components";
 
 // TODO notifications
 const Home = () => {
@@ -40,10 +40,10 @@ const Home = () => {
         margin: "24px 16px",
         minHeight: 280,
       }}>
-      <Title>
-        {" "}
-        Hola, {parentData.nombres} {parentData.apellidos} !
-      </Title>
+      <DefaultTitleContent
+        title={`Hola, ${parent.nombres} ${parent.apellidos} !`}
+        subtitle="¡Haz click en uno de tus pupilos para desplegar información resumida de ellos!"
+      />
 
       <div className="flex-container" style={{ padding: "1rem", justifyContent: "space-around" }}>
         <div style={{ display: "contents" }}>
