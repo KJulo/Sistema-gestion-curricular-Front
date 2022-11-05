@@ -39,7 +39,7 @@ const MainLayout = ({ userType }) => {
     if (userType === "parent") dispatch(fetchParent());
   }, []);
 
-  const { userData } = useSelector((store) => store.user);
+  const { user } = useSelector((store) => store.auth);
 
   return (
     <Layout>
@@ -71,7 +71,7 @@ const MainLayout = ({ userType }) => {
               backgroundColor: "white",
               boxShadow: "0px 9px 28px 8px rgb(0 0 0 / 5%), 0px 3px 6px -4px rgb(0 0 0 / 12%)",
             }}>
-            <UserDropdown user={userData} />
+            <UserDropdown user={user} />
           </Header>
         </Affix>
 
