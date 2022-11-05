@@ -5,10 +5,15 @@ import { errorClear, errorFetch } from "@slices/error";
 import { updateUser } from "@slices/user";
 import {
   fetchParent,
-  updateParent,
   fetchStudents,
+  fetchCourses,
+  fetchStudentsNotes,
+  fetchAttendance,
+  updateParent,
   updateStudents,
   updateCourses,
+  updateStudentsNotes,
+  updateStudentsAttendance,
 } from "@slices/parents";
 
 // Network
@@ -68,22 +73,20 @@ function* getCourses() {
   }
 }
 
-//TODO
-function* getStudentsNotes() {
+function* getStudentsMarks() {
   try {
     const response = (yield call(notas.getNotas)).data.data;
-    // yield put(updateStudentsNotes(response));
+    yield put(updateStudentsNotes(response));
   } catch (e) {
     console.log(e);
     yield put(errorFetch({ code: 500, error: "Error de servidor." }));
   }
 }
 
-// TODO
 function* getStudentsAttendance() {
   try {
     const response = (yield call(asistencia.getAttendance)).data.data;
-    // yield put(setStudentsAttendance(response));
+    yield put(updateStudentsAttendance(response));
   } catch (e) {
     console.log(e);
     yield put(errorFetch({ code: 500, error: "Error de servidor." }));
@@ -111,7 +114,19 @@ function* watchGetStudents() {
   yield takeLatest(fetchStudents, getStudents);
 }
 function* watchGetCourses() {
-  yield takeLatest(fetchStudents, getCourses);
+  yield takeLatest(fetchCourses, getCourses);
+}
+function* watchGetMarks() {
+  yield takeLatest(fetchStudentsNotes, getStudentsMarks);
+}
+function* watchGetAttendance() {
+  yield takeLatest(fetchAttendance, getStudentsAttendance);
 }
 
-export default [watchGetParentUser(), watchGetStudents(), watchGetCourses()];
+export default [
+  watchGetParentUser(),
+  watchGetStudents(),
+  watchGetCourses(),
+  watchGetMarks(),
+  watchGetAttendance(),
+];

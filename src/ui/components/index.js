@@ -11,7 +11,7 @@ export { default as HandleError } from "@components/Error/HandleError";
 export { default as LoadingSpinner } from "@components/LoadingSpinner";
 export { default as DocumentGenerator } from "@components/DocumentGenerator";
 export { default as Warning } from "@components/Warning";
-export { default as StudentsCards } from "@components/StudentsCards";
+export { default as StudentCards } from "@components/StudentCards";
 
 //admin
 export { default as AdminMenu } from "@components/Admin/NavigationMenu";
