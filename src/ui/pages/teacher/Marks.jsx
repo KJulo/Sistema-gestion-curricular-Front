@@ -11,6 +11,7 @@ import {
   TeacherFilterCourse,
   DefaultTitleContent,
   LoadingSpinner,
+  AddMark,
 } from "@components/index";
 
 //containers
@@ -58,8 +59,11 @@ const getColumns = (content) => {
 const Marks = () => {
   const dispatch = useDispatch();
   const content = useSelector((store) => store.teacher.students.list);
-  const activeFilter = useSelector((store) => store.teacher.activeFilters);
-  const isLoading = useSelector((store) => store.teacher.isLoading);
+  const {
+    activeFilter,
+    isLoading,
+    courses: { list: courses },
+  } = useSelector((store) => store.teacher);
   const [studentsFiltered, setStudentsFiltered] = useState(content);
   const [tableColumns, setTableColumns] = useState(getColumns(content));
 
@@ -78,7 +82,8 @@ const Marks = () => {
 
   // Filtro de curso
   useEffect(() => {
-    setStudentsFiltered(content.filter((c) => c.id_curso === activeFilter.courseId));
+    if (activeFilter)
+      setStudentsFiltered(content.filter((c) => c.id_curso === activeFilter.courseId));
   }, [activeFilter]);
 
   useEffect(() => {
@@ -92,12 +97,14 @@ const Marks = () => {
 
   return (
     <div>
-      <DefaultTitleContent title={"Módulo Notas"} action="" />
+      <DefaultTitleContent
+        title={"Módulo Notas"}
+        subtitle="En este módulo podrás ver y añadir las notas de tus alumnos."
+      />
       <div style={true ? {} : { pointerEvents: "none" }}>
         <LoadingSpinner isLoading={isLoading}>
           <AdminTableLayout
-            searchInput={""}
-            selectFilter={<TeacherFilterCourse />}
+            filters={[<TeacherFilterCourse courses={courses} includeDate={false} />, <AddMark />]}
             tableContent={
               <ContentTable content={studentsFiltered} columns={tableColumns} scroll={false} />
             }

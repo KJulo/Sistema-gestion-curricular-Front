@@ -1,35 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 
 // antd
-import { Layout, Typography } from 'antd';
+import { Layout, Typography } from "antd";
 const { Title } = Typography;
 
 // assets
-import SchoolImg from '@logos/school-img.png';
+import SchoolImg from "@logos/school-img.png";
 
 // styles
-import '@styles/Home.less';
+import "@styles/Home.less";
 
 //components
-import Notifications from '@components/Notifications';
-import Card from '@components/Card';
+import Notifications from "@components/Notifications";
+import { StudentsCards, DefaultTitleContent } from "@components";
 
 // constants
-import { parents } from '@constants/users';
-
-const StudentsCards = ({students}) => {
-  return (
-    <div className='card-container'>
-      {students.map((student) => (
-        <Card
-          title={student.nombres + ' ' + student.apellidos}
-          content={student.curso}
-          icon="user"
-        />
-      ))}
-    </div>
-  )
-}
+import { parents } from "@constants/users";
 
 // no funcionando, faltan endpoints
 const Home = () => {
@@ -38,33 +24,30 @@ const Home = () => {
 
   // Seleccionar un padre cualquiera
   useEffect(() => {
-    setParent(parents.parents[0])
-  }, [])
-
+    setParent(parents.parents[0]);
+  }, []);
 
   return (
     <div
-      className='body-bg'
+      className="body-bg"
       style={{
-        margin: '24px 16px',
+        margin: "24px 16px",
         minHeight: 280,
       }}>
-      <Title>
-        {' '}
-        Hola, {parent.nombres} {parent.apellidos} !
-      </Title>  
+      <DefaultTitleContent
+        title={`Hola, ${parent.nombres} ${parent.apellidos} !`}
+        subtitle="¡Haz click en uno de tus pupilos para desplegar información resumida de ellos!"
+      />
 
-      <div
-        className='flex-container'
-        style={{ padding: '1rem', justifyContent: 'space-around' }}>
-        <div style={ { display: 'contents' } }> 
-          <img src={SchoolImg} alt='Logo Colegio' className='fit-image' />
+      <div className="flex-container" style={{ padding: "1rem", justifyContent: "space-around" }}>
+        <div style={{ display: "contents" }}>
+          <img src={SchoolImg} alt="Logo Colegio" className="fit-image" />
           <StudentsCards students={students} />
         </div>
         <Notifications />
       </div>
     </div>
-  )
+  );
 };
 
 export default Home;

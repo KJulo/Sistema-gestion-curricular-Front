@@ -20,7 +20,10 @@ import { useEffect } from "react";
 
 const Home = () => {
   const dispatch = useDispatch();
-  const courses = useSelector((store) => store.teacher.courses.list);
+  const {
+    isLoading,
+    courses: { management, list: courses },
+  } = useSelector((store) => store.teacher);
 
   useEffect(() => {
     dispatch(fetchCourses());
@@ -33,10 +36,14 @@ const Home = () => {
         padding: 0,
         minHeight: 280,
       }}>
-      <DefaultTitleContent title={"Mis Cursos"} action="" />
+      <DefaultTitleContent
+        title={"Mis Cursos"}
+        subtitle="Haz click en uno de los cursos para ir a la planificación."
+        action=""
+      />
       <div className="flex-container">
-        <LoadingSpinner isLoading={courses.length == 0}>
-          <CoursesCards courses={courses} />
+        <LoadingSpinner isLoading={courses.length === 0}>
+          <CoursesCards courses={courses} management={management} isLoading={isLoading} />
         </LoadingSpinner>
       </div>
     </div>

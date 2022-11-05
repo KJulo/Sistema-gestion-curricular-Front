@@ -9,32 +9,22 @@ import { setActiveFilter } from "@slices/teachers";
 
 import { useGetCurrentDate } from "@hooks/useDate";
 
-const FilterCourse = () => {
+const FilterCourse = ({ courses }) => {
   const dispatch = useDispatch();
-  const courses = useSelector((store) => store.teacher.courses.list);
 
   const handleChange = (value) => {
     dispatch(setActiveFilter({ courseId: value }));
   };
 
-  const onChange = (date, dateString) => {
-    dispatch(setActiveFilter({ selectedDate: dateString }));
-  };
-
   useEffect(() => {
-    dispatch(setActiveFilter({ selectedDate: useGetCurrentDate() }));
+    const dateSplited = useGetCurrentDate().split("-");
+    const date = dateSplited[2] + "-" + dateSplited[1] + "-" + dateSplited[0];
+    dispatch(setActiveFilter({ selectedDate: date }));
     if (courses.length > 0) dispatch(setActiveFilter({ courseId: courses[0].id }));
   }, [courses]);
 
   return (
     <div style={{ display: "flex", flexDirection: "row-revers", flexWrap: "wrap", gap: "12px" }}>
-      <DatePicker
-        onChange={(date, dateString) => onChange(date, dateString)}
-        size="large"
-        defaultValue={moment()}
-        format={"DD/MM/YYYY"}
-      />
-
       {courses.length > 0 ? (
         <Select size="large" defaultValue={courses[0].id} onChange={handleChange}>
           {courses.map((course) => (
@@ -44,7 +34,7 @@ const FilterCourse = () => {
           ))}
         </Select>
       ) : (
-        <></>
+        <Select size="large" defaultValue={"Sin Cursos"} />
       )}
     </div>
   );

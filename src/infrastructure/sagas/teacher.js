@@ -1,12 +1,10 @@
 import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
+import { message } from "antd";
 
 // Reducers
 import { errorClear, errorFetch } from "@slices/error";
 import { updateUser } from "@slices/user";
 import {
-  initProcess,
-  cleanProcess,
-  finishProcess,
   setIsLoading,
   fetchTeacher,
   fetchCourses,
@@ -18,7 +16,7 @@ import {
   updateCourses,
   updateStudents,
   updateStudentsNotes,
-  // setStudentsAttendance,
+  setStudentsAttendance,
   addAttendance,
   setForumsAndContent,
   deleteContent,
@@ -27,6 +25,9 @@ import {
   contentAdded,
   editContent,
   contentEdited,
+  addForums,
+  forumsAdded,
+  editAttendance,
 } from "@slices/teachers";
 
 // Network
@@ -109,7 +110,7 @@ function* getStudentsNotes() {
 function* getStudentsAttendance() {
   try {
     const response = (yield call(asistencia.getAttendance)).data.data;
-    // yield put(setStudentsAttendance(response));
+    yield put(setStudentsAttendance(response));
   } catch (e) {
     console.log(e);
     yield put(errorFetch({ code: 500, error: "Error de servidor." }));
@@ -118,21 +119,28 @@ function* getStudentsAttendance() {
 
 function* createAttendance(action) {
   const payload = action.payload;
-  console.log(payload);
   try {
-    /**
-     * TODO
-     * * id_asignatura,
-     * * id_alumno,
-     * * asistencia,
-     * ! fecha : problema con insertarla en el backend
-     */
-
-    const response = (yield call(asistencia.addAttendance, payload)).data.data;
-    console.log("response: ", response);
+    yield call(asistencia.addAttendance, payload);
+    message.success("Asistencia registrada.");
   } catch (e) {
     console.log(e);
-    yield put(errorFetch({ code: 500, error: "Error de servidor." }));
+    yield put(setIsLoading(false));
+    message.error("Error al registrar la asistencia.");
+  }
+}
+
+function* goEditAttendance(action) {
+  const payload = action.payload;
+  try {
+    yield call(asistencia.editAttendance, {
+      data: payload,
+      id: payload.id_asistencia,
+    });
+    message.success("Campos editados con éxito.");
+  } catch (e) {
+    console.log(e);
+    yield put(setIsLoading(false));
+    message.error("Error al editar la asistencia.");
   }
 }
 
@@ -158,6 +166,7 @@ function* delContent(action) {
   try {
     const response = yield call(contenido.deleteContent, action.payload);
     yield put(removeContent(response.data.data));
+    message.success("Eliminado con éxito.");
   } catch (e) {
     console.log(e);
     yield put(errorFetch({ code: 500, error: "Error de servidor." }));
@@ -168,19 +177,46 @@ function* createContent(action) {
   try {
     const response = yield call(contenido.createContent, action.payload);
     yield put(contentAdded(response.data.data));
+    message.success("Creado con éxito.");
   } catch (e) {
     console.log(e);
-    yield put(errorFetch({ code: 500, error: "Error de servidor." }));
+    yield put(setIsLoading(false));
+    message.error("Error al crear la contenido.");
   }
 }
 
-function* goEdit(action) {
+function* goEditContent(action) {
   try {
     const response = yield call(contenido.editContent, action.payload);
     yield put(contentEdited(response.data.data));
+    message.success("Editado con éxito.");
   } catch (e) {
     console.log(e);
-    yield put(errorFetch({ code: 500, error: "Error de servidor." }));
+    yield put(setIsLoading(false));
+    message.error("Error al editar la contenido.");
+  }
+}
+
+function* createForums(action) {
+  const { course, forums } = action.payload;
+  try {
+    for (let i = 0; i < forums.length; i++) {
+      const subject = course.asignaturas.find((a) => a.nombre === course.asignatura);
+      yield call(foro.createForum, {
+        id_asignatura: subject.id,
+        titulo: forums[i].nombre,
+      });
+    }
+    message.success(
+      "Se han creado las unidades con éxito en el Aula Virtual de " +
+        course.nombre +
+        " " +
+        course.paralelo
+    );
+  } catch (e) {
+    console.log(e);
+    yield put(setIsLoading(false));
+    message.error("No se ha podido registrar las unidades con éxito.");
   }
 }
 
@@ -212,7 +248,13 @@ function* watchCreateContent() {
   yield takeLatest(addContent, createContent);
 }
 function* watchEditContent() {
-  yield takeLatest(editContent, goEdit);
+  yield takeLatest(editContent, goEditContent);
+}
+function* watchGoEditAttendance() {
+  yield takeLatest(editAttendance, goEditAttendance);
+}
+function* watchAddForums() {
+  yield takeLatest(addForums, createForums);
 }
 
 export default [
@@ -226,4 +268,6 @@ export default [
   watchDeleteContent(),
   watchCreateContent(),
   watchEditContent(),
+  watchAddForums(),
+  watchGoEditAttendance(),
 ];

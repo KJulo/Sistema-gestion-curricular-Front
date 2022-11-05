@@ -13,6 +13,8 @@ function getAttendanceStatus(record) {
   }
 }
 
+export const status = ["Si", "No", "Justificado"];
+
 export const columns = [
   {
     title: "Fecha",

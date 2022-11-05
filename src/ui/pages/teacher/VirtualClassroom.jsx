@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 // antd
-import { Typography, Space, Menu, Select, Modal, Input, Alert } from "antd";
+import { Typography, Space, Menu, Select, Modal, Input, Alert, Layout, Checkbox } from "antd";
+const { Sider, Content } = Layout;
+const { TextArea } = Input;
 import {
   AppstoreOutlined,
   PlusSquareOutlined,
@@ -10,7 +12,6 @@ import {
   MoreOutlined,
   RightOutlined,
 } from "@ant-design/icons";
-const { TextArea } = Input;
 
 // styles
 import "@styles/Home.less";
@@ -31,16 +32,7 @@ import {
 } from "@slices/teachers";
 
 //components
-import {
-  ForumContent,
-  FilterCourse,
-  FilterButton,
-  ContentTable,
-  SearchContent,
-  TeacherFilterCourse,
-  DefaultTitleContent,
-  LoadingSpinner,
-} from "@components/index";
+import { ForumContent, FilterButton, LoadingSpinner, DefaultTitleContent } from "@components/index";
 
 //constants
 const { Title } = Typography;
@@ -54,18 +46,8 @@ const defaultMenu = [
   },
 ];
 
-const Header = ({ title, filterOptions }) => {
-  return (
-    <div className="header-container">
-      <Title>{title}</Title>
-      <Space direction="vertical">{filterOptions}</Space>
-    </div>
-  );
-};
-
 const VitualClassroom = () => {
   const dispatch = useDispatch();
-  const currentDate = useGetCurrentDay() + "-" + useGetCurrentMonth() + "-" + useGetCurrentYear();
   const [isAddOpen, setIsAddOpen] = useState(false);
 
   const {
@@ -141,7 +123,7 @@ const VitualClassroom = () => {
       : defaultMenu;
 
   const handleChange = (value) => {
-    console.log("id curso: ", value);
+    console.log(value);
     if (courses[value] !== currentCourse) {
       setCurrentCourse(courses[value]);
     }
@@ -166,6 +148,7 @@ const VitualClassroom = () => {
   function onClickAdd() {
     setIsAddOpen(true);
   }
+
   function handdleClose() {
     setIsAddOpen(false);
     const title = document.getElementById("input").value;
@@ -174,6 +157,10 @@ const VitualClassroom = () => {
       addContent({ id_foro: currentSubMenu.id, titulo: title, descripcion: body, tipo: "content" })
     );
   }
+
+  const onChangeCheckbox = (e) => {
+    console.log(`checked = `, e);
+  };
 
   return (
     <div>
@@ -186,7 +173,10 @@ const VitualClassroom = () => {
           marginBottom: "20px",
           flexDirection: "column",
         }}>
-        <Title>Aula Virtual</Title>
+        <DefaultTitleContent
+          title={"Módulo Aula Virtual"}
+          subtitle="¡Haz click abajo para cambiar de curso! Recuerda que tu administrador designa tus cursos."
+        />
         <LoadingSpinner isLoading={isLoading}>
           <FilterButton options={courseNames} onChange={handleChange} />
         </LoadingSpinner>
@@ -224,37 +214,58 @@ const VitualClassroom = () => {
         />
       )}
 
-      <div className="content-container">
+      <Layout className="content-container flex">
         {hasSubMenu ? (
           <>
-            {currentSubMenu.contenidos.map((item) => (
-              <ForumContent
-                content={item}
-                isEdit={true}
-                process={process}
-                forumId={currentSubMenu.id}
+            <Content>
+              {currentSubMenu.contenidos.map((item) => (
+                <ForumContent
+                  content={item}
+                  isEdit={true}
+                  process={process}
+                  forumId={currentSubMenu.id}
+                />
+              ))}
+              {currentSubMenu.contenidos.length === 0 ? (
+                <Alert
+                  message="Para añadir material, hacer click en el botón de abajo."
+                  type="info"
+                  showIcon
+                  style={{ marginBottom: 20 }}
+                />
+              ) : (
+                <></>
+              )}
+              <PlusSquareOutlined
+                onClick={() => {
+                  onClickAdd();
+                }}
               />
-            ))}
-            {currentSubMenu.contenidos.length === 0 ? (
-              <Alert
-                message="Para añadir material, hacer click en el botón de abajo."
-                type="info"
-                showIcon
-                style={{ marginBottom: 20 }}
-              />
-            ) : (
-              <></>
-            )}
-            <PlusSquareOutlined
-              onClick={() => {
-                onClickAdd();
-              }}
-            />
+            </Content>
+            <div className="side-objetives">
+              <Title level={3}>Objetivos</Title>
+              TODO seccion objetivos
+              <Checkbox.Group
+                className="vertical-flex"
+                style={{
+                  width: "100%",
+                }}
+                onChange={onChangeCheckbox}>
+                <Checkbox value="1" style={{ margin: 0 }}>
+                  Objetivo 1
+                </Checkbox>
+                <Checkbox value="2" style={{ margin: 0 }}>
+                  Objetivo 2
+                </Checkbox>
+                <Checkbox value="3" style={{ margin: 0 }}>
+                  Objetivo 2
+                </Checkbox>
+              </Checkbox.Group>
+            </div>
           </>
         ) : (
           <></>
         )}
-
         <Modal
           title="Añadir nueva información o tarea"
           open={isAddOpen}
@@ -265,7 +276,7 @@ const VitualClassroom = () => {
             <TextArea rows={6} placeholder="Contenido." id="textArea" />
           </Input.Group>
         </Modal>
-      </div>
+      </Layout>
     </div>
   );
 };

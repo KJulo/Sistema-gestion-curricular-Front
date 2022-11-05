@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, current } from "@reduxjs/toolkit";
 
 import { initState } from "../../domain/teacher";
 
@@ -8,24 +8,6 @@ export const teacherSlice = createSlice({
   reducers: {
     resetStore: (state) => {
       state = initState;
-    },
-    initProcess: (state, action) => {
-      state.process = {
-        name: action.payload,
-        finish: "",
-      };
-    },
-    finishProcess: (state, action) => {
-      state.process = {
-        ...state.process,
-        finish: action.payload,
-      };
-    },
-    cleanProcess: (state) => {
-      state.process = {
-        name: "",
-        finish: "",
-      };
     },
     setIsLoading: (state, action) => {
       state.isLoading = action.payload;
@@ -51,6 +33,9 @@ export const teacherSlice = createSlice({
     addAttendance: (state) => {
       state.isLoading = true;
     },
+    editAttendance: (state) => {
+      state.isLoading = true;
+    },
     deleteContent: (state) => {
       state.isLoading = true;
     },
@@ -58,6 +43,9 @@ export const teacherSlice = createSlice({
       state.isLoading = true;
     },
     editContent: (state) => {
+      state.isLoading = true;
+    },
+    addForums: (state) => {
       state.isLoading = true;
     },
     updateTeacher: (state, action) => {
@@ -103,18 +91,45 @@ export const teacherSlice = createSlice({
     updateStudentAttendance: (state, action) => {
       const payload = action.payload;
       const studentList = state.students.list.map((student) => {
-        if (payload.id === student.id)
-          return {
-            ...student,
-            asistencia: payload.asistencia,
-          };
-        return student;
+        // Buscar al estudiante que corresponse la fecha
+        if (payload.id === student.id) {
+          // Verificar si la fecha fue registrada por parte el endpoint
+          if (payload.asistencia.registrado === "Si") {
+            return {
+              ...student,
+              asistencia: student.asistencia.map((a) => {
+                // Editar la asistencia en funcion la fecha
+                if (a.fecha === payload.asistencia.fecha) {
+                  return {
+                    ...a,
+                    asistencia: payload.asistencia.asistencia,
+                    fecha: payload.asistencia.fecha,
+                  };
+                } else {
+                  return a;
+                }
+              }),
+            };
+          } else {
+            // Caso no registrado
+            return {
+              ...student,
+              asistencia: student.asistencia.concat(payload.asistencia),
+            };
+          }
+        } else {
+          return student;
+        }
       });
       state.isLoading = false;
       state.students.list = studentList;
     },
     updateCourseManagement: (state, action) => {
       state.courses.management.course = action.payload;
+      state.isLoading = false;
+    },
+    cleanUnitsManagement: (state) => {
+      state.courses.management.units = [];
       state.isLoading = false;
     },
     appendUnitsManagement: (state, action) => {
@@ -253,10 +268,31 @@ export const teacherSlice = createSlice({
       const data = action.payload;
       state.activeFilters = { ...state.activeFilters, ...data };
     },
-    // setStudentsAttendance: (state, action) => {
-    //   console.log(action);
-    //   return state;
-    // },
+    setStudentsAttendance: (state, action) => {
+      const data = action.payload;
+      const studentsWithAttendance = state.students.list.map((student) => {
+        const studentAttendance = data.filter((d) => d.id_alumno === student.id);
+        if (studentAttendance.length > 0) {
+          return {
+            ...student,
+            asistencia: studentAttendance.map((a) => {
+              return {
+                ...a,
+                fecha: a.fecha.slice(0, 10),
+                registrado: "Si",
+              };
+            }),
+          };
+        } else {
+          return {
+            ...student,
+            asistencia: [],
+          };
+        }
+      });
+      state.students.list = studentsWithAttendance;
+      state.isLoading = false;
+    },
     setForumsAndContent: (state, action) => {
       const { payload } = action;
       const coursesWithForums = state.courses.list.map((course) => {
@@ -271,6 +307,7 @@ export const teacherSlice = createSlice({
         };
       });
       state.courses.list = coursesWithForums;
+      state.isLoading = false;
     },
     removeContent: (state, action) => {
       const { payload } = action;
@@ -342,18 +379,32 @@ export const teacherSlice = createSlice({
       state.courses.list = coursesWithForums;
       state.isLoading = false;
     },
+    forumsAdded: (state, action) => {
+      const { payload } = action;
+      const coursesWithForums = state.courses.list.map((course) => {
+        return {
+          ...course,
+          asignaturas: course.asignaturas.map((subject) => {
+            return {
+              ...subject,
+              foros: payload,
+            };
+          }),
+        };
+      });
+      state.courses.list = coursesWithForums;
+      state.isLoading = false;
+    },
   },
 });
 
 // exportar funciones individuales
 export const {
   resetStore,
-  initProcess,
-  cleanProcess,
-  finishProcess,
   setIsLoading,
   courseFiltersUpdate,
   updateStudentAttendance,
+  editAttendance,
   fetchTeacher,
   fetchCourses,
   fetchStudents,
@@ -364,6 +415,7 @@ export const {
   updateStudents,
   updateStudentsNotes,
   updateCourseManagement,
+  cleanUnitsManagement,
   appendUnitsManagement,
   deleteUnitManagement,
   updateUnitManagement,
@@ -376,7 +428,7 @@ export const {
   deleteValueManagement,
   setActiveFilter,
   fetchAttendance,
-  // setStudentsAttendance,
+  setStudentsAttendance,
   addAttendance,
   fetchForumsAndContent,
   setForumsAndContent,
@@ -385,6 +437,8 @@ export const {
   contentAdded,
   editContent,
   contentEdited,
+  addForums,
+  forumsAdded,
 } = teacherSlice.actions;
 
 // exportar reducer del slice para mandarlo a la store

@@ -1,24 +1,17 @@
 import React from "react";
 
 //antd
-import { Row, Col } from "antd";
+import { Row, Col, Space } from "antd";
 
-const AdminTableLayout = ({ searchInput, selectFilter, tableContent, extraFilter }) => {
-
-  const allSpan2 = searchInput === '' ? 18 : 14;
-
+const AdminTableLayout = ({ tableContent, searchInput, filters }) => {
   return (
     <div>
-      <Row style={{ display: "flex", justifyContent:"space-between" }}>
-        <Col span={8} >{searchInput}</Col>
-        <Col span={allSpan2} >{selectFilter}</Col>
-        {extraFilter ?? (
-          <Col>
-            {extraFilter}
-          </Col>
-        )}
-      </Row>
-
+      <Space direction="horizontal">
+        <Row justify="start" gutter={16}>
+          {searchInput ? <Col>{searchInput}</Col> : <></>}
+          {filters ? filters.map((component) => <Col>{component}</Col>) : <></>}
+        </Row>
+      </Space>
 
       <div
         style={{
@@ -26,11 +19,9 @@ const AdminTableLayout = ({ searchInput, selectFilter, tableContent, extraFilter
           marginTop: "30px",
           borderRadius: "8px",
           border: "1px solid rgb(232, 232, 232)",
-        }}
-      >
+        }}>
         {tableContent}
       </div>
-      
     </div>
   );
 };
