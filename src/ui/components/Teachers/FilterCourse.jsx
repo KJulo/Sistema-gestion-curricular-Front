@@ -9,17 +9,11 @@ import { setActiveFilter } from "@slices/teachers";
 
 import { useGetCurrentDate } from "@hooks/useDate";
 
-const FilterCourse = ({ courses, includeDate }) => {
+const FilterCourse = ({ courses }) => {
   const dispatch = useDispatch();
 
   const handleChange = (value) => {
     dispatch(setActiveFilter({ courseId: value }));
-  };
-
-  const onChange = (_, dateString) => {
-    const dateSplited = dateString.split("/");
-    const date = dateSplited[2] + "-" + dateSplited[1] + "-" + dateSplited[0];
-    dispatch(setActiveFilter({ selectedDate: date }));
   };
 
   useEffect(() => {
@@ -31,17 +25,6 @@ const FilterCourse = ({ courses, includeDate }) => {
 
   return (
     <div style={{ display: "flex", flexDirection: "row-revers", flexWrap: "wrap", gap: "12px" }}>
-      {includeDate ? (
-        <DatePicker
-          onChange={onChange}
-          size="large"
-          defaultValue={moment()}
-          format={"DD/MM/YYYY"}
-        />
-      ) : (
-        <></>
-      )}
-
       {courses.length > 0 ? (
         <Select size="large" defaultValue={courses[0].id} onChange={handleChange}>
           {courses.map((course) => (
@@ -51,7 +34,7 @@ const FilterCourse = ({ courses, includeDate }) => {
           ))}
         </Select>
       ) : (
-        <></>
+        <Select size="large" defaultValue={"Sin Cursos"} />
       )}
     </div>
   );

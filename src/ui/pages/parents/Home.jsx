@@ -12,7 +12,7 @@ import "@styles/Home.less";
 
 //components
 import Notifications from "@components/Notifications";
-import { StudentsCards } from "@components";
+import { StudentsCards, DefaultTitleContent } from "@components";
 
 // constants
 import { parents } from "@constants/users";
@@ -34,10 +34,10 @@ const Home = () => {
         margin: "24px 16px",
         minHeight: 280,
       }}>
-      <Title>
-        {" "}
-        Hola, {parent.nombres} {parent.apellidos} !
-      </Title>
+      <DefaultTitleContent
+        title={`Hola, ${parent.nombres} ${parent.apellidos} !`}
+        subtitle="¡Haz click en uno de tus pupilos para desplegar información resumida de ellos!"
+      />
 
       <div className="flex-container" style={{ padding: "1rem", justifyContent: "space-around" }}>
         <div style={{ display: "contents" }}>

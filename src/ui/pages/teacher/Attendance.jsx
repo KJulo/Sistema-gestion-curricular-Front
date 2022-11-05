@@ -5,6 +5,7 @@ import "@styles/Attendance.less";
 // redux
 import {
   setIsLoading,
+  setActiveFilter,
   updateStudentAttendance,
   fetchStudents,
   fetchCourses,
@@ -25,6 +26,7 @@ import {
   TeacherFilterCourse,
   DefaultTitleContent,
   FilterSubject,
+  DatePicker,
 } from "@components/index";
 
 //containers
@@ -88,6 +90,12 @@ const Attendance = () => {
       setStudentsFiltered(studentsByDate);
     }
   }, [activeFilters, content]);
+
+  const onChangeDate = (_, dateString) => {
+    const dateSplited = dateString.split("/");
+    const date = dateSplited[2] + "-" + dateSplited[1] + "-" + dateSplited[0];
+    dispatch(setActiveFilter({ selectedDate: date }));
+  };
 
   // Al hacer click en el icono de switch, cambiar estado de asiste
   const handleClick = (record) => {
@@ -188,12 +196,17 @@ const Attendance = () => {
 
   return (
     <div>
-      <DefaultTitleContent title={"Módulo Asistencia"} action="" />
+      <DefaultTitleContent
+        title={"Módulo Asistencia"}
+        subtitle="En este módulo podrás ver, añadir y editar la asistencia de tus alumnos."
+      />
       <div style={true ? {} : { pointerEvents: "none" }}>
         <AdminTableLayout
-          searchInput={""}
-          selectFilter={<TeacherFilterCourse courses={courses} includeDate={true} />}
-          extraFilter={<FilterSubject subjects={selectedCourseSubjects} />}
+          filters={[
+            <DatePicker onChange={onChangeDate} />,
+            <TeacherFilterCourse courses={courses} includeDate={true} />,
+            <FilterSubject subjects={selectedCourseSubjects} />,
+          ]}
           tableContent={
             <ContentTable
               content={studentsFiltered}

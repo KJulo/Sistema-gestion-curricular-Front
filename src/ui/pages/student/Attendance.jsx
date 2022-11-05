@@ -75,8 +75,11 @@ const Attendance = () => {
 
   return (
     <div>
-      <div style={{ marginBottom: 20 }}>
-        <Title>Asistencia</Title>
+      <div style={{ marginBottom: -20 }}>
+        <DefaultTitleContent
+          title={"Asistencia"}
+          subtitle="Aquí podrás revisar la asistencia que llevas dependiendo del mes que elijas aquí abajo."
+        />
         <Space direction="vertical">
           <DatePicker
             defaultValue={moment(currentDate, "MM-YYYY")}
@@ -89,8 +92,6 @@ const Attendance = () => {
       <div style={true ? {} : { pointerEvents: "none" }}>
         <LoadingSpinner isLoading={isLoading}>
           <AdminTableLayout
-            searchInput={""}
-            // selectFilter={<TeacherFilterCourse />}
             tableContent={
               <ContentTable content={attendanceFiltered} columns={columns} scroll={false} />
             }
