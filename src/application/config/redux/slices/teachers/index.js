@@ -291,6 +291,7 @@ export const teacherSlice = createSlice({
         }
       });
       state.students.list = studentsWithAttendance;
+      state.isLoading = false;
     },
     setForumsAndContent: (state, action) => {
       const { payload } = action;
@@ -306,6 +307,7 @@ export const teacherSlice = createSlice({
         };
       });
       state.courses.list = coursesWithForums;
+      state.isLoading = false;
     },
     removeContent: (state, action) => {
       const { payload } = action;

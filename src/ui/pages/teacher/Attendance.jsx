@@ -117,7 +117,6 @@ const Attendance = () => {
 
   const onSaveChanges = (content) => {
     const { students, filters } = content;
-
     if (hasAllConditions(activeFilters)) {
       message.destroy();
       // TODO comprobar si existe o no asistencia registrada para no regitrarla solo 2 veces y solo editarla
@@ -128,8 +127,9 @@ const Attendance = () => {
           asistencia: student.asistencia.asistencia ?? "No",
           fecha: filters.selectedDate,
         };
-        // verificar si la fecha ya fue registrada
+        // verificar si la fecha ya fue registrada en el endpoint
         if (hasBeenRegistered(filters.selectedDate)) {
+          params["id_asistencia"] = student.asistencia.id;
           dispatch(editAttendance(params));
         } else {
           dispatch(addAttendance(params));
@@ -156,7 +156,7 @@ const Attendance = () => {
     if (studentsFiltered) {
       let dateFound = false;
       for (let i = 0; i < content.length; i++) {
-        if (content[i].asistencia.find((a) => a.fecha === filterDate)) {
+        if (content[i].asistencia.find((a) => a.fecha === filterDate && a.registrado === "Si")) {
           dateFound = true;
           break;
         }

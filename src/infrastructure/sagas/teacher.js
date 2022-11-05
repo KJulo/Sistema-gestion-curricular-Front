@@ -117,33 +117,30 @@ function* getStudentsAttendance() {
   }
 }
 
-// TODO
 function* createAttendance(action) {
   const payload = action.payload;
   try {
-    setIsLoading(true);
-    // const response = yield call(asistencia.addAttendance, payload);
-    setIsLoading(false);
+    yield call(asistencia.addAttendance, payload);
+    message.success("Asistencia registrada.");
   } catch (e) {
     console.log(e);
-    yield put(errorFetch({ code: 500, error: "Error de servidor." }));
+    yield put(setIsLoading(false));
+    message.error("Error al registrar la asistencia.");
   }
 }
 
-// TODO
 function* goEditAttendance(action) {
   const payload = action.payload;
   try {
-    setIsLoading(true);
-    // const response = yield call(asistencia.editAttendance, {
-    //   payload: payload.data,
-    //   id: payload.id,
-    // });
-
-    setIsLoading(false);
+    yield call(asistencia.editAttendance, {
+      data: payload,
+      id: payload.id_asistencia,
+    });
+    message.success("Campos editados con éxito.");
   } catch (e) {
     console.log(e);
-    yield put(errorFetch({ code: 500, error: "Error de servidor." }));
+    yield put(setIsLoading(false));
+    message.error("Error al editar la asistencia.");
   }
 }
 
@@ -183,7 +180,8 @@ function* createContent(action) {
     message.success("Creado con éxito.");
   } catch (e) {
     console.log(e);
-    yield put(errorFetch({ code: 500, error: "Error de servidor." }));
+    yield put(setIsLoading(false));
+    message.error("Error al crear la contenido.");
   }
 }
 
@@ -194,7 +192,8 @@ function* goEditContent(action) {
     message.success("Editado con éxito.");
   } catch (e) {
     console.log(e);
-    yield put(errorFetch({ code: 500, error: "Error de servidor." }));
+    yield put(setIsLoading(false));
+    message.error("Error al editar la contenido.");
   }
 }
 
@@ -216,7 +215,8 @@ function* createForums(action) {
     );
   } catch (e) {
     console.log(e);
-    yield put(errorFetch({ code: 500, error: "Error de servidor." }));
+    yield put(setIsLoading(false));
+    message.error("No se ha podido registrar las unidades con éxito.");
   }
 }
 
