@@ -67,11 +67,6 @@ const Marks = () => {
   const [studentsFiltered, setStudentsFiltered] = useState(content);
   const [tableColumns, setTableColumns] = useState(getColumns(content));
 
-  // console.log("content ", content);
-  // obtener alumnos
-  // obtener cursos
-  // filtrar a los alumnos por curso
-
   useEffect(() => {
     dispatch(setIsLoading(true));
     dispatch(fetchCourses());
