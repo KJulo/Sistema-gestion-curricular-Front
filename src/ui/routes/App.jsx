@@ -64,7 +64,7 @@ const App = () => {
               <Route path="login" element={<Login />} />
               <Route path="recover" element={<Recover />} />
 
-              <Route element={<RequireAuth />}>
+              <Route element={<RequireAuth role="administrador"/>}>
                 <Route
                   path="administrador"
                   element={<MainLayout userType="admin" />}
@@ -87,45 +87,51 @@ const App = () => {
                 </Route>
               </Route>
 
-              <Route
-                path="estudiante"
-                element={<MainLayout userType="student" />}
-              >
-                <Route path="" element={<StudentHome />} />
-                <Route path="asistencia" element={<StudentAttendance />} />
-                <Route path="notas" element={<StudentMarks />} />
+              <Route element={<RequireAuth role="alumno" />}>
                 <Route
-                  path="aula-virtual"
-                  element={<StudentVirtualClassroom />}
-                />
-                <Route path="*" element={<Navigate to="/estudiante" />} />
+                  path="alumno"
+                  element={<MainLayout userType="student" />}
+                >
+                  <Route path="" element={<StudentHome />} />
+                  <Route path="asistencia" element={<StudentAttendance />} />
+                  <Route path="notas" element={<StudentMarks />} />
+                  <Route
+                    path="aula-virtual"
+                    element={<StudentVirtualClassroom />}
+                  />
+                  <Route path="*" element={<Navigate to="/alumno" />} />
+                </Route>
               </Route>
 
-              <Route
-                path="apoderado"
-                element={<MainLayout userType="parent" />}
-              >
-                <Route path="" element={<ParentsHome />} />
-                <Route path="asistencia" element={<ParentsAttendance />} />
-                <Route path="notas" element={<ParentsMarks />} />
-                <Route path="*" element={<Navigate to="/apoderado" />} />
+              <Route element={<RequireAuth role="apoderado" />}>
+                <Route
+                  path="apoderado"
+                  element={<MainLayout userType="parent" />}
+                >
+                  <Route path="" element={<ParentsHome />} />
+                  <Route path="asistencia" element={<ParentsAttendance />} />
+                  <Route path="notas" element={<ParentsMarks />} />
+                  <Route path="*" element={<Navigate to="/apoderado" />} />
+                </Route>
               </Route>
 
-              <Route
-                path="profesor"
-                element={<MainLayout userType="teacher" />}
-              >
-                <Route path="" element={<TeacherHome />} />
+              <Route element={<RequireAuth role="profesor" />}>
                 <Route
-                  path="modulo-asistencia"
-                  element={<TeacherAttendance />}
-                />
-                <Route path="modulo-notas" element={<TeacherMarks />} />
-                <Route
-                  path="modulo-aulas"
-                  element={<TeacherVirtualClassroom />}
-                />
-                <Route path="*" element={<Navigate to="/profesor" />} />
+                  path="profesor"
+                  element={<MainLayout userType="teacher" />}
+                >
+                  <Route path="" element={<TeacherHome />} />
+                  <Route
+                    path="modulo-asistencia"
+                    element={<TeacherAttendance />}
+                  />
+                  <Route path="modulo-notas" element={<TeacherMarks />} />
+                  <Route
+                    path="modulo-aulas"
+                    element={<TeacherVirtualClassroom />}
+                  />
+                  <Route path="*" element={<Navigate to="/profesor" />} />
+                </Route>
               </Route>
             </Routes>
           </BrowserRouter>

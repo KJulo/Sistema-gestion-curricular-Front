@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setCredentials } from "../../../application/config/redux/slices/auth/authSlice";
 import { useLoginMutation } from "../../../application/config/redux/slices/auth/authApiSlice";
@@ -22,29 +22,16 @@ const Login = () => {
   const [auth, setAuth] = useState(false);
   const [errorCount, setErrorCount] = useState(0);
 
-  const userRef = useRef();
-  const errRef = useRef();
-  const [user, setUser] = useState("");
-  const [pwd, setPwd] = useState("");
-  const [errMsg, setErrMsg] = useState("");
   const navigate = useNavigate();
 
   const [login, { isLoading }] = useLoginMutation();
   const dispatch = useDispatch();
 
-  // Redirect
-  useEffect(() => {
-    //
-  }, [auth]);
-
   const onFinish = async (values) => {
     try {
-      console.log(values);
       const userData = await login(values).unwrap();
       console.log(userData);
-      dispatch(
-        setCredentials(userData)
-      );
+      dispatch(setCredentials(userData));
       navigate(`/${values.type}/home`);
     } catch (err) {
       console.log(err);
@@ -57,6 +44,7 @@ const Login = () => {
       } else {
         message.error("Error desconocido");
       }
+      error();
     }
   };
 
@@ -115,7 +103,7 @@ const Login = () => {
           rules={[
             {
               required: true,
-              message: "Porfavor, ingrese su usuario.",
+              message: "Porfavor, ingrese su rut.",
             },
             {
               pattern: /^\d{1,2}\.\d{3}\.\d{3}[-][0-9kK]{1}$/,
@@ -145,9 +133,9 @@ const Login = () => {
           />
         </Form.Item>
         <Form.Item>
-          <a className="login-form-forgot" href="recover">
-            Olvidé mi contraseña
-          </a>
+          <Link to="/recover" className="login-form-forgot">
+            Olvide mi contraseña
+          </Link>
         </Form.Item>
         <Form.Item>
           <Button
@@ -158,9 +146,9 @@ const Login = () => {
             Ingresar
           </Button>
           o ir a{" "}
-          <a href="#" onClick={info}>
+          <Link to="#" onClick={info}>
             Registrarse
-          </a>
+          </Link>
         </Form.Item>
       </Form>
     </div>

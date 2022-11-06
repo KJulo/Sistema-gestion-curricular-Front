@@ -12,7 +12,7 @@ import { logOut } from "../../application/config/redux/slices/auth/authSlice";
 const UserDropdown = ({ user }) => {
   const dispatch = useDispatch();
   return (
-    <Row>
+    <Row justify="end" style={{gap:"16px"}}>
       <Col>
         <a
           onClick={(e) => e.preventDefault()}
