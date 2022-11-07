@@ -11,6 +11,7 @@ import { useGetCurrentDate } from "@hooks/useDate";
 
 const FilterCourse = ({ courses }) => {
   const dispatch = useDispatch();
+  const defaultValue = courses.length > 0 ? courses[0].id : "Sin Cursos";
 
   const handleChange = (value) => {
     dispatch(setActiveFilter({ courseId: value }));
@@ -26,7 +27,7 @@ const FilterCourse = ({ courses }) => {
   return (
     <div style={{ display: "flex", flexDirection: "row-revers", flexWrap: "wrap", gap: "12px" }}>
       {courses.length > 0 ? (
-        <Select size="large" defaultValue={courses[0].id} onChange={handleChange}>
+        <Select size="large" defaultValue={defaultValue} onChange={handleChange}>
           {courses.map((course) => (
             <Option value={course.id}>
               {course.nombre} - {course.paralelo}
@@ -34,7 +35,7 @@ const FilterCourse = ({ courses }) => {
           ))}
         </Select>
       ) : (
-        <Select size="large" defaultValue={"Sin Cursos"} />
+        <></>
       )}
     </div>
   );

@@ -60,12 +60,13 @@ const Marks = () => {
   const dispatch = useDispatch();
   const content = useSelector((store) => store.teacher.students.list);
   const {
-    activeFilter,
+    activeFilters,
     isLoading,
     courses: { list: courses },
   } = useSelector((store) => store.teacher);
   const [studentsFiltered, setStudentsFiltered] = useState(content);
   const [tableColumns, setTableColumns] = useState(getColumns(content));
+  const [selectedCourse, setSelectedCourse] = useState(null);
 
   useEffect(() => {
     dispatch(setIsLoading(true));
@@ -77,12 +78,13 @@ const Marks = () => {
 
   // Filtro de curso
   useEffect(() => {
-    if (activeFilter)
-      setStudentsFiltered(content.filter((c) => c.id_curso === activeFilter.courseId));
-  }, [activeFilter]);
+    if (activeFilters)
+      setStudentsFiltered(content.filter((c) => c.id_curso === activeFilters.courseId));
+  }, [activeFilters]);
 
   useEffect(() => {
     setTableColumns(getColumns(studentsFiltered));
+    setSelectedCourse(courses.find((c) => c.id === activeFilters?.courseId));
   }, [studentsFiltered]);
 
   // Al hacer click en el icono de switch, cambiar estado de asiste
@@ -99,7 +101,10 @@ const Marks = () => {
       <div style={true ? {} : { pointerEvents: "none" }}>
         <LoadingSpinner isLoading={isLoading}>
           <AdminTableLayout
-            filters={[<TeacherFilterCourse courses={courses} includeDate={false} />, <AddMark />]}
+            filters={[
+              <TeacherFilterCourse courses={courses} includeDate={false} />,
+              <AddMark course={selectedCourse} students={studentsFiltered} />,
+            ]}
             tableContent={
               <ContentTable content={studentsFiltered} columns={tableColumns} scroll={false} />
             }
