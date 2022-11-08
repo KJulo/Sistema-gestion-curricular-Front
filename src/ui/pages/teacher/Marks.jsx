@@ -103,7 +103,11 @@ const Marks = () => {
           <AdminTableLayout
             filters={[
               <TeacherFilterCourse courses={courses} includeDate={false} />,
-              <AddMark course={selectedCourse} students={studentsFiltered} />,
+              <AddMark
+                course={selectedCourse}
+                students={studentsFiltered}
+                filters={activeFilters}
+              />,
             ]}
             tableContent={
               <ContentTable content={studentsFiltered} columns={tableColumns} scroll={false} />
