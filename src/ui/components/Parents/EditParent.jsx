@@ -103,7 +103,7 @@ const EditParent = ({ parent }) => {
           <Form.Item
             label="Correo"
             name="correo"
-            rules={[{ required: true, type: "email" }]}
+            rules={[{ required: true, message:"Por favor ingrese el correo del apoderado"}]}
           >
             <Input />
           </Form.Item>

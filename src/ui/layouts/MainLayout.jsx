@@ -70,7 +70,9 @@ const MainLayout = ({ userType }) => {
               textAlignLast: "end",
               backgroundColor: "white",
               boxShadow: "0px 9px 28px 8px rgb(0 0 0 / 5%), 0px 3px 6px -4px rgb(0 0 0 / 12%)",
-            }}>
+            }}
+            className="site-page-header-responsive"
+            >
             <UserDropdown user={user} />
           </Header>
         </Affix>

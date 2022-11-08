@@ -43,11 +43,11 @@ const EditTeacher = ({ teacher }) => {
             rules={[
               {
                 required: true,
-                message: "Por favor ingrese el o los nombres del estudiante",
+                message: "Por favor ingrese el o los nombres del profesor",
               },
             ]}
           >
-            <Input />
+            <Input placeholder="Nombre Nombre" />
           </Form.Item>
 
           <Form.Item
@@ -56,11 +56,11 @@ const EditTeacher = ({ teacher }) => {
             rules={[
               {
                 required: true,
-                message: "Por favor ingrese el o los apellidos del estudiante",
+                message: "Por favor ingrese el o los apellidos del profesor",
               },
             ]}
           >
-            <Input />
+            <Input placeholder="Apellido Apellido"/>
           </Form.Item>
 
           <Form.Item
@@ -69,7 +69,7 @@ const EditTeacher = ({ teacher }) => {
             rules={[
               {
                 required: true,
-                message: "Por favor ingrese el rut del estudiante",
+                message: "Por favor ingrese el rut del profesor",
               },
               {
                 pattern: /^\d{1,2}\.\d{3}\.\d{3}[-][0-9kK]{1}$/,
@@ -77,14 +77,14 @@ const EditTeacher = ({ teacher }) => {
               },
             ]}
           >
-            <Input />
+            <Input placeholder="11.111.111-1" />
           </Form.Item>
           <Form.Item
             label="Correo"
             name="correo"
-            rules={[{ required: true, type: "email" }]}
+            rules={[{ required: true, message:"Por favor ingrese el correo del profesor" }]}
           >
-            <Input />
+            <Input placeholder="correo@correo.com"/>
           </Form.Item>
           <Form.Item
             label="Contraseña"
@@ -92,7 +92,7 @@ const EditTeacher = ({ teacher }) => {
             rules={[
               {
                 required: true,
-                message: "Por favor ingrese la contraseña del estudiante",
+                message: "Por favor ingrese la contraseña del profesor",
               },
             ]}
           >

@@ -13,7 +13,7 @@ import '@styles/Error.less';
 
 
 const NotFound = () => {
-  return <ErrorServer error={{ code: 404  }}/>
+  return <ErrorServer error={{ code: 404  }} />
 };
 
 export default NotFound;

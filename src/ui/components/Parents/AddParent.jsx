@@ -49,7 +49,7 @@ const AddTeacher = () => {
               },
             ]}
           >
-            <Input />
+            <Input placeholder="Nombre Nombre"/>
           </Form.Item>
 
           <Form.Item
@@ -62,7 +62,7 @@ const AddTeacher = () => {
               },
             ]}
           >
-            <Input />
+            <Input placeholder="Apellido Apellido"/>
           </Form.Item>
 
           <Form.Item
@@ -75,15 +75,15 @@ const AddTeacher = () => {
               },
             ]}
           >
-            <Input />
+            <Input placeholder="+56912345678"/>
           </Form.Item>
 
           <Form.Item label="Telefono secundario" name="telefonoEmergencia">
-            <Input />
+            <Input placeholder="+56912345678"/>
           </Form.Item>
 
           <Form.Item label="Dirección" name="direccion">
-            <Input />
+            <Input placeholder="Av. Brasil XXXX"/>
           </Form.Item>
 
           <Form.Item
@@ -100,15 +100,15 @@ const AddTeacher = () => {
               },
             ]}
           >
-            <Input />
+            <Input placeholder="11.111.111-1"/>
           </Form.Item>
 
           <Form.Item
             label="Correo"
             name="correo"
-            rules={[{ required: true, type: "email" }]}
+            rules={[{ required: true, message:"Por favor ingrese el correo del apoderado" }]}
           >
-            <Input />
+            <Input placeholder="correo@correo.com"/>
           </Form.Item>
 
           <Form.Item

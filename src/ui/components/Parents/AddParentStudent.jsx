@@ -26,7 +26,7 @@ const AddParentStudent = ({ data }) => {
       ></Button>
       <Input
         style={{ width: "70%" }}
-        placeholder="ID del estudiante"
+        placeholder="ID del alumno"
         onChange={(e) => setIdAlumno(e.target.value)}
       />
     </Input.Group>

@@ -14,7 +14,9 @@ const DefaultTitleContent = ({ title, action }) => {
         marginTop: "6px",
         alignItems: "center",
         display: "flex",
-        marginBottom: "20px"
+        marginBottom: "20px",
+        flexDirection: "row",
+        flexWrap: "wrap",
       }}
     >
       <Title>{title}</Title>

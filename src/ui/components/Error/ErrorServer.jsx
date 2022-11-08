@@ -28,7 +28,7 @@ const ErrorServer = ({ error }) => {
             className="button-tertiary"
             onClick={() => (error.code === 404 ? location.assign("/") : location.reload())}
             style={{ width: "128px" }}>
-            Actualizar
+            {error.code === 404 ? "Volver al inicio" : "Recargar"}
           </Button>
         </div>
       </div>

@@ -34,7 +34,6 @@ const Login = () => {
       dispatch(setCredentials(userData));
       navigate(`/${values.type}/home`);
     } catch (err) {
-      console.log(err);
       if (err?.originalStatus) {
         message.error("No hay respuesta del servidor");
       } else if (err?.status === 400) {
@@ -50,13 +49,13 @@ const Login = () => {
 
   const error = () => {
     setErrorCount(errorCount + 1);
-    if (errorCount < 2) message.error("Algo a salido mal, inténtelo de nuevo.");
-    else
+    if (errorCount > 2) {
       message.warning(
         "Demasiados intentos fallidos, compruebe su conexión a internet " +
           "o contacte a su institución educativa.",
         10
       );
+    }
   };
 
   const info = () => {
