@@ -67,7 +67,7 @@ const Attendance = () => {
       const studentsByCourse = content.filter((c) => c.id_curso === activeFilters.courseId);
       const studentsByDate = studentsByCourse.map((student) => {
         // Buscar en el arreglo de asistencia la asistencia con fecha correspondiente
-        const attendanceFinded = student.asistencia.find(
+        const attendanceFinded = student?.asistencia?.find(
           (a) => a.fecha === activeFilters.selectedDate
         );
         if (attendanceFinded) {

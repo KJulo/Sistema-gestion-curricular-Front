@@ -142,20 +142,16 @@ export const Planification = ({ course, management }) => {
 
       <br></br>
 
-      {hasSubjects ? (
-        <DocumentGenerator
-          data={{
-            course: {
-              ...course,
-              asignatura: selectedSubject,
-            },
-            units: units,
-            teacher: teacher,
-          }}
-        />
-      ) : (
-        <></>
-      )}
+      <DocumentGenerator
+        data={{
+          course: {
+            ...course,
+            asignatura: selectedSubject,
+          },
+          units: units,
+          teacher: teacher,
+        }}
+      />
     </Form>
   );
 };
