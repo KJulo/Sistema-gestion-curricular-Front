@@ -48,6 +48,9 @@ export const teacherSlice = createSlice({
     addForums: (state) => {
       state.isLoading = true;
     },
+    addMarks: (state) => {
+      state.isLoading = true;
+    },
     updateTeacher: (state, action) => {
       state.teacher = { ...state.teacher, ...action.payload };
       state.isLoading = false;
@@ -79,6 +82,32 @@ export const teacherSlice = createSlice({
               delete m.descripcion;
               return { ...m, nota: nota };
             }),
+          };
+        } else {
+          return student;
+        }
+      });
+
+      state.students.list = studentsWithNotes;
+      state.isLoading = false;
+    },
+    appendStudentsMarks: (state, action) => {
+      const marksList = action.payload;
+
+      const studentsWithNotes = state.students.list.map((student) => {
+        // recorrer la lista de estudiantes
+        let mark = marksList.find((n) => n.id_alumno === student.id); // ver si hay nota para el estudiante
+        if (mark) {
+          const nota = mark.descripcion;
+          delete mark.descripcion;
+          mark = {
+            ...mark,
+            nota: nota,
+          };
+          // retorna al estudiante añadiendo la nueva nota
+          return {
+            ...student,
+            notas: student.notas.concat(mark),
           };
         } else {
           return student;
@@ -439,6 +468,8 @@ export const {
   contentEdited,
   addForums,
   forumsAdded,
+  addMarks,
+  appendStudentsMarks,
 } = teacherSlice.actions;
 
 // exportar reducer del slice para mandarlo a la store

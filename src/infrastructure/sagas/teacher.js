@@ -28,6 +28,8 @@ import {
   addForums,
   forumsAdded,
   editAttendance,
+  addMarks,
+  appendStudentsMarks,
 } from "@slices/teachers";
 
 // Network
@@ -220,6 +222,46 @@ function* createForums(action) {
   }
 }
 
+function* createMark(action) {
+  try {
+    const { markInformation, courseInformation } = action.payload;
+    const { nombre, ponderacion } = markInformation;
+    const { courseId, selectedDate, subjectId } = courseInformation;
+
+    // eliminar estos datos para quedarse con los alumnos
+    delete markInformation["nombre"];
+    delete markInformation["ponderacion"];
+
+    const values = Object.values(markInformation);
+    const keys = Object.keys(markInformation);
+
+    const response = (yield call(alumno.getStudents)).data.data;
+
+    let newMarks = [];
+
+    for (let i = 0; i < keys.length; i++) {
+      const idStudent = (response?.find((s) => s.rut === keys[i])).id;
+      const decimalPonderacion = ponderacion / 100;
+      const params = {
+        id_asignatura: subjectId,
+        id_alumno: idStudent,
+        nombre: nombre,
+        fecha: selectedDate,
+        descripcion: values[i].toString(),
+        ponderacion: decimalPonderacion.toString(),
+      };
+      newMarks.push(params);
+      // yield call(notas.addNota, params);
+    }
+    yield put(appendStudentsMarks(newMarks));
+    message.success("Se han creado las notas con éxito");
+  } catch (e) {
+    console.log(e);
+    yield put(setIsLoading(false));
+    message.error("No se ha podido registrar la nota.");
+  }
+}
+
 function* watchGetTeacherUser() {
   yield takeLatest(fetchTeacher, getTeacher);
 }
@@ -256,6 +298,9 @@ function* watchGoEditAttendance() {
 function* watchAddForums() {
   yield takeLatest(addForums, createForums);
 }
+function* watchAddMarks() {
+  yield takeLatest(addMarks, createMark);
+}
 
 export default [
   watchGetTeacherUser(),
@@ -270,4 +315,5 @@ export default [
   watchEditContent(),
   watchAddForums(),
   watchGoEditAttendance(),
+  watchAddMarks(),
 ];
