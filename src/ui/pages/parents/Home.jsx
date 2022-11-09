@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from "react";
 
+// Redux
+import { useDispatch, useSelector } from "react-redux";
+import { fetchStudents, fetchCourses, fetchStudentsNotes, fetchAttendance } from "@slices/parents";
+
 // antd
 import { Layout, Typography } from "antd";
 const { Title } = Typography;
@@ -12,20 +16,22 @@ import "@styles/Home.less";
 
 //components
 import Notifications from "@components/Notifications";
-import { StudentsCards, DefaultTitleContent } from "@components";
+import { StudentCards, DefaultTitleContent } from "@components";
 
-// constants
-import { parents } from "@constants/users";
-
-// no funcionando, faltan endpoints
+// TODO notifications
 const Home = () => {
-  const [parent, setParent] = useState(parents.parents[0]);
-  const [students, setStudents] = useState(parents.students);
+  const dispatch = useDispatch();
+  const { parentData, students, notification, isLoading } = useSelector((store) => store.parent);
 
-  // Seleccionar un padre cualquiera
   useEffect(() => {
-    setParent(parents.parents[0]);
-  }, []);
+    dispatch(fetchStudents());
+  }, [parentData]);
+
+  useEffect(() => {
+    dispatch(fetchCourses());
+    dispatch(fetchStudentsNotes());
+    dispatch(fetchAttendance());
+  }, [students.length]);
 
   return (
     <div
@@ -42,7 +48,11 @@ const Home = () => {
       <div className="flex-container" style={{ padding: "1rem", justifyContent: "space-around" }}>
         <div style={{ display: "contents" }}>
           <img src={SchoolImg} alt="Logo Colegio" className="fit-image" />
-          <StudentsCards students={students} />
+          <div className="card-container">
+            {students.map((student) => (
+              <StudentCards student={student} />
+            ))}
+          </div>
         </div>
         <Notifications />
       </div>
