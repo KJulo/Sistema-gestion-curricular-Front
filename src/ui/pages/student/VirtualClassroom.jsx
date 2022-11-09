@@ -47,15 +47,6 @@ const defaultMenu = [
   },
 ];
 
-const Header = ({ title, filterOptions }) => {
-  return (
-    <div className="header-container">
-      <Title>{title}</Title>
-      <Space direction="vertical">{filterOptions}</Space>
-    </div>
-  );
-};
-
 const VitualClassroom = () => {
   const dispatch = useDispatch();
   const currentDate = useGetCurrentDay() + "-" + useGetCurrentMonth() + "-" + useGetCurrentYear();
@@ -157,17 +148,10 @@ const VitualClassroom = () => {
 
   return (
     <div>
-      <div
-        style={{
-          justifyContent: "space-between",
-          marginTop: "6px",
-          alignItems: "flex-start",
-          display: "flex",
-          marginBottom: "20px",
-          flexDirection: "column",
-        }}>
-        <Title>Aula Virtual</Title>
-      </div>
+      <DefaultTitleContent
+        title={"Aula Virtual"}
+        subtitle="Aquí podrás revisar las unidades y material de tu curso."
+      />
 
       {hasMenu ? (
         <Menu

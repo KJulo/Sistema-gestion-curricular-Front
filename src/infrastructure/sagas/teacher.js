@@ -16,7 +16,7 @@ import {
   updateCourses,
   updateStudents,
   updateStudentsNotes,
-  // setStudentsAttendance,
+  setStudentsAttendance,
   addAttendance,
   setForumsAndContent,
   deleteContent,
@@ -27,6 +27,9 @@ import {
   contentEdited,
   addForums,
   forumsAdded,
+  editAttendance,
+  addMarks,
+  appendStudentsMarks,
 } from "@slices/teachers";
 
 // Network
@@ -109,7 +112,7 @@ function* getStudentsNotes() {
 function* getStudentsAttendance() {
   try {
     const response = (yield call(asistencia.getAttendance)).data.data;
-    // yield put(setStudentsAttendance(response));
+    yield put(setStudentsAttendance(response));
   } catch (e) {
     console.log(e);
     yield put(errorFetch({ code: 500, error: "Error de servidor." }));
@@ -118,21 +121,28 @@ function* getStudentsAttendance() {
 
 function* createAttendance(action) {
   const payload = action.payload;
-  console.log(payload);
   try {
-    /**
-     * TODO
-     * * id_asignatura,
-     * * id_alumno,
-     * * asistencia,
-     * ! fecha : problema con insertarla en el backend
-     */
-
-    const response = (yield call(asistencia.addAttendance, payload)).data.data;
-    console.log("response: ", response);
+    yield call(asistencia.addAttendance, payload);
+    message.success("Asistencia registrada.");
   } catch (e) {
     console.log(e);
-    yield put(errorFetch({ code: 500, error: "Error de servidor." }));
+    yield put(setIsLoading(false));
+    message.error("Error al registrar la asistencia.");
+  }
+}
+
+function* goEditAttendance(action) {
+  const payload = action.payload;
+  try {
+    yield call(asistencia.editAttendance, {
+      data: payload,
+      id: payload.id_asistencia,
+    });
+    message.success("Campos editados con éxito.");
+  } catch (e) {
+    console.log(e);
+    yield put(setIsLoading(false));
+    message.error("Error al editar la asistencia.");
   }
 }
 
@@ -172,18 +182,20 @@ function* createContent(action) {
     message.success("Creado con éxito.");
   } catch (e) {
     console.log(e);
-    yield put(errorFetch({ code: 500, error: "Error de servidor." }));
+    yield put(setIsLoading(false));
+    message.error("Error al crear la contenido.");
   }
 }
 
-function* goEdit(action) {
+function* goEditContent(action) {
   try {
     const response = yield call(contenido.editContent, action.payload);
     yield put(contentEdited(response.data.data));
     message.success("Editado con éxito.");
   } catch (e) {
     console.log(e);
-    yield put(errorFetch({ code: 500, error: "Error de servidor." }));
+    yield put(setIsLoading(false));
+    message.error("Error al editar la contenido.");
   }
 }
 
@@ -205,7 +217,48 @@ function* createForums(action) {
     );
   } catch (e) {
     console.log(e);
-    yield put(errorFetch({ code: 500, error: "Error de servidor." }));
+    yield put(setIsLoading(false));
+    message.error("No se ha podido registrar las unidades con éxito.");
+  }
+}
+
+function* createMark(action) {
+  try {
+    const { markInformation, courseInformation } = action.payload;
+    const { nombre, ponderacion } = markInformation;
+    const { courseId, selectedDate, subjectId } = courseInformation;
+
+    // eliminar estos datos para quedarse con los alumnos
+    delete markInformation["nombre"];
+    delete markInformation["ponderacion"];
+
+    const values = Object.values(markInformation);
+    const keys = Object.keys(markInformation);
+
+    const response = (yield call(alumno.getStudents)).data.data;
+
+    let newMarks = [];
+
+    for (let i = 0; i < keys.length; i++) {
+      const idStudent = (response?.find((s) => s.rut === keys[i])).id;
+      const decimalPonderacion = ponderacion / 100;
+      const params = {
+        id_asignatura: subjectId,
+        id_alumno: idStudent,
+        nombre: nombre,
+        fecha: selectedDate,
+        descripcion: values[i].toString(),
+        ponderacion: decimalPonderacion.toString(),
+      };
+      newMarks.push(params);
+      // yield call(notas.addNota, params);
+    }
+    yield put(appendStudentsMarks(newMarks));
+    message.success("Se han creado las notas con éxito");
+  } catch (e) {
+    console.log(e);
+    yield put(setIsLoading(false));
+    message.error("No se ha podido registrar la nota.");
   }
 }
 
@@ -237,10 +290,16 @@ function* watchCreateContent() {
   yield takeLatest(addContent, createContent);
 }
 function* watchEditContent() {
-  yield takeLatest(editContent, goEdit);
+  yield takeLatest(editContent, goEditContent);
+}
+function* watchGoEditAttendance() {
+  yield takeLatest(editAttendance, goEditAttendance);
 }
 function* watchAddForums() {
   yield takeLatest(addForums, createForums);
+}
+function* watchAddMarks() {
+  yield takeLatest(addMarks, createMark);
 }
 
 export default [
@@ -255,4 +314,6 @@ export default [
   watchCreateContent(),
   watchEditContent(),
   watchAddForums(),
+  watchGoEditAttendance(),
+  watchAddMarks(),
 ];

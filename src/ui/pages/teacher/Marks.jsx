@@ -11,6 +11,7 @@ import {
   TeacherFilterCourse,
   DefaultTitleContent,
   LoadingSpinner,
+  AddMark,
 } from "@components/index";
 
 //containers
@@ -59,17 +60,13 @@ const Marks = () => {
   const dispatch = useDispatch();
   const content = useSelector((store) => store.teacher.students.list);
   const {
-    activeFilter,
+    activeFilters,
     isLoading,
     courses: { list: courses },
   } = useSelector((store) => store.teacher);
   const [studentsFiltered, setStudentsFiltered] = useState(content);
   const [tableColumns, setTableColumns] = useState(getColumns(content));
-
-  // console.log("content ", content);
-  // obtener alumnos
-  // obtener cursos
-  // filtrar a los alumnos por curso
+  const [selectedCourse, setSelectedCourse] = useState(null);
 
   useEffect(() => {
     dispatch(setIsLoading(true));
@@ -81,12 +78,13 @@ const Marks = () => {
 
   // Filtro de curso
   useEffect(() => {
-    if (activeFilter)
-      setStudentsFiltered(content.filter((c) => c.id_curso === activeFilter.courseId));
-  }, [activeFilter]);
+    if (activeFilters)
+      setStudentsFiltered(content.filter((c) => c.id_curso === activeFilters.courseId));
+  }, [activeFilters]);
 
   useEffect(() => {
     setTableColumns(getColumns(studentsFiltered));
+    setSelectedCourse(courses.find((c) => c.id === activeFilters?.courseId));
   }, [studentsFiltered]);
 
   // Al hacer click en el icono de switch, cambiar estado de asiste
@@ -96,12 +94,21 @@ const Marks = () => {
 
   return (
     <div>
-      <DefaultTitleContent title={"Módulo Notas"} action="" />
+      <DefaultTitleContent
+        title={"Módulo Notas"}
+        subtitle="En este módulo podrás ver y añadir las notas de tus alumnos."
+      />
       <div style={true ? {} : { pointerEvents: "none" }}>
         <LoadingSpinner isLoading={isLoading}>
           <AdminTableLayout
-            searchInput={""}
-            selectFilter={<TeacherFilterCourse courses={courses} includeDate={false} />}
+            filters={[
+              <TeacherFilterCourse courses={courses} includeDate={false} />,
+              <AddMark
+                course={selectedCourse}
+                students={studentsFiltered}
+                filters={activeFilters}
+              />,
+            ]}
             tableContent={
               <ContentTable content={studentsFiltered} columns={tableColumns} scroll={false} />
             }

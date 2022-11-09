@@ -36,9 +36,13 @@ const Home = () => {
         padding: 0,
         minHeight: 280,
       }}>
-      <DefaultTitleContent title={"Mis Cursos"} action="" />
+      <DefaultTitleContent
+        title={"Mis Cursos"}
+        subtitle="Haz click en uno de los cursos para ir a la planificación."
+        action=""
+      />
       <div className="flex-container">
-        <LoadingSpinner isLoading={courses.length == 0}>
+        <LoadingSpinner isLoading={courses.length === 0}>
           <CoursesCards courses={courses} management={management} isLoading={isLoading} />
         </LoadingSpinner>
       </div>

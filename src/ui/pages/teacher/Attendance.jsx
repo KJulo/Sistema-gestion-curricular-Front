@@ -5,16 +5,18 @@ import "@styles/Attendance.less";
 // redux
 import {
   setIsLoading,
+  setActiveFilter,
   updateStudentAttendance,
   fetchStudents,
   fetchCourses,
   fetchAttendance,
   addAttendance,
+  editAttendance,
   resetStore,
 } from "@slices/teachers";
 
 // antd
-import { Button, Alert } from "antd";
+import { Button, Alert, message } from "antd";
 import { SwapOutlined, CheckOutlined } from "@ant-design/icons";
 
 //components
@@ -24,13 +26,14 @@ import {
   TeacherFilterCourse,
   DefaultTitleContent,
   FilterSubject,
+  DatePicker,
 } from "@components/index";
 
 //containers
 import { AdminTableLayout } from "@containers/index";
 
 //constants
-import { columns } from "@constants/teacher/attendanceTable";
+import { columns, status } from "@constants/teacher/attendanceTable";
 
 const Attendance = () => {
   const dispatch = useDispatch();
@@ -39,7 +42,6 @@ const Attendance = () => {
   const { activeFilters, isLoading } = useSelector((store) => store.teacher);
   const [studentsFiltered, setStudentsFiltered] = useState(content);
   const [selectedCourseSubjects, setSelectedCourseSubjects] = useState([]);
-  const [alertActive, setAlertActive] = useState(false);
 
   useEffect(() => {
     // TODO: se cae cuando se entre desde otro modulo a este de asistencia
@@ -51,70 +53,125 @@ const Attendance = () => {
 
   // Inicializar las asistencias de los estudiantes al cambiar la fecha
   useEffect(() => {
-    if (activeFilters) {
-      initAttendance();
-      if (activeFilters.courseId) {
-        const selectedCourse = courses.find((c) => c.id === activeFilters.courseId);
-        setSelectedCourseSubjects(selectedCourse.asignaturas);
-      }
+    if (activeFilters && activeFilters.courseId) {
+      const selectedCourse = courses.find((c) => c.id === activeFilters.courseId);
+      setSelectedCourseSubjects(selectedCourse.asignaturas);
     }
   }, [activeFilters, content.length > 0]);
 
-  function initAttendance() {
-    content.map((student) => {
-      dispatch(
-        updateStudentAttendance({
-          id: student.id,
-          asistencia: { fecha: activeFilters.selectedDate, asiste: false },
-        })
-      );
-    });
-  }
-
-  // Filtro de curso
+  // Filtro de curso y fecha
   useEffect(() => {
-    if (activeFilters.courseId)
-      setStudentsFiltered(content.filter((c) => c.id_curso === activeFilters.courseId));
+    const condition =
+      activeFilters.hasOwnProperty("courseId") && activeFilters.hasOwnProperty("selectedDate");
+    if (condition) {
+      const studentsByCourse = content.filter((c) => c.id_curso === activeFilters.courseId);
+      const studentsByDate = studentsByCourse.map((student) => {
+        // Buscar en el arreglo de asistencia la asistencia con fecha correspondiente
+        const attendanceFinded = student?.asistencia?.find(
+          (a) => a.fecha === activeFilters.selectedDate
+        );
+        if (attendanceFinded) {
+          return {
+            ...student,
+            asistencia: { ...attendanceFinded, registrado: "Si" },
+          };
+        } else {
+          return {
+            ...student,
+            asistencia: {
+              fecha: activeFilters.selectedDate,
+              asistencia: status[0],
+              registrado: "No",
+            },
+          };
+        }
+      });
+
+      setStudentsFiltered(studentsByDate);
+    }
   }, [activeFilters, content]);
+
+  const onChangeDate = (_, dateString) => {
+    const dateSplited = dateString.split("/");
+    const date = dateSplited[2] + "-" + dateSplited[1] + "-" + dateSplited[0];
+    dispatch(setActiveFilter({ selectedDate: date }));
+  };
 
   // Al hacer click en el icono de switch, cambiar estado de asiste
   const handleClick = (record) => {
-    const cambio = record.asistencia.asiste ? false : true;
-    dispatch(
-      updateStudentAttendance({
-        id: record.id,
-        asistencia: { fecha: activeFilters.selectedDate, asiste: cambio },
-      })
+    const lengthStatus = status.length;
+    const nextStatusIndex = status.indexOf(record.asistencia.asistencia) + 1;
+    const newStatusIndex = nextStatusIndex <= lengthStatus - 1 ? nextStatusIndex : 0;
+    updateAttendance(
+      record.id,
+      activeFilters.selectedDate,
+      status[newStatusIndex],
+      record.asistencia.registrado
     );
   };
 
+  function updateAttendance(studentId, date, status, registered) {
+    dispatch(
+      updateStudentAttendance({
+        id: studentId,
+        asistencia: {
+          fecha: date,
+          asistencia: status,
+          registrado: registered,
+        },
+      })
+    );
+  }
+
   const onSaveChanges = (content) => {
     const { students, filters } = content;
-    const condition =
-      activeFilters &&
-      activeFilters.courseId &&
-      activeFilters.selectedDate &&
-      activeFilters.subjectId;
-
-    if (condition || condition !== undefined) {
-      setAlertActive(false);
-      setIsLoading(true);
+    if (hasAllConditions(activeFilters)) {
+      message.destroy();
+      // TODO comprobar si existe o no asistencia registrada para no regitrarla solo 2 veces y solo editarla
       students.map((student) => {
-        const dateSplited = filters.selectedDate.split("-");
-        const date = dateSplited[2] + "-" + dateSplited[1] + "-" + dateSplited[0];
         const params = {
           id_asignatura: filters.subjectId,
           id_alumno: student.id,
-          asistencia: student.asistencia.asiste ? "Si" : "No",
-          fecha: date,
+          asistencia: student.asistencia.asistencia ?? "No",
+          fecha: filters.selectedDate,
         };
-        dispatch(addAttendance(params));
+        // verificar si la fecha ya fue registrada en el endpoint
+        if (hasBeenRegistered(filters.selectedDate)) {
+          params["id_asistencia"] = student.asistencia.id;
+          dispatch(editAttendance(params));
+        } else {
+          dispatch(addAttendance(params));
+        }
+        // dispatch(addAttendance(params));
       });
-      setIsLoading(false);
-    } else {
-      setAlertActive(true);
     }
   };
+
+  function hasAllConditions(filters) {
+    const condition = filters && filters.courseId && filters.selectedDate && filters.subjectId;
+    // Si no se cumple con algo
+    if (!condition) {
+      message.destroy();
+      if (!filters.courseId) message.warning("Seleccione el curso a registrar.");
+      if (!filters.selectedDate) message.warning("Seleccione una fecha para registrar.");
+      if (!filters.subjectId) message.warning("Seleccione la asignatura a registrar.");
+    } else {
+      return true;
+    }
+  }
+
+  function hasBeenRegistered(filterDate) {
+    if (studentsFiltered) {
+      let dateFound = false;
+      for (let i = 0; i < content.length; i++) {
+        if (content[i].asistencia.find((a) => a.fecha === filterDate && a.registrado === "Si")) {
+          dateFound = true;
+          break;
+        }
+      }
+      return dateFound;
+    }
+  }
 
   // Columna de edición, se agrega ahora con un concat
   const editColumn = [
@@ -139,12 +196,17 @@ const Attendance = () => {
 
   return (
     <div>
-      <DefaultTitleContent title={"Módulo Asistencia"} action="" />
+      <DefaultTitleContent
+        title={"Módulo Asistencia"}
+        subtitle="En este módulo podrás ver, añadir y editar la asistencia de tus alumnos."
+      />
       <div style={true ? {} : { pointerEvents: "none" }}>
         <AdminTableLayout
-          searchInput={""}
-          selectFilter={<TeacherFilterCourse courses={courses} includeDate={true} />}
-          extraFilter={<FilterSubject subjects={selectedCourseSubjects} />}
+          filters={[
+            <DatePicker onChange={onChangeDate} />,
+            <TeacherFilterCourse courses={courses} includeDate={true} />,
+            <FilterSubject subjects={selectedCourseSubjects} />,
+          ]}
           tableContent={
             <ContentTable
               content={studentsFiltered}
@@ -163,16 +225,6 @@ const Attendance = () => {
           loading={isLoading}>
           Guardar Cambios
         </Button>
-        {alertActive ? (
-          <Alert
-            style={{ marginTop: 20 }}
-            message="Porfavor, seleccione un curso, asignatura y fecha."
-            type="warning"
-            showIcon
-          />
-        ) : (
-          <></>
-        )}
       </div>
     </div>
   );

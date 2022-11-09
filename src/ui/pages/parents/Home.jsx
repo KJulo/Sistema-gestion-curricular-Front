@@ -1,70 +1,63 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
+
+// Redux
+import { useDispatch, useSelector } from "react-redux";
+import { fetchStudents, fetchCourses, fetchStudentsNotes, fetchAttendance } from "@slices/parents";
 
 // antd
-import { Layout, Typography } from 'antd';
+import { Layout, Typography } from "antd";
 const { Title } = Typography;
 
 // assets
-import SchoolImg from '@logos/school-img.png';
+import SchoolImg from "@logos/school-img.png";
 
 // styles
-import '@styles/Home.less';
+import "@styles/Home.less";
 
 //components
-import Notifications from '@components/Notifications';
-import Card from '@components/Card';
+import Notifications from "@components/Notifications";
+import { StudentCards, DefaultTitleContent } from "@components";
 
-// constants
-import { parents } from '@constants/users';
-
-const StudentsCards = ({students}) => {
-  return (
-    <div className='card-container'>
-      {students.map((student) => (
-        <Card
-          title={student.nombres + ' ' + student.apellidos}
-          content={student.curso}
-          icon="user"
-        />
-      ))}
-    </div>
-  )
-}
-
-// no funcionando, faltan endpoints
+// TODO notifications
 const Home = () => {
-  const [parent, setParent] = useState(parents.parents[0]);
-  const [students, setStudents] = useState(parents.students);
+  const dispatch = useDispatch();
+  const { parentData, students, notification, isLoading } = useSelector((store) => store.parent);
 
-  // Seleccionar un padre cualquiera
   useEffect(() => {
-    setParent(parents.parents[0])
-  }, [])
+    dispatch(fetchStudents());
+  }, [parentData]);
 
+  useEffect(() => {
+    dispatch(fetchCourses());
+    dispatch(fetchStudentsNotes());
+    dispatch(fetchAttendance());
+  }, [students.length]);
 
   return (
     <div
-      className='body-bg'
+      className="body-bg"
       style={{
-        margin: '24px 16px',
+        margin: "24px 16px",
         minHeight: 280,
       }}>
-      <Title>
-        {' '}
-        Hola, {parent.nombres} {parent.apellidos} !
-      </Title>  
+      <DefaultTitleContent
+        title={`Hola, ${parent.nombres} ${parent.apellidos} !`}
+        subtitle="¡Haz click en uno de tus pupilos para desplegar información resumida de ellos!"
+      />
 
-      <div
-        className='flex-container'
-        style={{ padding: '1rem', justifyContent: 'space-around' }}>
-        <div style={ { display: 'contents' } }> 
-          <img src={SchoolImg} alt='Logo Colegio' className='fit-image' />
-          <StudentsCards students={students} />
+      <div className="flex-container" style={{ padding: "1rem", justifyContent: "space-around" }}>
+        <div style={{ display: "contents" }}>
+          <img src={SchoolImg} alt="Logo Colegio" className="fit-image" />
+          <div className="card-container">
+            {students.map((student) => (
+              <StudentCards student={student} />
+            ))}
+          </div>
         </div>
         <Notifications />
       </div>
     </div>
-  )
+  );
 };
 
 export default Home;

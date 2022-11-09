@@ -2,11 +2,11 @@
 import React from "react";
 
 //antd
-import { Button, Typography } from "antd";
-const { Title } = Typography;
+import { Space, Typography } from "antd";
+const { Title, Text } = Typography;
 import { UsergroupAddOutlined } from "@ant-design/icons";
 
-const DefaultTitleContent = ({ title, action }) => {
+const DefaultTitleContent = ({ title, subtitle, action }) => {
   return (
     <div
       style={{
@@ -15,11 +15,11 @@ const DefaultTitleContent = ({ title, action }) => {
         alignItems: "center",
         display: "flex",
         marginBottom: "20px",
-        flexDirection: "row",
-        flexWrap: "wrap",
-      }}
-    >
-      <Title>{title}</Title>
+      }}>
+      <Space direction="vertical">
+        <Title style={{ marginBottom: 5 }}>{title}</Title>
+        {subtitle ? <Text type="secondary">{subtitle}</Text> : <></>}
+      </Space>
       <div>{action}</div>
     </div>
   );

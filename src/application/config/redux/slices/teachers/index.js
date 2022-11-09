@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, current } from "@reduxjs/toolkit";
 
 import { initState } from "../../domain/teacher";
 
@@ -33,6 +33,9 @@ export const teacherSlice = createSlice({
     addAttendance: (state) => {
       state.isLoading = true;
     },
+    editAttendance: (state) => {
+      state.isLoading = true;
+    },
     deleteContent: (state) => {
       state.isLoading = true;
     },
@@ -43,6 +46,9 @@ export const teacherSlice = createSlice({
       state.isLoading = true;
     },
     addForums: (state) => {
+      state.isLoading = true;
+    },
+    addMarks: (state) => {
       state.isLoading = true;
     },
     updateTeacher: (state, action) => {
@@ -85,15 +91,64 @@ export const teacherSlice = createSlice({
       state.students.list = studentsWithNotes;
       state.isLoading = false;
     },
+    appendStudentsMarks: (state, action) => {
+      const marksList = action.payload;
+
+      const studentsWithNotes = state.students.list.map((student) => {
+        // recorrer la lista de estudiantes
+        let mark = marksList.find((n) => n.id_alumno === student.id); // ver si hay nota para el estudiante
+        if (mark) {
+          const nota = mark.descripcion;
+          delete mark.descripcion;
+          mark = {
+            ...mark,
+            nota: nota,
+          };
+          // retorna al estudiante añadiendo la nueva nota
+          return {
+            ...student,
+            notas: student.notas.concat(mark),
+          };
+        } else {
+          return student;
+        }
+      });
+
+      state.students.list = studentsWithNotes;
+      state.isLoading = false;
+    },
     updateStudentAttendance: (state, action) => {
       const payload = action.payload;
       const studentList = state.students.list.map((student) => {
-        if (payload.id === student.id)
-          return {
-            ...student,
-            asistencia: payload.asistencia,
-          };
-        return student;
+        // Buscar al estudiante que corresponse la fecha
+        if (payload.id === student.id) {
+          // Verificar si la fecha fue registrada por parte el endpoint
+          if (payload.asistencia.registrado === "Si") {
+            return {
+              ...student,
+              asistencia: student.asistencia.map((a) => {
+                // Editar la asistencia en funcion la fecha
+                if (a.fecha === payload.asistencia.fecha) {
+                  return {
+                    ...a,
+                    asistencia: payload.asistencia.asistencia,
+                    fecha: payload.asistencia.fecha,
+                  };
+                } else {
+                  return a;
+                }
+              }),
+            };
+          } else {
+            // Caso no registrado
+            return {
+              ...student,
+              asistencia: student.asistencia.concat(payload.asistencia),
+            };
+          }
+        } else {
+          return student;
+        }
       });
       state.isLoading = false;
       state.students.list = studentList;
@@ -242,10 +297,31 @@ export const teacherSlice = createSlice({
       const data = action.payload;
       state.activeFilters = { ...state.activeFilters, ...data };
     },
-    // setStudentsAttendance: (state, action) => {
-    //   console.log(action);
-    //   return state;
-    // },
+    setStudentsAttendance: (state, action) => {
+      const data = action.payload;
+      const studentsWithAttendance = state.students.list.map((student) => {
+        const studentAttendance = data.filter((d) => d.id_alumno === student.id);
+        if (studentAttendance.length > 0) {
+          return {
+            ...student,
+            asistencia: studentAttendance.map((a) => {
+              return {
+                ...a,
+                fecha: a.fecha.slice(0, 10),
+                registrado: "Si",
+              };
+            }),
+          };
+        } else {
+          return {
+            ...student,
+            asistencia: [],
+          };
+        }
+      });
+      state.students.list = studentsWithAttendance;
+      state.isLoading = false;
+    },
     setForumsAndContent: (state, action) => {
       const { payload } = action;
       const coursesWithForums = state.courses.list.map((course) => {
@@ -260,6 +336,7 @@ export const teacherSlice = createSlice({
         };
       });
       state.courses.list = coursesWithForums;
+      state.isLoading = false;
     },
     removeContent: (state, action) => {
       const { payload } = action;
@@ -356,6 +433,7 @@ export const {
   setIsLoading,
   courseFiltersUpdate,
   updateStudentAttendance,
+  editAttendance,
   fetchTeacher,
   fetchCourses,
   fetchStudents,
@@ -379,7 +457,7 @@ export const {
   deleteValueManagement,
   setActiveFilter,
   fetchAttendance,
-  // setStudentsAttendance,
+  setStudentsAttendance,
   addAttendance,
   fetchForumsAndContent,
   setForumsAndContent,
@@ -390,6 +468,8 @@ export const {
   contentEdited,
   addForums,
   forumsAdded,
+  addMarks,
+  appendStudentsMarks,
 } = teacherSlice.actions;
 
 // exportar reducer del slice para mandarlo a la store
