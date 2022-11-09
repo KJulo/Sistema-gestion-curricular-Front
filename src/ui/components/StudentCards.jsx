@@ -9,7 +9,6 @@ const { Title, Paragraph, Text } = Typography;
 const StudentCards = ({ student }) => {
   const [modalOpen, setModalOpen] = useState(false);
 
-  // TODO terminar el modal de informacion del alumno
   function handdleOpenModal(a) {
     setModalOpen(true);
   }
@@ -52,7 +51,7 @@ const StudentCards = ({ student }) => {
 const StudentMarks = ({ student }) => {
   if (student.notas.length > 0) {
     const total = student.notas.length;
-    const studentAverage = getAverage(student.notas);
+    const studentAverage = getAverage(student.notas).toFixed(2);
     return (
       <>
         Total de notas:
