@@ -1,33 +1,43 @@
 import React from "react";
 
-import { Menu, Dropdown, Avatar } from "antd";
+import { Menu, Dropdown, Avatar, Row, Col, Button, Tooltip } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import teacher from "../../infrastructure/sagas/teacher";
 
 import { isEmpty } from "@utils/isEmpty";
-
-const menuPerfil = (
-  <Menu style={{ marginTop: "12px" }}>
-    <Menu.Item key={"logout"}>Cerrar sesión</Menu.Item>
-  </Menu>
-);
+import { logOut } from "../../application/config/redux/slices/auth/authSlice";
+import { LogoutOutlined } from "@ant-design/icons";
 
 const UserDropdown = ({ user }) => {
-  const hasName = user.hasOwnProperty("nombres");
-  const fullName = !hasName ? " - " : user.nombres + " " + user.apellidos;
-  const initals = !hasName ? "?" : user.nombres[0] + user.apellidos[0];
-
+  const dispatch = useDispatch();
   return (
-    <Dropdown overlay={menuPerfil}>
-      <a onClick={(e) => e.preventDefault()} style={{ color: "black", justifyItems: "baseline" }}>
-        <Avatar size="medium" style={{ marginRight: "10px" }}>
-          {initals}
-        </Avatar>{" "}
-        {fullName} <DownOutlined />
-      </a>
-    </Dropdown>
+    <Row justify="end" style={{ gap: "16px", flexWrap: "wrap" }}>
+      <Col xs={0} sm={0} md={12}>
+        <a
+          onClick={(e) => e.preventDefault()}
+          style={{ color: "black", justifyItems: "baseline" }}
+        >
+          <Avatar size="medium" style={{ marginRight: "10px" }}>
+            {user?.nombres[0]}
+          </Avatar>{" "}
+          {`${user?.nombres} ${user?.apellidos}`}
+        </a>{" "}
+      </Col>
+      <Col>
+        <Tooltip title="Cerrar sesión">
+          <Button
+            type="danger"
+            onClick={() => {
+              dispatch(logOut());
+            }}
+          >
+            <LogoutOutlined />
+          </Button>
+        </Tooltip>
+      </Col>
+    </Row>
   );
 };
 

@@ -32,7 +32,7 @@ const AppendStudent = ({ type, data }) => {
       ></Button>
       <Input
         style={{ width: "70%" }}
-        placeholder="ID del estudiante"
+        placeholder="ID del Alumno"
         onChange={(e) => setIdEstudiante(e.target.value)}
       />
     </Input.Group>

@@ -30,7 +30,7 @@ const EditStudent = ({ student }) => {
         <EditOutlined /> Editar
       </Button>
       <Modal
-        title="Editar estudiante"
+        title="Editar alumno"
         visible={isModalVisible}
         onOk={form.submit}
         onCancel={handleCancel}
@@ -42,11 +42,11 @@ const EditStudent = ({ student }) => {
             rules={[
               {
                 required: true,
-                message: "Por favor ingrese el o los nombres del estudiante",
+                message: "Por favor ingrese el o los nombres del alumno",
               },
             ]}
           >
-            <Input />
+            <Input placeholder="Nombre Nombre"/>
           </Form.Item>
 
           <Form.Item
@@ -55,11 +55,11 @@ const EditStudent = ({ student }) => {
             rules={[
               {
                 required: true,
-                message: "Por favor ingrese el o los apellidos del estudiante",
+                message: "Por favor ingrese el o los apellidos del alumno",
               },
             ]}
           >
-            <Input />
+            <Input placeholder="Apellido Apellido"/>
           </Form.Item>
 
           <Form.Item
@@ -68,7 +68,7 @@ const EditStudent = ({ student }) => {
             rules={[
               {
                 required: true,
-                message: "Por favor ingrese el rut del estudiante",
+                message: "Por favor ingrese el rut del alumno",
               },
               {
                 pattern: /^\d{1,2}\.\d{3}\.\d{3}[-][0-9kK]{1}$/,
@@ -76,14 +76,14 @@ const EditStudent = ({ student }) => {
               },
             ]}
           >
-            <Input />
+            <Input placeholder="11.111.111-1"/>
           </Form.Item>
           <Form.Item
             label="Correo"
             name="correo"
-            rules={[{ required: true, type: "email" }]}
+            rules={[{ required: true, message:"Por favor ingrese el correo del alumno"}]}
           >
-            <Input />
+            <Input placeholder="correo@correo.com"/>
           </Form.Item>
           <Form.Item
             label="Contraseña"
@@ -91,7 +91,7 @@ const EditStudent = ({ student }) => {
             rules={[
               {
                 required: true,
-                message: "Por favor ingrese la contraseña del estudiante",
+                message: "Por favor ingrese la contraseña del alumno",
               },
             ]}
           >
