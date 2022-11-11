@@ -296,7 +296,11 @@ function* updateCourse(action) {
       message.success("Curso editado con exito");
     }
   } catch (error) {
-    message.error("Debido a un error, no se ha editado el curso");
+    if (action.payload.asignatura) {
+      message.error("Debido a un error, no se ha podido editar la asignatura");
+    } else {
+      message.error("Debido a un error, no se ha podido editar el curso")
+    }
     console.log(error);
   }
 }

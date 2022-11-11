@@ -1,45 +1,74 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { setCredentials } from "../../../application/config/redux/slices/auth/authSlice";
+import { useLoginMutation } from "../../../application/config/redux/slices/auth/authApiSlice";
 
-import { Button, Checkbox, Form, Input, message, Typography } from 'antd';
-import { LockOutlined, UserOutlined } from '@ant-design/icons';
+import {
+  Button,
+  Checkbox,
+  Form,
+  Input,
+  message,
+  Select,
+  Typography,
+} from "antd";
+import { LockOutlined, UserOutlined } from "@ant-design/icons";
 const { Title } = Typography;
 
-import '@styles/LoginPage.less'
+import "@styles/LoginPage.less";
 
 const Login = () => {
   const [auth, setAuth] = useState(false);
   const [errorCount, setErrorCount] = useState(0);
 
-  // Redirect
-  useEffect(() => {
-    if (auth) {
-      window.location.replace('/profesor')
-    }
-  }, [auth])
+  const navigate = useNavigate();
 
-  const onFinish = (values) => {
-    console.log('Received values of form: ', values);
-    // error()
-    setAuth(true);
+  const [login, { isLoading }] = useLoginMutation();
+  const dispatch = useDispatch();
+
+  const onFinish = async (values) => {
+    try {
+      const userData = await login(values).unwrap();
+      console.log(userData);
+      dispatch(setCredentials(userData));
+      navigate(`/${values.type}/home`);
+    } catch (err) {
+      if (err?.originalStatus) {
+        message.error("No hay respuesta del servidor");
+      } else if (err?.status === 400) {
+        message.error("Usuario o contraseña incorrectos");
+      } else if (err?.status === 401) {
+        message.error(err?.data?.error);
+      } else {
+        message.error("Error desconocido");
+      }
+      error();
+    }
   };
 
   const error = () => {
-    setErrorCount(errorCount+1);
-    if (errorCount < 2)
-      message.error('Algo a salido mal, inténtelo de nuevo.');
-    else
-      message.warning('Demasiados intentos fallidos, compruebe su conexión a internet ' +
-                      'o contacte a su institución educativa.', 10);
+    setErrorCount(errorCount + 1);
+    if (errorCount > 2) {
+      message.warning(
+        "Demasiados intentos fallidos, compruebe su conexión a internet " +
+          "o contacte a su institución educativa.",
+        10
+      );
+    }
   };
 
   const info = () => {
-    message.info('Lo sentimos, el registro no se encuentra habilitado, ' +
-                 'contacte a su institución educativa en caso de presentar ' +
-                 'problemas al momento de ingresar a la plataforma. ', 10);
+    message.info(
+      "Lo sentimos, el registro no se encuentra habilitado, " +
+        "contacte a su institución educativa en caso de presentar " +
+        "problemas al momento de ingresar a la plataforma. ",
+      10
+    );
   };
 
   return (
-    <div className='login-container'>
+    <div className="login-container">
       <Title level={2}>Iniciar Sesión</Title>
       <Form
         name="normal_login"
@@ -49,18 +78,42 @@ const Login = () => {
         }}
         onFinish={onFinish}
         layout="vertical"
-        >
+      >
         <Form.Item
-          name="username"
-          label="Usuario"
+          label="Tipo de usuario"
+          name="type"
           rules={[
             {
               required: true,
-              message: 'Porfavor, ingrese su usuario.',
+              message: "Porfavor, seleccione el tipo de usuario",
             },
           ]}
-          >
-          <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="12345678-9" />
+        >
+          <Select>
+            <Select.Option value="alumno">Alumno</Select.Option>
+            <Select.Option value="apoderado">Apoderado</Select.Option>
+            <Select.Option value="profesor">Profesor</Select.Option>
+            <Select.Option value="administrador">Administrador</Select.Option>
+          </Select>
+        </Form.Item>
+        <Form.Item
+          name="rut"
+          label="Rut"
+          rules={[
+            {
+              required: true,
+              message: "Porfavor, ingrese su rut.",
+            },
+            {
+              pattern: /^\d{1,2}\.\d{3}\.\d{3}[-][0-9kK]{1}$/,
+              message: "Rut invalido",
+            },
+          ]}
+        >
+          <Input
+            prefix={<UserOutlined className="site-form-item-icon" />}
+            placeholder="12.345.678-9"
+          />
         </Form.Item>
         <Form.Item
           name="password"
@@ -68,10 +121,10 @@ const Login = () => {
           rules={[
             {
               required: true,
-              message: 'Porfavor, ingrese su contraseña.',
+              message: "Porfavor, ingrese su contraseña.",
             },
           ]}
-          >
+        >
           <Input
             prefix={<LockOutlined className="site-form-item-icon" />}
             type="password"
@@ -79,20 +132,22 @@ const Login = () => {
           />
         </Form.Item>
         <Form.Item>
-          <Form.Item name="remember" valuePropName="checked" noStyle>
-            <Checkbox>Recordarme</Checkbox>
-          </Form.Item>
-
-          <a className="login-form-forgot" href="recover">
-            Olvidé mi contraseña
-          </a>
+          <Link to="/recover" className="login-form-forgot">
+            Olvide mi contraseña
+          </Link>
         </Form.Item>
-
         <Form.Item>
-          <Button type="primary" htmlType="submit" className="login-form-button">
+          <Button
+            type="primary"
+            htmlType="submit"
+            className="login-form-button"
+          >
             Ingresar
           </Button>
-          o ir a <a href="#" onClick={info} >Registrarse</a>
+          o ir a{" "}
+          <Link to="#" onClick={info}>
+            Registrarse
+          </Link>
         </Form.Item>
       </Form>
     </div>

@@ -12,7 +12,15 @@ import asignaturaNetwork from "./asignatura";
 import contenidoNetwork from "./contenido";
 import foroNetwork from "./foro";
 
-const clientApiApp = axios.create(/* Configuration */);
+
+// AxiosClient es una instancia de axios con configuraciones predefinidas
+import store from "@application/config/redux";
+const clientApiApp = axios.create();
+clientApiApp.interceptors.request.use(function (config) {
+  const token = store.getState()?.auth?.token;
+  config.headers["x-auth-token"] = token;
+  return config
+})
 
 export const alumno = alumnoNetwork(clientApiApp);
 export const apoderado = apoderadoNetwork(clientApiApp);

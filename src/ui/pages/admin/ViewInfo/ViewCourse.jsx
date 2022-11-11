@@ -16,10 +16,7 @@ import { AdminTableLayout } from "@containers/index";
 import { DeleteOutlined, EditOutlined, UserOutlined } from "@ant-design/icons";
 
 //constants
-import {
-  columnsCourse
-} from "@constants/admin/students";
-
+import { columnsCourse } from "@constants/admin/students";
 
 import {
   FETCH_COURSE_ADMIN,
@@ -60,7 +57,7 @@ const ViewCourse = () => {
   const confirm = async (e) => {
     await dispatch({
       type: DELETE_COURSE_ADMIN,
-      payload: { id: id, },
+      payload: { id: id },
     });
     navigate("/administrador/cursos");
   };
@@ -79,11 +76,11 @@ const ViewCourse = () => {
         <DefaultTitleContent
           title={
             course.nombre !== undefined
-              ? `${course.nombre} - ${course.paralelo}, año:${course.anho}`
+              ? `${course.nombre} - ${course.paralelo}, ${course.anho}`
               : ""
           }
           action={
-            <div>
+            <div style={{display:"flex", gap:"8px"}}>
               <EditCourse course={course} />
               <Popconfirm
                 title="¿Estás seguro de que quieres eliminar este curso?"
@@ -219,7 +216,7 @@ const ViewCourse = () => {
 
         <div>
           <SubTitleContent
-            title="Estudiante(s)"
+            title="Alumno(s)"
             action={<AppendStudent type="course" data={course.id} />}
           />
           <AdminTableLayout
