@@ -11,7 +11,6 @@ import { logOut } from "../../application/config/redux/slices/auth/authSlice";
 import { LogoutOutlined } from "@ant-design/icons";
 
 const UserDropdown = ({ user }) => {
-  console.log(user);
   const dispatch = useDispatch();
   return (
     user && (

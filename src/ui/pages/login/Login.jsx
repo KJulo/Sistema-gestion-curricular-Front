@@ -1,18 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setCredentials } from "../../../application/config/redux/slices/auth/authSlice";
-import { useLoginMutation } from "../../../application/config/redux/slices/auth/authApiSlice";
+import { setCredentials } from "@slices/auth/authSlice";
+import { useLoginMutation } from "@slices/auth/authApiSlice";
 
-import {
-  Button,
-  Checkbox,
-  Form,
-  Input,
-  message,
-  Select,
-  Typography,
-} from "antd";
+import { Session } from "@hooks/useSession";
+
+import { Button, Checkbox, Form, Input, message, Select, Typography } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 const { Title } = Typography;
 
@@ -30,10 +24,11 @@ const Login = () => {
   const onFinish = async (values) => {
     try {
       const userData = await login(values).unwrap();
-      console.log(userData);
+      Session.start(userData.type, userData.data); // key, value
       dispatch(setCredentials(userData));
       navigate(`/${values.type}/home`);
     } catch (err) {
+      message.destroy();
       if (err?.originalStatus) {
         message.error("No hay respuesta del servidor");
       } else if (err?.status === 400) {
@@ -41,7 +36,7 @@ const Login = () => {
       } else if (err?.status === 401) {
         message.error(err?.data?.error);
       } else {
-        message.error("Error desconocido");
+        message.error("Error desconocido. Code: ", err?.status);
       }
       error();
     }
@@ -50,6 +45,7 @@ const Login = () => {
   const error = () => {
     setErrorCount(errorCount + 1);
     if (errorCount > 2) {
+      message.destroy();
       message.warning(
         "Demasiados intentos fallidos, compruebe su conexión a internet " +
           "o contacte a su institución educativa.",
@@ -59,6 +55,7 @@ const Login = () => {
   };
 
   const info = () => {
+    message.destroy();
     message.info(
       "Lo sentimos, el registro no se encuentra habilitado, " +
         "contacte a su institución educativa en caso de presentar " +
@@ -77,8 +74,7 @@ const Login = () => {
           remember: true,
         }}
         onFinish={onFinish}
-        layout="vertical"
-      >
+        layout="vertical">
         <Form.Item
           label="Tipo de usuario"
           name="type"
@@ -87,8 +83,7 @@ const Login = () => {
               required: true,
               message: "Porfavor, seleccione el tipo de usuario",
             },
-          ]}
-        >
+          ]}>
           <Select>
             <Select.Option value="alumno">Alumno</Select.Option>
             <Select.Option value="apoderado">Apoderado</Select.Option>
@@ -108,8 +103,7 @@ const Login = () => {
               pattern: /^\d{1,2}\.\d{3}\.\d{3}[-][0-9kK]{1}$/,
               message: "Rut invalido",
             },
-          ]}
-        >
+          ]}>
           <Input
             prefix={<UserOutlined className="site-form-item-icon" />}
             placeholder="12.345.678-9"
@@ -123,8 +117,7 @@ const Login = () => {
               required: true,
               message: "Porfavor, ingrese su contraseña.",
             },
-          ]}
-        >
+          ]}>
           <Input
             prefix={<LockOutlined className="site-form-item-icon" />}
             type="password"
@@ -137,11 +130,7 @@ const Login = () => {
           </Link>
         </Form.Item>
         <Form.Item>
-          <Button
-            type="primary"
-            htmlType="submit"
-            className="login-form-button"
-          >
+          <Button type="primary" htmlType="submit" className="login-form-button">
             Ingresar
           </Button>
           o ir a{" "}

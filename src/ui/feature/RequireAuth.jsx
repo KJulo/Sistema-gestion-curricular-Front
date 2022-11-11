@@ -4,7 +4,8 @@ import { useLocation, Navigate, Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectCurrentToken, selectCurrentUser } from "@slices/auth/authSlice";
 
-const RequireAuth = ({role}) => {
+const RequireAuth = ({ role }) => {
+  const localData = getItem(role); // get value with key "role"
   const token = useSelector(selectCurrentToken);
   const user = useSelector(selectCurrentUser);
   const location = useLocation();

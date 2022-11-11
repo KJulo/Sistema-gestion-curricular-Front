@@ -64,7 +64,7 @@ const CoursesCards = ({ courses, management, isLoading }) => {
       <Modal
         title={
           <Title level={4}>
-            Planificación {selectedCourse.nombre + " " + selectedCourse.paralelo}{" "}
+            Planificación {selectedCourse?.nombre + " " + selectedCourse?.paralelo}{" "}
           </Title>
         }
         open={open}
@@ -80,7 +80,7 @@ const CoursesCards = ({ courses, management, isLoading }) => {
           onClick={handleOk}
           type="primary"
           shape="round"
-          disabled={!selectedCourse.asignaturas.length > 0}>
+          disabled={!selectedCourse?.asignaturas?.length > 0}>
           Guardar Cambios
         </Button>
       </Modal>
