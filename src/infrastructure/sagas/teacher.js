@@ -44,13 +44,11 @@ import {
   contenido,
 } from "@network/index";
 
-function* getTeacher() {
+function* getTeacher(action) {
+  const { payload } = action;
   try {
-    const response = yield call(profesor.getTeachers);
-    const teacherList = response.data.data;
-    const userData = teacherList[0];
-    yield put(updateTeacher({ ...userData, tipo: "profesor" }));
-    yield put(updateUser({ ...userData, tipo: "profesor" }));
+    yield put(updateTeacher({ ...payload, tipo: "profesor" }));
+    yield put(updateUser({ ...payload, tipo: "profesor" }));
   } catch (e) {
     console.log(e);
     yield put(errorFetch({ code: 500, error: "Error de servidor." }));

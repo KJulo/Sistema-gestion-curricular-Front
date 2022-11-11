@@ -11,33 +11,32 @@ import { logOut } from "../../application/config/redux/slices/auth/authSlice";
 import { LogoutOutlined } from "@ant-design/icons";
 
 const UserDropdown = ({ user }) => {
+  console.log(user);
   const dispatch = useDispatch();
   return (
-    <Row justify="end" style={{ gap: "16px", flexWrap: "wrap" }}>
-      <Col xs={0} sm={0} md={12}>
-        <a
-          onClick={(e) => e.preventDefault()}
-          style={{ color: "black", justifyItems: "baseline" }}
-        >
-          <Avatar size="medium" style={{ marginRight: "10px" }}>
-            {user?.nombres[0]}
-          </Avatar>{" "}
-          {`${user?.nombres} ${user?.apellidos}`}
-        </a>{" "}
-      </Col>
-      <Col>
-        <Tooltip title="Cerrar sesión">
-          <Button
-            type="danger"
-            onClick={() => {
-              dispatch(logOut());
-            }}
-          >
-            <LogoutOutlined />
-          </Button>
-        </Tooltip>
-      </Col>
-    </Row>
+    user && (
+      <Row justify="end" style={{ gap: "16px", flexWrap: "wrap" }}>
+        <Col md={12}>
+          <div style={{ color: "black", justifyItems: "baseline" }}>
+            <Avatar size="medium" style={{ marginRight: "10px" }}>
+              {user.nombres[0]}
+            </Avatar>{" "}
+            {`${user.nombres} ${user.apellidos}`}
+          </div>{" "}
+        </Col>
+        <Col>
+          <Tooltip title="Cerrar sesión">
+            <Button
+              type="danger"
+              onClick={() => {
+                dispatch(logOut());
+              }}>
+              <LogoutOutlined />
+            </Button>
+          </Tooltip>
+        </Col>
+      </Row>
+    )
   );
 };
 

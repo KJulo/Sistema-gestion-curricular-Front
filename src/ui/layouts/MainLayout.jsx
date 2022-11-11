@@ -31,15 +31,16 @@ const SiderMenu = ({ userType }) => {
 const MainLayout = ({ userType }) => {
   const dispatch = useDispatch();
 
-  // Buscar al usuario (esto es provicional)
-  useEffect(() => {
-    if (userType === "admin") dispatch(fetchAdmin());
-    if (userType === "teacher") dispatch(fetchTeacher());
-    if (userType === "student") dispatch(fetchStudent());
-    if (userType === "parent") dispatch(fetchParent());
-  }, []);
-
   const { user } = useSelector((store) => store.auth);
+
+  useEffect(() => {
+    if (user) {
+      if (userType === "admin") dispatch(fetchAdmin(user));
+      if (userType === "teacher") dispatch(fetchTeacher(user));
+      if (userType === "student") dispatch(fetchStudent(user));
+      if (userType === "parent") dispatch(fetchParent(user));
+    }
+  }, [user]);
 
   return (
     <Layout>
@@ -71,8 +72,7 @@ const MainLayout = ({ userType }) => {
               backgroundColor: "white",
               boxShadow: "0px 9px 28px 8px rgb(0 0 0 / 5%), 0px 3px 6px -4px rgb(0 0 0 / 12%)",
             }}
-            className="site-page-header-responsive"
-            >
+            className="site-page-header-responsive">
             <UserDropdown user={user} />
           </Header>
         </Affix>

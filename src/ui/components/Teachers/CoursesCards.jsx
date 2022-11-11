@@ -2,11 +2,11 @@ import React, { useState } from "react";
 
 // redux
 import { useDispatch, useSelector } from "react-redux";
-import { addForums, fetchForumsAndContent } from "@slices/teachers";
+import { addForums } from "@slices/teachers";
 
 // antd
 import { Typography, Button, Modal, Row, Space, message } from "antd";
-const { Title } = Typography;
+const { Title, Text } = Typography;
 
 // styles
 import "@styles/Home.less";
@@ -17,13 +17,10 @@ import { useEffect } from "react";
 
 const CoursesCards = ({ courses, management, isLoading }) => {
   const dispatch = useDispatch();
-  const [selectedCourse, setSelectedCourse] = useState(courses[0]);
+  const hasCourses = courses.length > 0;
+  const [selectedCourse, setSelectedCourse] = useState(hasCourses ? courses[0] : []);
   // Modal
   const [open, setOpen] = useState(false);
-
-  useEffect(() => {
-    dispatch(fetchForumsAndContent());
-  }, []);
 
   const showModal = (course) => {
     setOpen(true);
@@ -48,7 +45,7 @@ const CoursesCards = ({ courses, management, isLoading }) => {
     setOpen(false);
   };
 
-  return (
+  return hasCourses ? (
     <div className="card-container">
       <Row gutter={16}>
         {courses.map((course) => (
@@ -88,6 +85,8 @@ const CoursesCards = ({ courses, management, isLoading }) => {
         </Button>
       </Modal>
     </div>
+  ) : (
+    <Text>Sin cursos que mostrar.</Text>
   );
 };
 

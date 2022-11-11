@@ -2,7 +2,7 @@ import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 // Slices
-import { fetchCourses } from "@slices/teachers";
+import { fetchCourses, fetchForumsAndContent } from "@slices/teachers";
 
 // antd
 import { Typography, Button, Modal } from "antd";
@@ -27,6 +27,7 @@ const Home = () => {
 
   useEffect(() => {
     dispatch(fetchCourses());
+    dispatch(fetchForumsAndContent());
   }, []);
 
   return (
@@ -42,7 +43,7 @@ const Home = () => {
         action=""
       />
       <div className="flex-container">
-        <LoadingSpinner isLoading={courses.length === 0}>
+        <LoadingSpinner isLoading={courses.length === 0 && isLoading}>
           <CoursesCards courses={courses} management={management} isLoading={isLoading} />
         </LoadingSpinner>
       </div>
