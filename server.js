@@ -4,20 +4,6 @@ const cors = require("cors");
 const express = require("express");
 const app = express(); // create express app
 const proxy = require("express-http-proxy");
-
-
-//json-server
-const jsonServer = require("json-server");
-const server = jsonServer.create();
-const router = jsonServer.router('db.json');
-const middlewares = jsonServer.defaults();
-server.use(middlewares);
-server.use(router);
-//server.listen(8087);
-app.use('/mocki', middlewares, router);
-//
-
-
 app.use(cors());
 require('dotenv').config()
 
@@ -25,19 +11,15 @@ const bodyParser = require("body-parser");
 const { default: axios } = require("axios");
 app.use(bodyParser.json());
 
-
-const mockiProxy = proxy(process.env.MOCKI_URL, {
-  proxyReqPathResolver: (req) => {
-    return req.baseUrl.replace("/mocki/", "");
-  },
-});
-
 app.use("/api/*", async function (req, res, next) {
   var response;
   const uri = `${process.env.SERVER_URL}${req.originalUrl.replace(
     "/api/",
     ""
   )}`;
+  if (req.headers['x-auth-token']) {
+    axios.defaults.headers.common['x-auth-token'] = req.headers['x-auth-token'];
+  }
   // Se distribuyen los metodos en secciones especificas para hacer uso de las funciones de axios.
   if (req.method === "GET") {
     response = await axios.get(uri);
@@ -53,9 +35,6 @@ app.use("/api/*", async function (req, res, next) {
   res.json(response.data);
 });
 
-
-
-app.use("/mocki/*", mockiProxy);
 
 // add middlewares
 const root = require("path").join(__dirname, "dist");
