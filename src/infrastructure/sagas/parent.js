@@ -19,13 +19,11 @@ import {
 // Network
 import { profesor, curso, alumno, notas, asignatura, asistencia, apoderado } from "@network/index";
 
-function* getParent() {
+function* getParent(action) {
+  const { payload } = action;
   try {
-    const response = yield call(apoderado.getParents);
-    const parentList = response.data.data;
-    const userData = parentList[0];
-    yield put(updateParent({ ...userData, tipo: "apoderado" }));
-    yield put(updateUser({ ...userData, tipo: "apoderado" }));
+    yield put(updateParent({ ...payload, tipo: "apoderado" }));
+    yield put(updateUser({ ...payload, tipo: "apoderado" }));
   } catch (e) {
     console.log(e);
     yield put(errorFetch({ code: 500, error: "Error de servidor." }));

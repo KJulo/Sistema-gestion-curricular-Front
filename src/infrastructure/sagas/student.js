@@ -28,13 +28,11 @@ import {
   contenido,
 } from "@network/index";
 
-function* getStudent() {
+function* getStudent(action) {
+  const { payload } = action;
   try {
-    const response = yield call(alumno.getStudents);
-    const studentList = response.data.data;
-    const userData = studentList[0];
-    yield put(updateStudent({ ...userData, tipo: "estudiante" }));
-    yield put(updateUser({ ...userData, tipo: "estudiante" }));
+    yield put(updateStudent({ ...payload, tipo: "estudiante" }));
+    yield put(updateUser({ ...payload, tipo: "estudiante" }));
   } catch (e) {
     console.log(e);
     yield put(errorFetch({ code: 500, error: "Error de servidor." }));

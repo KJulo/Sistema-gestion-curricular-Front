@@ -59,23 +59,14 @@ import {
 } from "./types/admin";
 
 // Network
-import {
-  administrador,
-  alumno,
-  curso,
-  apoderado,
-  profesor,
-  asignatura,
-} from "@network/index";
+import { administrador, alumno, curso, apoderado, profesor, asignatura } from "@network/index";
 import { message } from "antd";
 
-function* getAdmin() {
+function* getAdmin(action) {
+  const { payload } = action;
   try {
-    const response = yield call(administrador.getAdmins);
-    const adminList = response.data.data;
-    const userData = adminList[0];
-    yield put(updateAdmin({ ...userData, tipo: "administrador" }));
-    yield put(updateUser({ ...userData, tipo: "administrador" }));
+    yield put(updateAdmin({ ...payload, tipo: "administrador" }));
+    yield put(updateUser({ ...payload, tipo: "administrador" }));
   } catch (e) {
     console.log(e);
   }
@@ -117,9 +108,7 @@ function* updateTeacher(action) {
     yield put(updateTeacherAdmin(response.data.data));
     message.success("Profesor actualizado con exito.");
   } catch (error) {
-    message.success(
-      "Debido a un error, no se ha podido actualizar el profesor"
-    );
+    message.success("Debido a un error, no se ha podido actualizar el profesor");
     console.log(error);
   }
 }
@@ -237,9 +226,7 @@ function* updateParent(action) {
     yield put(updateParentAdmin(response.data.data));
     message.success("Se ha editado el apoderado con exito");
   } catch (error) {
-    message.error(
-      "Debido a un error, no se ha podido editar el apoderado con exito"
-    );
+    message.error("Debido a un error, no se ha podido editar el apoderado con exito");
     console.log(error);
   }
 }
@@ -249,9 +236,7 @@ function* deleteParent(action) {
     yield call(apoderado.deleteParent, action.payload.id);
     message.success("Se ha eliminado el apoderado con exito");
   } catch (error) {
-    message.error(
-      "Debido a un error, no se ha podido editar el apoderado con exito"
-    );
+    message.error("Debido a un error, no se ha podido editar el apoderado con exito");
     console.log(error);
   }
 }
@@ -299,7 +284,7 @@ function* updateCourse(action) {
     if (action.payload.asignatura) {
       message.error("Debido a un error, no se ha podido editar la asignatura");
     } else {
-      message.error("Debido a un error, no se ha podido editar el curso")
+      message.error("Debido a un error, no se ha podido editar el curso");
     }
     console.log(error);
   }
@@ -322,9 +307,7 @@ function* appendStudentCourse(action) {
     yield put(updateCourseStudentAdmin(response.data.data));
     message.success("Se ha agregado con exito el alumno al curso");
   } catch (error) {
-    message.error(
-      "Debido a un error, no se ha podido agregar el alumno al curso"
-    );
+    message.error("Debido a un error, no se ha podido agregar el alumno al curso");
     console.log(error);
   }
 }
@@ -341,9 +324,7 @@ function* appendTeacherCourse(action) {
       message.success("Se ha eliminado el profesor jefe con exito");
     }
   } catch (error) {
-    message.error(
-      "Debido a un error, no se ha podido agregar el profesor jefe al curso"
-    );
+    message.error("Debido a un error, no se ha podido agregar el profesor jefe al curso");
     console.log(error);
   }
 }
@@ -356,9 +337,7 @@ function* deleteStudentCourse(action) {
     yield put(deleteCourseStudentAdmin(response.data.data));
     message.success("Se ha eliminado el alumno perteneciente al curso");
   } catch (error) {
-    message.error(
-      "Debido a un error, no se ha podido eliminar el alumno del curso"
-    );
+    message.error("Debido a un error, no se ha podido eliminar el alumno del curso");
     console.log(error);
   }
 }
@@ -370,9 +349,7 @@ function* deleteSubject(action) {
     yield put(filterSubjectCourseAdmin(response.data.data));
     message.success("Se ha eliminado la asignatura del curso");
   } catch (error) {
-    message.error(
-      "Debido a un error, no se ha podido eliminar la asignatura del curso"
-    );
+    message.error("Debido a un error, no se ha podido eliminar la asignatura del curso");
     console.log(error);
   }
 }
