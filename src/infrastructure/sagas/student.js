@@ -27,6 +27,7 @@ import {
   profesor,
   contenido,
 } from "@network/index";
+import { message } from "antd";
 
 function* getStudent(action) {
   const { payload } = action;
@@ -35,7 +36,7 @@ function* getStudent(action) {
     yield put(updateUser({ ...payload, tipo: "estudiante" }));
   } catch (e) {
     console.log(e);
-    yield put(errorFetch({ code: 500, error: "Error de servidor." }));
+    yield put(errorFetch({ code: e?.response?.status ?? 500, error: "Error de cliente." }));
   }
 }
 
@@ -52,7 +53,12 @@ function* getAttendance() {
     yield put(updateAttendance(merge));
   } catch (e) {
     console.log(e);
-    yield put(errorFetch({ code: 500, error: "Error de servidor." }));
+    yield put(
+      errorFetch({
+        code: e?.response?.status ?? 500,
+        error: "Error de servidor, no se ha encontrado asistencia.",
+      })
+    );
   }
 }
 
@@ -67,7 +73,12 @@ function* getMarks(action) {
     }
   } catch (e) {
     console.log(e);
-    yield put(errorFetch({ code: 500, error: "Error de servidor." }));
+    yield put(
+      errorFetch({
+        code: e?.response?.status ?? 500,
+        error: "Error de servidor, no se han encontrado notas.",
+      })
+    );
   }
 }
 
@@ -100,7 +111,12 @@ function* getCourse() {
     yield put(updateCourse(merged));
   } catch (e) {
     console.log(e);
-    yield put(errorFetch({ code: 500, error: "Error de servidor." }));
+    yield put(
+      errorFetch({
+        code: e?.response?.status ?? 500,
+        error: "Error de servidor, no se han encontrado cursos.",
+      })
+    );
   }
 }
 
@@ -118,7 +134,8 @@ function* getForumsAndContent() {
     yield put(updateForumsAndContent(forumsWithContent));
   } catch (e) {
     console.log(e);
-    yield put(errorFetch({ code: 500, error: "Error de servidor." }));
+    message.destroy();
+    message.info("Aún no hay foros en este curso.");
   }
 }
 
