@@ -48,8 +48,13 @@ const Attendance = () => {
     dispatch(resetStore());
     dispatch(fetchCourses());
     dispatch(fetchStudents());
-    dispatch(fetchAttendance());
   }, []);
+
+  useEffect(() => {
+    if (content) {
+      dispatch(fetchAttendance());
+    }
+  }, [content.length]);
 
   // Inicializar las asistencias de los estudiantes al cambiar la fecha
   useEffect(() => {
@@ -66,25 +71,27 @@ const Attendance = () => {
     if (condition) {
       const studentsByCourse = content.filter((c) => c.id_curso === activeFilters.courseId);
       const studentsByDate = studentsByCourse.map((student) => {
+        const isEmpty = JSON.stringify(student.asistencia) === "{}";
         // Buscar en el arreglo de asistencia la asistencia con fecha correspondiente
-        const attendanceFinded = student?.asistencia?.find(
-          (a) => a.fecha === activeFilters.selectedDate
-        );
-        if (attendanceFinded) {
-          return {
-            ...student,
-            asistencia: { ...attendanceFinded, registrado: "Si" },
-          };
-        } else {
-          return {
-            ...student,
-            asistencia: {
-              fecha: activeFilters.selectedDate,
-              asistencia: status[0],
-              registrado: "No",
-            },
-          };
+        if (!isEmpty) {
+          const attendanceFinded = student?.asistencia?.find(
+            (a) => a.fecha === activeFilters.selectedDate
+          );
+          if (attendanceFinded) {
+            return {
+              ...student,
+              asistencia: { ...attendanceFinded, registrado: "Si" },
+            };
+          }
         }
+        return {
+          ...student,
+          asistencia: {
+            fecha: activeFilters.selectedDate,
+            asistencia: status[0],
+            registrado: "No",
+          },
+        };
       });
 
       setStudentsFiltered(studentsByDate);
@@ -127,7 +134,6 @@ const Attendance = () => {
     const { students, filters } = content;
     if (hasAllConditions(activeFilters)) {
       message.destroy();
-      // TODO comprobar si existe o no asistencia registrada para no regitrarla solo 2 veces y solo editarla
       students.map((student) => {
         const params = {
           id_asignatura: filters.subjectId,
@@ -136,13 +142,12 @@ const Attendance = () => {
           fecha: filters.selectedDate,
         };
         // verificar si la fecha ya fue registrada en el endpoint
-        if (hasBeenRegistered(filters.selectedDate)) {
+        if (hasBeenRegistered(filters.selectedDate) && student.asistencia.id) {
           params["id_asistencia"] = student.asistencia.id;
           dispatch(editAttendance(params));
         } else {
           dispatch(addAttendance(params));
         }
-        // dispatch(addAttendance(params));
       });
     }
   };
@@ -194,6 +199,14 @@ const Attendance = () => {
     },
   ];
 
+  useEffect(() => {
+    if (isLoading) {
+      message.destroy();
+    }
+  }, [isLoading]);
+
+  console.log(onChangeDate, courses, selectedCourseSubjects);
+
   return (
     <div>
       <DefaultTitleContent
@@ -214,6 +227,7 @@ const Attendance = () => {
               scroll={false}
             />
           }
+          isLoading={isLoading}
         />
         <br></br>
         <Button

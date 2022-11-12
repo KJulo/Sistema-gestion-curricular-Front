@@ -30,6 +30,7 @@ import {
   editAttendance,
   addMarks,
   appendStudentsMarks,
+  updateStudentAttendance,
 } from "@slices/teachers";
 
 // Network
@@ -121,6 +122,7 @@ function* createAttendance(action) {
   const payload = action.payload;
   try {
     yield call(asistencia.addAttendance, payload);
+    yield put(updateStudentAttendance(payload));
     message.success("Asistencia registrada.");
   } catch (e) {
     console.log(e);
@@ -136,6 +138,7 @@ function* goEditAttendance(action) {
       data: payload,
       id: payload.id_asistencia,
     });
+    yield put(updateStudentAttendance(payload));
     message.success("Campos editados con éxito.");
   } catch (e) {
     console.log(e);

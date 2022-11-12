@@ -122,6 +122,9 @@ export const teacherSlice = createSlice({
       const studentList = state.students.list.map((student) => {
         // Buscar al estudiante que corresponse la fecha
         if (payload.id === student.id) {
+          if (JSON.stringify(student.asistencia) === "{}") {
+            student.asistencia = [];
+          }
           // Verificar si la fecha fue registrada por parte el endpoint
           if (payload.asistencia.registrado === "Si") {
             return {
@@ -140,6 +143,7 @@ export const teacherSlice = createSlice({
               }),
             };
           } else {
+            payload.asistencia.registrado = "Si";
             // Caso no registrado
             return {
               ...student,
