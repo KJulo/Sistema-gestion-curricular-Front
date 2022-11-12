@@ -1,17 +1,27 @@
 import React from "react";
-
+import { useDispatch, useSelector } from "react-redux";
 import { useLocation, Navigate, Outlet } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { selectCurrentToken, selectCurrentUser } from "@slices/auth/authSlice";
+
+import { selectCurrentToken, selectCurrentUser, setCredentials } from "@slices/auth/authSlice";
+
+import { useEffect } from "react";
 
 const RequireAuth = ({ role }) => {
-  const localData = getItem(role); // get value with key "role"
+  const dispatch = useDispatch();
+  const localData = JSON.parse(sessionStorage.getItem("sesion"));
   const token = useSelector(selectCurrentToken);
   const user = useSelector(selectCurrentUser);
   const location = useLocation();
+
+  useEffect(() => {
+    if (localData) {
+      dispatch(setCredentials(localData));
+    }
+  }, [localData?.data?.token]);
+
   return (
     <>
-      {token && user.type === role ? (
+      {localData?.data || (token && user.type === role) ? (
         <Outlet />
       ) : (
         <Navigate to="/login" state={{ from: location }} replace />

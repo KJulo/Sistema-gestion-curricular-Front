@@ -4,8 +4,6 @@ import { useDispatch } from "react-redux";
 import { setCredentials } from "@slices/auth/authSlice";
 import { useLoginMutation } from "@slices/auth/authApiSlice";
 
-import { Session } from "@hooks/useSession";
-
 import { Button, Checkbox, Form, Input, message, Select, Typography } from "antd";
 import { LockOutlined, UserOutlined } from "@ant-design/icons";
 const { Title } = Typography;
@@ -24,7 +22,9 @@ const Login = () => {
   const onFinish = async (values) => {
     try {
       const userData = await login(values).unwrap();
-      Session.start(userData.type, userData.data); // key, value
+      // Guardar sesion en local
+      sessionStorage.setItem("sesion", JSON.stringify(userData));
+      // Guardar data en la store
       dispatch(setCredentials(userData));
       navigate(`/${values.type}/home`);
     } catch (err) {

@@ -28,6 +28,7 @@ const UserDropdown = ({ user }) => {
             <Button
               type="danger"
               onClick={() => {
+                sessionStorage.clear();
                 dispatch(logOut());
               }}>
               <LogoutOutlined />
