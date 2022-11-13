@@ -37,7 +37,6 @@ function* getParent(action) {
 function* getStudents() {
   try {
     const response = (yield call(alumno.getStudents)).data.data;
-    console.log(response);
     yield put(updateStudents(response));
   } catch (e) {
     console.log(e);
@@ -105,7 +104,6 @@ function* getNotification(action) {
     const payload = { ...action.payload, notification }
     yield put(updateNotification(payload))
   } catch (error) {
-    console.log(error);
     message.warning("No se ha podido obtener las notificaciones");
   }
 }

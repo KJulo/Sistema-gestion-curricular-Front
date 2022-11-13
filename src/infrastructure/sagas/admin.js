@@ -102,7 +102,6 @@ function* addTeacher(action) {
 }
 
 function* updateTeacher(action) {
-  console.log(action);
   try {
     const response = yield call(profesor.patchTeacher, action.payload);
     yield put(updateTeacherAdmin(response.data.data));
@@ -154,7 +153,6 @@ function* addStudent(action) {
 
 function* updateStudent(action) {
   try {
-    console.log(action);
     const response = yield call(alumno.patchStudent, action.payload);
     yield put(updateStudentAdmin(response.data.data));
     if (action.payload.contrasena) {
@@ -210,7 +208,6 @@ function* getParent(action) {
 
 function* addParent(action) {
   try {
-    console.log(action);
     const response = yield call(apoderado.addParent, action.payload);
     yield put(appendParentAdmin(response.data.data));
     message.success("Se ha agregado el apoderado con exito");
@@ -272,7 +269,6 @@ function* addCourse(action) {
 
 function* updateCourse(action) {
   try {
-    console.log(action);
     const response = yield call(curso.patchCourse, action.payload);
     yield put(updateCourseAdmin(response.data.data));
     if (action.payload.asignatura) {
@@ -302,7 +298,6 @@ function* deleteCourse(action) {
 
 function* appendStudentCourse(action) {
   try {
-    console.log(action);
     const response = yield call(alumno.patchStudent, action.payload);
     yield put(updateCourseStudentAdmin(response.data.data));
     message.success("Se ha agregado con exito el alumno al curso");
@@ -314,9 +309,7 @@ function* appendStudentCourse(action) {
 
 function* appendTeacherCourse(action) {
   try {
-    console.log(action);
     const response = yield call(curso.patchCourse, action.payload);
-    console.log(response);
     yield put(updateCourseAdmin(response.data.data));
     if (action.payload.id_profesor) {
       message.success("Se ha agregado el profesor jefe con exito");
@@ -331,9 +324,7 @@ function* appendTeacherCourse(action) {
 
 function* deleteStudentCourse(action) {
   try {
-    console.log(action);
     const response = yield call(alumno.patchStudent, action.payload);
-    console.log(response);
     yield put(deleteCourseStudentAdmin(response.data.data));
     message.success("Se ha eliminado el alumno perteneciente al curso");
   } catch (error) {
@@ -345,7 +336,6 @@ function* deleteStudentCourse(action) {
 function* deleteSubject(action) {
   try {
     const response = yield call(asignatura.deleteSubject, action.payload);
-    console.log(response);
     yield put(filterSubjectCourseAdmin(response.data.data));
     message.success("Se ha eliminado la asignatura del curso");
   } catch (error) {
@@ -357,7 +347,6 @@ function* deleteSubject(action) {
 function* updateSubject(action) {
   try {
     const response = yield call(asignatura.patchSubject, action.payload);
-    console.log(response);
     yield put(updateSubjectAdmin(response.data.data));
     message.success("Se ha editado la asignatura con exito");
   } catch (error) {
@@ -380,7 +369,6 @@ function* appendParentStudents(action) {
 function* deleteParentStudent(action) {
   try {
     const response = yield call(alumno.patchStudent, action.payload);
-    console.log(response);
     yield put(deleteParentStudentsAdmin(response.data.data));
     message.success("Se ha eliminado el alumno con exito");
   } catch (error) {

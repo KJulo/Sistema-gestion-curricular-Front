@@ -91,7 +91,6 @@ export const adminSlice = createSlice({
       };
     },
     updateParentStudentsAdmin: (state, action) => {
-      console.log(action);
       state.parent = {
         ...state.parent,
         alumno:

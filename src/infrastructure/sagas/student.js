@@ -143,16 +143,13 @@ function* getForumsAndContent() {
 }
 
 function* getNotification(action) {
-  console.log(action)
   try {
     const params = {
       id_curso: action.payload
     }
     const notification = (yield call(notificacion.getNotifications, {params})).data.data
     yield put(updateNotification(notification))
-    console.log(notification)
   } catch (error) {
-    console.log(error);
     message.warning("No se ha podido obtener las notificaciones.");
   }
 }

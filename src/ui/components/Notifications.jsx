@@ -15,8 +15,6 @@ import { fetchNotification } from "@slices/students";
 import moment from "moment";
 
 const Notifications = ({ data }) => {
-
-  console.log(data);
   return (
     <div>
       <Divider orientation="center">Notificaciones</Divider>
