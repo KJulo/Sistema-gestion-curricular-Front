@@ -1,37 +1,36 @@
-import React, { useEffect, useState } from 'react';
-import { Divider, List } from 'antd';
+import React, { useEffect, useState } from "react";
+import { Divider, List, notification } from "antd";
 
-import Card from '@components/Card';
+//import Card from "@components/Card";
+import { Card } from "antd";
 
-import '@styles/Notifications.less';
+import "@styles/Notifications.less";
 
 // constants
-import { homeWork } from '@constants/homeWork';
+import { homeWork } from "@constants/homeWork";
 
-const Notifications = () => {
-  function getText(data) {
-    const textList = [];
-    data.map((item) => {
-      textList.push(item.fecha + ', ' + item.asignatura + ', ' + item.modulo);
-    });
-    return textList;
-  }
+import { useDispatch, useSelector } from "react-redux";
 
+import { fetchNotification } from "@slices/students";
+import moment from "moment";
+
+const Notifications = ({ data }) => {
+
+  console.log(data);
   return (
     <div>
-      <Divider orientation='center'>Notificaciones</Divider>
-      <div className='notification-container'>
+      <Divider orientation="center">Notificaciones</Divider>
+      <Card>
         <List
-          bordered
-          dataSource={getText(homeWork)}
+          
+          dataSource={data}
           renderItem={(item) => (
-            <List.Item className='notification-item'>
-              {/* <Card content={item} /> */}
-              {item}
+            <List.Item>
+              {`${moment(item.fecha).format("DD/MM/YYYY")} | ${item.titulo} | ${item.descripcion}`}
             </List.Item>
           )}
         />
-      </div>
+      </Card>
     </div>
   );
 };

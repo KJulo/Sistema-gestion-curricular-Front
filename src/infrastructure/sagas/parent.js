@@ -9,15 +9,19 @@ import {
   fetchCourses,
   fetchStudentsNotes,
   fetchAttendance,
+  fetchNotification,
   updateParent,
   updateStudents,
   updateCourses,
   updateStudentsNotes,
   updateStudentsAttendance,
+  updateNotification,
+  
 } from "@slices/parents";
 
 // Network
-import { profesor, curso, alumno, notas, asignatura, asistencia, apoderado } from "@network/index";
+import { profesor, curso, alumno, notas, asignatura, asistencia, apoderado, notificacion } from "@network/index";
+import { message } from "antd";
 
 function* getParent(action) {
   const { payload } = action;
@@ -33,6 +37,7 @@ function* getParent(action) {
 function* getStudents() {
   try {
     const response = (yield call(alumno.getStudents)).data.data;
+    console.log(response);
     yield put(updateStudents(response));
   } catch (e) {
     console.log(e);
@@ -91,6 +96,20 @@ function* getStudentsAttendance() {
   }
 }
 
+function* getNotification(action) {
+  try {
+    const params = {
+      id_curso: action.payload.idCurso,
+    }
+    const notification = (yield call(notificacion.getNotifications, { params })).data.data
+    const payload = { ...action.payload, notification }
+    yield put(updateNotification(payload))
+  } catch (error) {
+    console.log(error);
+    message.warning("No se ha podido obtener las notificaciones");
+  }
+}
+
 //TODO
 function* getTeacher() {
   try {
@@ -120,6 +139,9 @@ function* watchGetMarks() {
 function* watchGetAttendance() {
   yield takeLatest(fetchAttendance, getStudentsAttendance);
 }
+function* watchGetNotification() {
+  yield takeLatest(fetchNotification, getNotification);
+}
 
 export default [
   watchGetParentUser(),
@@ -127,4 +149,5 @@ export default [
   watchGetCourses(),
   watchGetMarks(),
   watchGetAttendance(),
+  watchGetNotification(),
 ];

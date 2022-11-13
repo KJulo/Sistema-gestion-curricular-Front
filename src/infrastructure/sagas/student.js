@@ -5,6 +5,7 @@ import { updateUser } from "@slices/user";
 import { errorClear, errorFetch } from "@slices/error";
 import {
   fetchStudent,
+  fetchNotification,
   fetchAttendance,
   fetchMarks,
   fetchCourse,
@@ -14,6 +15,7 @@ import {
   updateMarks,
   updateForumsAndContent,
   updateCourse,
+  updateNotification,
 } from "@slices/students";
 
 // Network
@@ -26,6 +28,7 @@ import {
   foro,
   profesor,
   contenido,
+  notificacion
 } from "@network/index";
 import { message } from "antd";
 
@@ -139,6 +142,25 @@ function* getForumsAndContent() {
   }
 }
 
+function* getNotification(action) {
+  console.log(action)
+  try {
+    const params = {
+      id_curso: action.payload
+    }
+    const notification = (yield call(notificacion.getNotifications, {params})).data.data
+    yield put(updateNotification(notification))
+    console.log(notification)
+  } catch (error) {
+    console.log(error);
+    message.warning("No se ha podido obtener las notificaciones.");
+  }
+}
+
+
+function* watchGetNotification() {
+  yield takeLatest(fetchNotification, getNotification);
+}
 function* watchGetStudentUser() {
   yield takeLatest(fetchStudent, getStudent);
 }
@@ -155,7 +177,10 @@ function* watchForumsAndContent() {
   yield takeLatest(fetchForumsAndContent, getForumsAndContent);
 }
 
+
+
 export default [
+  watchGetNotification(),
   watchGetStudentUser(),
   watchGetAttendance(),
   watchGetMarks(),

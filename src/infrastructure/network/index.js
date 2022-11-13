@@ -11,7 +11,7 @@ import administradorNetwork from "./administrador";
 import asignaturaNetwork from "./asignatura";
 import contenidoNetwork from "./contenido";
 import foroNetwork from "./foro";
-
+import notificacionNetwork from "./notificacion";
 
 // AxiosClient es una instancia de axios con configuraciones predefinidas
 import store from "@application/config/redux";
@@ -34,3 +34,4 @@ export const administrador = administradorNetwork(clientApiApp);
 export const asignatura = asignaturaNetwork(clientApiApp);
 export const contenido = contenidoNetwork(clientApiApp);
 export const foro = foroNetwork(clientApiApp);
+export const notificacion = notificacionNetwork(clientApiApp);

@@ -21,6 +21,9 @@ export const studentSlice = createSlice({
     fetchMarks: (state) => {
       state.isLoading = true;
     },
+    fetchNotification: (state) => {
+      state.isLoading = true;
+    },
     fetchCourse: (state) => {
       state.isLoading = true;
     },
@@ -29,6 +32,9 @@ export const studentSlice = createSlice({
     },
     setIsLoading: (state, action) => {
       state.isLoading = action.payload;
+    },
+    updateNotification: (state, action) => {
+      state.notifications = action.payload;
     },
     updateStudent: (state, action) => {
       state.student = { ...state.student, ...action.payload };
@@ -84,11 +90,13 @@ export const studentSlice = createSlice({
 export const {
   setIsLoading,
   fetchStudent,
+  fetchNotification,
   fetchMarks,
   fetchAttendance,
   fetchCourse,
   fetchForumsAndContent,
   updateStudent,
+  updateNotification,
   updateAttendance,
   updateMarks,
   updateFilters,

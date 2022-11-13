@@ -49,7 +49,7 @@ const StudentCards = ({ student }) => {
 };
 
 const StudentMarks = ({ student }) => {
-  if (student.notas.length > 0) {
+  if (student.nota.length > 0) {
     const total = student.notas.length;
     const studentAverage = getAverage(student.notas).toFixed(2);
     return (

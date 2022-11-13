@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 //components
 import Notifications from "@components/Notifications";
@@ -16,10 +16,17 @@ import SchoolImg from "@logos/school-img.png";
 
 // constants
 import { useDispatch, useSelector } from "react-redux";
+import { fetchNotification } from "@slices/students";
 
 const Home = () => {
   const dispatch = useDispatch();
-  const { student } = useSelector((store) => store.student);
+  const { student, notifications } = useSelector((store) => store.student);
+
+  useEffect(() => {
+    if (student.id_curso) {
+      dispatch(fetchNotification(student.id_curso));
+    }
+  }, [student]);
 
   return (
     <div style={{ minHeight: 280 }}>
@@ -28,10 +35,13 @@ const Home = () => {
         subtitle="Aquí podrás ver tus tareas pendientes y tu izquierda, podrás seguir navegando por el sitio, ¡Buen día!"
       />
 
-      <div className="flex-container" style={{ padding: 10, justifyContent: "space-around" }}>
+      <div
+        className="flex-container"
+        style={{ padding: 10, justifyContent: "space-around" }}
+      >
         <img src={SchoolImg} alt="Logo Colegio" style={{ margin: 10 }} />
 
-        <Notifications />
+        <Notifications data={notifications} />
       </div>
     </div>
   );
