@@ -131,7 +131,7 @@ export const Planification = ({ course, management }) => {
         onClick={() =>
           addUnit({
             id: randomId(),
-            nombre: "Nueva unidad: Descripción",
+            nombre: "Nueva unidad",
             objetivos: [],
             valores: [],
           })
