@@ -352,6 +352,25 @@ export const teacherSlice = createSlice({
       state.courses.list = coursesWithForums;
       state.isLoading = false;
     },
+    updateStateForum: (state, action) => {
+      const { payload } = action;
+
+      const stateUnits = state.courses.management.units;
+
+      const updatedUnits = stateUnits.map((unit) => {
+        if (unit.id === payload.id) {
+          if (unit.id.includes("noRegistrado")) {
+            return {
+              ...unit,
+              id: unit.id.replace("noRegistrado", payload.state),
+            };
+          }
+        }
+        return unit;
+      });
+      state.courses.management.units = updatedUnits;
+      state.isLoading = false;
+    },
     removeContent: (state, action) => {
       const { payload } = action;
       const coursesWithForums = state.courses.list.map((course) => {
@@ -484,6 +503,7 @@ export const {
   forumsAdded,
   addMarks,
   appendStudentsMarks,
+  updateStateForum,
 } = teacherSlice.actions;
 
 // exportar reducer del slice para mandarlo a la store

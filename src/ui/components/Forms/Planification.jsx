@@ -53,7 +53,7 @@ export const Planification = ({ course, management }) => {
         if (objetivos.length > 0) {
           let cont = 0;
           objetivos = objetivos.map((o) => {
-            if (typeof o === "string" || !o.hasOwnProperty("id")) {
+            if (o !== "" && (typeof o === "string" || !o.hasOwnProperty("id"))) {
               cont = cont + 1;
               return {
                 id: randomId(),
@@ -61,6 +61,9 @@ export const Planification = ({ course, management }) => {
               };
             }
           });
+        }
+        if (objetivos.length === 1 && !objetivos[0]) {
+          objetivos = [];
         }
         delete f.nombre;
         dispatch(appendUnitsManagement({ ...f, objetivos: objetivos, nombre: titulo }));

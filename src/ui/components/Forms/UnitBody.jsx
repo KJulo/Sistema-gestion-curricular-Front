@@ -50,7 +50,13 @@ const UnitBody = ({ unit }) => {
       </Title>
 
       {unit.objetivos?.length > 0 ? (
-        unit.objetivos.map((objetive, i) => <Objetive unit={unit} objetive={objetive} index={i} />)
+        unit.objetivos.map((objetive, i) => {
+          if (objetive) {
+            return <Objetive unit={unit} objetive={objetive} index={i} />;
+          } else {
+            return <></>;
+          }
+        })
       ) : (
         <></>
       )}

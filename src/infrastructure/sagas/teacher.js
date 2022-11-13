@@ -154,11 +154,12 @@ function* getForumsAndContent() {
 
     // combinar arreglos
     const forumsWithContent = forums.map((f) => {
+      const objs = f.objetivo.split("[cut@},{@cut]");
       return {
         ...f,
         contenidos: contents.filter((c) => c.id_foro === f.id),
         dateRange: [f.objetivoInicio, f.objetivoTermino],
-        objetivos: f.objetivo.split("[cut@},{@cut]"),
+        objetivos: objs !== [""] ? objs : [],
       };
     });
     yield put(setForumsAndContent(forumsWithContent));
@@ -205,15 +206,34 @@ function* goEditContent(action) {
 
 function* createForums(action) {
   const { course, forums, deleted } = action.payload;
-  console.log(course, forums, deleted);
   try {
-    const subject = course.asignaturas.find((a) => a.nombre === subject);
-
     // Añadir o agregar
     for (let i = 0; i < forums.length; i++) {
+      const subject = course.asignaturas.find((a) => a.nombre === course.asignatura);
+
       let obj = "";
       forums[i].objetivos.map((o) => {
-        obj = obj + "[cut@},{@cut]" + o.descripcion;
+        // comprobar si hay numeros, ejemplo 1: Objetivo, 2: Objetivo
+        const matchNumbers = o.descripcion.match(/\d+:/);
+
+        if (matchNumbers) {
+          let index = o.descripcion.indexOf(matchNumbers[0]);
+          if (index === 0) {
+            if (obj === "") {
+              obj = o.descripcion.replace(matchNumbers[0] + " ", "");
+              return;
+            } else {
+              obj = obj + "[cut@},{@cut]" + o.descripcion.replace(matchNumbers[0] + " ", "");
+              return;
+            }
+          }
+        }
+
+        if (obj === "") {
+          obj = o.descripcion;
+        } else {
+          obj = obj + "[cut@},{@cut]" + o.descripcion;
+        }
       });
 
       const params = {
@@ -226,17 +246,14 @@ function* createForums(action) {
       };
 
       if (forums[i].id.includes("noRegistrado")) {
-        console.log("crear");
         yield call(foro.createForum, params);
       } else {
-        console.log("editar");
         yield call(foro.editForum, { id: forums[i].id, payload: params });
       }
     }
-    // Eliminar
+    // Eliminar si está registrado
     for (let i = 0; i < deleted.length; i++) {
       if (!deleted[i].id.includes("noRegistrado")) {
-        console.log("eliminar");
         yield call(foro.deleteForum, deleted[i].id);
       }
     }
@@ -246,10 +263,12 @@ function* createForums(action) {
         " " +
         course.paralelo
     );
+    yield put(fetchForumsAndContent());
+    yield put(setIsLoading(false));
   } catch (e) {
     console.log(e);
     yield put(setIsLoading(false));
-    message.error("No se ha podido registrar las unidades con éxito.");
+    message.error("No se ha podido registrar las unidades.");
   }
 }
 
