@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
 import { randomId } from "@utils/randomId";
+import moment from "moment";
 
 import { MinusCircleOutlined, PlusOutlined } from "@ant-design/icons";
 import { Button, Form, Input, Typography, Collapse, Empty, Radio } from "antd";
@@ -14,20 +16,10 @@ import {
   updateCourseManagement,
   appendUnitsManagement,
   cleanUnitsManagement,
+  updateDateManagement,
 } from "@slices/teachers";
 
 import { DocumentGenerator, UnitHeader, UnitBody } from "@components";
-
-const formItemLayout = {
-  labelCol: {
-    xs: { span: 24 },
-    sm: { span: 4 },
-  },
-  wrapperCol: {
-    xs: { span: 24 },
-    sm: { span: 20 },
-  },
-};
 
 const formItemLayoutWithOutLabel = {
   wrapperCol: {
@@ -45,6 +37,8 @@ export const Planification = ({ course, management }) => {
   const [selectedSubject, setSelectedSubject] = useState(course.asignaturas[0]?.nombre);
   const hasSubjects = asignaturas?.length > 0;
   const dispatch = useDispatch();
+  const dateFormat = "YYYY/MM/DD";
+  const todayDate = moment(new Date()).format(dateFormat);
 
   useEffect(() => {
     // update management course
@@ -55,8 +49,21 @@ export const Planification = ({ course, management }) => {
       dispatch(cleanUnitsManagement());
       subject?.foros?.map((f) => {
         const titulo = f.titulo;
+        let objetivos = f.objetivos ?? [];
+        if (objetivos.length > 0) {
+          let cont = 0;
+          objetivos = objetivos.map((o) => {
+            if (typeof o === "string" || !o.hasOwnProperty("id")) {
+              cont = cont + 1;
+              return {
+                id: randomId(),
+                descripcion: cont + ": " + o,
+              };
+            }
+          });
+        }
         delete f.nombre;
-        dispatch(appendUnitsManagement({ ...f, nombre: titulo }));
+        dispatch(appendUnitsManagement({ ...f, objetivos: objetivos, nombre: titulo }));
       });
     } else {
       dispatch(cleanUnitsManagement());
@@ -130,8 +137,9 @@ export const Planification = ({ course, management }) => {
         icon={<PlusOutlined />}
         onClick={() =>
           addUnit({
-            id: randomId(),
+            id: randomId() + "noRegistrado",
             nombre: "Nueva unidad",
+            dateRange: [todayDate, todayDate],
             objetivos: [],
             valores: [],
           })

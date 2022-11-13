@@ -151,11 +151,14 @@ function* getForumsAndContent() {
   try {
     const forums = (yield call(foro.getForums)).data.data;
     const contents = (yield call(contenido.getContents)).data.data;
+
     // combinar arreglos
     const forumsWithContent = forums.map((f) => {
       return {
         ...f,
         contenidos: contents.filter((c) => c.id_foro === f.id),
+        dateRange: [f.objetivoInicio, f.objetivoTermino],
+        objetivos: f.objetivo.split("[cut@},{@cut]"),
       };
     });
     yield put(setForumsAndContent(forumsWithContent));
@@ -201,17 +204,44 @@ function* goEditContent(action) {
 }
 
 function* createForums(action) {
-  const { course, forums } = action.payload;
+  const { course, forums, deleted } = action.payload;
+  console.log(course, forums, deleted);
   try {
+    const subject = course.asignaturas.find((a) => a.nombre === subject);
+
+    // Añadir o agregar
     for (let i = 0; i < forums.length; i++) {
-      const subject = course.asignaturas.find((a) => a.nombre === course.asignatura);
-      yield call(foro.createForum, {
+      let obj = "";
+      forums[i].objetivos.map((o) => {
+        obj = obj + "[cut@},{@cut]" + o.descripcion;
+      });
+
+      const params = {
         id_asignatura: subject.id,
         titulo: forums[i].nombre,
-      });
+        tipo: "unidad",
+        objetivo: obj,
+        objetivoInicio: forums[i].dateRange[0],
+        objetivoTermino: forums[i].dateRange[1],
+      };
+
+      if (forums[i].id.includes("noRegistrado")) {
+        console.log("crear");
+        yield call(foro.createForum, params);
+      } else {
+        console.log("editar");
+        yield call(foro.editForum, { id: forums[i].id, payload: params });
+      }
+    }
+    // Eliminar
+    for (let i = 0; i < deleted.length; i++) {
+      if (!deleted[i].id.includes("noRegistrado")) {
+        console.log("eliminar");
+        yield call(foro.deleteForum, deleted[i].id);
+      }
     }
     message.success(
-      "Se han creado las unidades con éxito en el Aula Virtual de " +
+      "Se han actualizado las unidades con éxito en el Aula Virtual de " +
         course.nombre +
         " " +
         course.paralelo

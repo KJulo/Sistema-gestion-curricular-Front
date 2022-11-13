@@ -234,13 +234,18 @@ export const teacherSlice = createSlice({
       const payload = action.payload;
       const stateUnits = state.courses.management.units;
 
-      stateUnits.map((unit) => {
+      state.courses.management.units = stateUnits.map((unit) => {
         if (unit.id === payload.unit.id) {
-          return { ...unit, valores: unit.valores.push(payload.value) };
+          const newValue =
+            unit.valores && unit.valores.length
+              ? [...unit.valores, payload.value]
+              : [payload.value];
+          return { ...unit, valores: newValue };
         } else {
           return unit;
         }
       });
+
       state.isLoading = false;
     },
     editValueManagement: (state, action) => {
@@ -292,9 +297,14 @@ export const teacherSlice = createSlice({
       state.isLoading = false;
     },
     deleteUnitManagement: (state, action) => {
-      state.courses.management.units = state.courses.management.units.filter(
+      const unitDeleted = state.courses.management.units.find(
+        (unit) => unit.id === action.payload.id
+      );
+      const unitsFiltered = state.courses.management.units.filter(
         (unit) => unit.id !== action.payload.id
       );
+      state.courses.management.deleted.push(unitDeleted);
+      state.courses.management.units = unitsFiltered;
       state.isLoading = false;
     },
     setActiveFilter: (state, action) => {
