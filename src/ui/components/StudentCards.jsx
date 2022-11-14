@@ -20,8 +20,8 @@ const StudentCards = ({ student }) => {
     <>
       <Card
         onClick={() => handdleOpenModal(student)}
-        title={student.nombres + " " + student.apellidos}
-        content={student.curso.nombre + " " + student.curso.paralelo}
+        title={`${student.nombres} ${student.apellidos}`}
+        content={`${student.curso.nombre} ${student.curso.paralelo}`}
         icon="user"
       />
 
@@ -30,7 +30,8 @@ const StudentCards = ({ student }) => {
         open={modalOpen}
         onOk={handdleOkModal}
         onCancel={handdleOkModal}
-        cancelButtonProps={{ style: { display: "none" } }}>
+        cancelButtonProps={{ style: { display: "none" } }}
+      >
         <Title level={4}>Notas</Title>
         <Paragraph>
           <blockquote>
@@ -50,20 +51,22 @@ const StudentCards = ({ student }) => {
 
 const StudentMarks = ({ student }) => {
   if (student.nota.length > 0) {
-    const total = student.notas.length;
-    const studentAverage = getAverage(student.notas).toFixed(2);
+    const total = student.nota.length;
+    const studentAverage = getAverage(student.nota).toFixed(2);
     return (
       <>
         Total de notas:
         <Text style={{ color: "black" }}>{` ${total}`}</Text>
         <br></br>
         Promedio del alumno:
-        <Text style={{ color: studentAverage < 4 ? "red" : "blue" }}>{` ${studentAverage}`}</Text>
+        <Text
+          style={{ color: studentAverage < 4 ? "red" : "blue" }}
+        >{` ${studentAverage}`}</Text>
         <br></br>
       </>
     );
   } else {
-    return <Text>Sin notas aún.</Text>;
+    return <Text>No hay registro de notas.</Text>;
   }
 };
 
@@ -72,7 +75,9 @@ const StudentAttendance = ({ student }) => {
   if (attendance.length > 0) {
     const total = attendance.length;
     const sum = attendance.reduce((acum, att) => {
-      return acum + att.asistencia === "Si" || att.asistencia === "Justificado" ? 1 : 0;
+      return acum + att.asistencia === "Si" || att.asistencia === "Justificado"
+        ? 1
+        : 0;
     }, 0);
     return (
       <>
@@ -88,7 +93,7 @@ const StudentAttendance = ({ student }) => {
       </>
     );
   } else {
-    return <Text>Sin notas aún.</Text>;
+    return <Text>No hay registro de asistencias.</Text>;
   }
 };
 

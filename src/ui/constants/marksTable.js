@@ -1,3 +1,4 @@
+import moment from "moment";
 import React from "react";
 
 export const columns = [
@@ -5,12 +6,24 @@ export const columns = [
     title: "Fecha",
     dataIndex: "fecha",
     key: "fecha",
+    render: (record) => {
+      return <span>{moment(record).format("DD/MM/YYYY")}</span>;
+    },
+  },
+  {
+    title: "Asignatura",
+    dataIndex: "asignatura",
+    key: "asignatura",
+    render: (record) => {
+      return <span>{record.nombre}</span>;
+    },
   },
   {
     title: "Evaluacion",
-    dataIndex: "evaluacion",
-    key: "evaluacion",
+    dataIndex: "nombre",
+    key: "nombre",
   },
+
   {
     title: "Nota",
     dataIndex: "nota",
@@ -21,11 +34,7 @@ export const columns = [
     dataIndex: "ponderacion",
     key: "ponderacion",
     render: (record) => {
-      return (
-        <div>
-          { record*100 } %
-        </div>
-      );
+      return <div>{record * 100} %</div>;
     },
-  }
+  },
 ];

@@ -1,18 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
 // Redux
 import { useDispatch, useSelector } from "react-redux";
-import {
-  fetchStudents,
-  fetchCourses,
-  fetchStudentsNotes,
-  fetchAttendance,
-  fetchNotification,
-} from "@slices/parents";
+import { fetchStudents } from "@slices/parents";
 
 // antd
-import { Col, Layout, Row, Typography } from "antd";
-const { Title } = Typography;
+import { Col, Row } from "antd";
 
 // assets
 import SchoolImg from "@logos/school-img.png";
@@ -26,22 +19,15 @@ import { StudentCards, DefaultTitleContent } from "@components";
 
 const Home = () => {
   const dispatch = useDispatch();
-  const { parentData, students, notification, isLoading } = useSelector(
-    (store) => store.parent
-  );
+  const { parentData, students } = useSelector((store) => store.parent);
 
   useEffect(() => {
     // Cada estudiante de por si ya incluye las notificaciones en la consulta
-    //Tambien incluye el curso y las asignaturas   
-    dispatch(fetchStudents());
+    // Tambien incluye el curso y las asignaturas
+    if (parentData.id) {
+      dispatch(fetchStudents(parentData.id));
+    }
   }, [parentData]);
-
-  // useEffect(() => {
-  //   dispatch(fetchCourses());
-  //   dispatch(fetchStudentsNotes());
-  //   dispatch(fetchAttendance());
-  // }, [students.length]);
-
   return (
     <div
       className="body-bg"
@@ -51,7 +37,7 @@ const Home = () => {
       }}
     >
       <DefaultTitleContent
-        title={`Hola, ${parent.nombres} ${parent.apellidos} !`}
+        title={`Hola, ${parentData.nombres} ${parentData.apellidos} !`}
         subtitle="¡Haz click en uno de tus pupilos para desplegar información resumida de ellos!"
       />
 
@@ -61,7 +47,7 @@ const Home = () => {
       >
         <div style={{ display: "contents" }}>
           <img src={SchoolImg} alt="Logo Colegio" className="fit-image" />
-          <Row className="card-container" >
+          <Row className="card-container">
             {students.map((student) => (
               <Col>
                 {console.log(student)}
