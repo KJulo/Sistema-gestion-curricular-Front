@@ -10,8 +10,6 @@ import { setActiveFilter } from "@slices/teachers";
 
 import { useGetCurrentDate } from "@hooks/useDate";
 
-import { LoadingSpinner } from "@components";
-
 const FilterCourse = ({ courses }) => {
   const dispatch = useDispatch();
   const defaultValue = courses.length > 0 ? courses[0].id : "Sin Cursos";
@@ -36,18 +34,20 @@ const FilterCourse = ({ courses }) => {
     }
   }, [courses]);
 
-  return courses.length > 0 ? (
+  return (
     <div style={{ display: "flex", flexDirection: "row-revers", flexWrap: "wrap", gap: "12px" }}>
-      <Select size="large" defaultValue={defaultValue} onChange={handleChange}>
-        {courses.map((course) => (
-          <Option value={course.id}>
-            {course.nombre} - {course.paralelo}
-          </Option>
-        ))}
-      </Select>
+      {courses.length > 0 ? (
+        <Select size="large" defaultValue={defaultValue} onChange={handleChange}>
+          {courses.map((course) => (
+            <Option value={course.id}>
+              {course.nombre} - {course.paralelo}
+            </Option>
+          ))}
+        </Select>
+      ) : (
+        <></>
+      )}
     </div>
-  ) : (
-    <LoadingSpinner isLoading={true} size={"small"} style={{ marginTop: 10 }} />
   );
 };
 

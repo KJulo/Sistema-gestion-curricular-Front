@@ -107,7 +107,6 @@ const Marks = () => {
                 course={selectedCourse}
                 students={studentsFiltered}
                 filters={activeFilters}
-                isLoading={isLoading}
               />,
             ]}
             tableContent={
