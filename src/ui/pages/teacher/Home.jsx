@@ -18,12 +18,6 @@ import { CoursesCards, DefaultTitleContent, LoadingSpinner } from "@components/i
 // import { courses } from '@constants/course';
 import { useEffect } from "react";
 
-/**
- * TODO
- * * Para los objetivos apilar todos en un arreglo y hacerle un JSON.stringify(arr) para enviarlo a la bd
- * ! Recordar ponerle fecha de inicio y final a la unidad en el backend
- */
-
 const Home = () => {
   const dispatch = useDispatch();
   const {
@@ -33,11 +27,8 @@ const Home = () => {
 
   useEffect(() => {
     dispatch(fetchCourses());
+    dispatch(fetchForumsAndContent());
   }, []);
-
-  useEffect(() => {
-    if (courses.length > 0) dispatch(fetchForumsAndContent());
-  }, [courses.length]);
 
   return (
     <div
@@ -52,7 +43,7 @@ const Home = () => {
         action=""
       />
       <div className="flex-container">
-        <LoadingSpinner isLoading={courses.length === 0 || isLoading}>
+        <LoadingSpinner isLoading={courses.length === 0 && isLoading}>
           <CoursesCards courses={courses} management={management} isLoading={isLoading} />
         </LoadingSpinner>
       </div>

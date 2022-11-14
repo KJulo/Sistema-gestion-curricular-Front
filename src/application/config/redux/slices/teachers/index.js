@@ -122,9 +122,6 @@ export const teacherSlice = createSlice({
       const studentList = state.students.list.map((student) => {
         // Buscar al estudiante que corresponse la fecha
         if (payload.id === student.id) {
-          if (JSON.stringify(student.asistencia) === "{}") {
-            student.asistencia = [];
-          }
           // Verificar si la fecha fue registrada por parte el endpoint
           if (payload.asistencia.registrado === "Si") {
             return {
@@ -143,7 +140,6 @@ export const teacherSlice = createSlice({
               }),
             };
           } else {
-            payload.asistencia.registrado = "Si";
             // Caso no registrado
             return {
               ...student,
@@ -234,18 +230,13 @@ export const teacherSlice = createSlice({
       const payload = action.payload;
       const stateUnits = state.courses.management.units;
 
-      state.courses.management.units = stateUnits.map((unit) => {
+      stateUnits.map((unit) => {
         if (unit.id === payload.unit.id) {
-          const newValue =
-            unit.valores && unit.valores.length
-              ? [...unit.valores, payload.value]
-              : [payload.value];
-          return { ...unit, valores: newValue };
+          return { ...unit, valores: unit.valores.push(payload.value) };
         } else {
           return unit;
         }
       });
-
       state.isLoading = false;
     },
     editValueManagement: (state, action) => {
@@ -297,14 +288,9 @@ export const teacherSlice = createSlice({
       state.isLoading = false;
     },
     deleteUnitManagement: (state, action) => {
-      const unitDeleted = state.courses.management.units.find(
-        (unit) => unit.id === action.payload.id
-      );
-      const unitsFiltered = state.courses.management.units.filter(
+      state.courses.management.units = state.courses.management.units.filter(
         (unit) => unit.id !== action.payload.id
       );
-      state.courses.management.deleted.push(unitDeleted);
-      state.courses.management.units = unitsFiltered;
       state.isLoading = false;
     },
     setActiveFilter: (state, action) => {
@@ -350,25 +336,6 @@ export const teacherSlice = createSlice({
         };
       });
       state.courses.list = coursesWithForums;
-      state.isLoading = false;
-    },
-    updateStateForum: (state, action) => {
-      const { payload } = action;
-
-      const stateUnits = state.courses.management.units;
-
-      const updatedUnits = stateUnits.map((unit) => {
-        if (unit.id === payload.id) {
-          if (unit.id.includes("noRegistrado")) {
-            return {
-              ...unit,
-              id: unit.id.replace("noRegistrado", payload.state),
-            };
-          }
-        }
-        return unit;
-      });
-      state.courses.management.units = updatedUnits;
       state.isLoading = false;
     },
     removeContent: (state, action) => {
@@ -503,7 +470,6 @@ export const {
   forumsAdded,
   addMarks,
   appendStudentsMarks,
-  updateStateForum,
 } = teacherSlice.actions;
 
 // exportar reducer del slice para mandarlo a la store

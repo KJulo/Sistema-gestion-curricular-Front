@@ -17,7 +17,6 @@ export const initState = {
     management: {
       course: {},
       units: [],
-      deleted: [],
     },
   },
   students: {
