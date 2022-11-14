@@ -2,10 +2,8 @@ import React, { useState, useEffect } from "react";
 import "@styles/Attendance.less";
 
 // antd
-import { Collapse, Typography, Space, DatePicker } from "antd";
-import { CalendarOutlined, CheckCircleTwoTone, CloseCircleTwoTone } from "@ant-design/icons";
+import { Collapse, Space, DatePicker } from "antd";
 import moment from "moment";
-const { Title } = Typography;
 const { Panel } = Collapse;
 
 // hooks
@@ -17,6 +15,8 @@ import {
   useIsSameMonth,
 } from "@hooks/useDate";
 
+import { fetchStudents } from "@slices/parents";
+
 //containers
 import { AdminTableLayout } from "@containers/index";
 
@@ -25,84 +25,24 @@ import { ContentTable, DefaultTitleContent } from "@components/index";
 
 // constants
 import { columns } from "@constants/attendanceTable";
-
-const family = {
-  idFamily: "2fj2fj98j3gjf",
-  parents: [
-    { id: "2910fj218jf2", tipo: "apoderado", nombres: "Emma", apellidos: "Tapia" },
-    { id: "j3fj9238j4gj9823", tipo: "apoderado", nombres: "Juan", apellidos: "Rojas" },
-  ],
-  students: [
-    {
-      id: "12412c1923m1928dj20d29",
-      id_colegio: "29183080jf102k9dk",
-      tipo: "estudiante",
-      nombres: "Marcelo Jose",
-      apellidos: "Rojas Tapia",
-      rut: "20539858-5",
-      curso: "2do Medio",
-      asistencia: [
-        { fecha: "2022-09-02", presente: true },
-        { fecha: "2022-09-03", presente: true },
-        { fecha: "2022-09-04", presente: true },
-        { fecha: "2022-09-05", presente: true },
-        { fecha: "2022-09-06", presente: false },
-        { fecha: "2022-09-07", presente: true },
-        { fecha: "2022-09-08", presente: true },
-        { fecha: "2022-10-01", presente: false },
-        { fecha: "2022-10-02", presente: false },
-        { fecha: "2022-10-03", presente: true },
-        { fecha: "2022-10-04", presente: false },
-        { fecha: "2022-10-05", presente: true },
-        { fecha: "2022-10-06", presente: true },
-        { fecha: "2022-11-09", presente: false },
-        { fecha: "2022-11-10", presente: false },
-        { fecha: "2022-11-11", presente: true },
-      ],
-    },
-    {
-      id: "1892381293812",
-      id_colegio: "29183080jf102k9dk",
-      tipo: "estudiante",
-      nombres: "Gonza Matias",
-      apellidos: "Donoso Días",
-      rut: "19249858-5",
-      curso: "1ro Básico",
-      asistencia: [
-        { fecha: "2022-09-02", presente: true },
-        { fecha: "2022-09-03", presente: true },
-        { fecha: "2022-09-04", presente: true },
-        { fecha: "2022-09-05", presente: true },
-        { fecha: "2022-09-06", presente: false },
-        { fecha: "2022-09-07", presente: true },
-        { fecha: "2022-09-08", presente: true },
-        { fecha: "2022-09-09", presente: false },
-        { fecha: "2022-09-10", presente: false },
-        { fecha: "2022-09-11", presente: true },
-        { fecha: "2022-10-06", presente: false },
-        { fecha: "2022-10-07", presente: true },
-        { fecha: "2022-10-08", presente: true },
-        { fecha: "2022-11-09", presente: false },
-        { fecha: "2022-11-10", presente: false },
-        { fecha: "2022-11-11", presente: true },
-      ],
-    },
-  ],
-};
+import { useDispatch, useSelector } from "react-redux";
 
 const CollapsePanel = ({ studentArray }) => {
   const onChange = (key) => {
     console.log(key);
   };
-
   return (
     <Collapse onChange={onChange}>
       {studentArray.map((student, index) => (
-        <Panel header={student.nombres + " " + student.apellidos} key={index}>
+        <Panel header={`${student.nombres} ${student.apellidos}`} key={index}>
           <AdminTableLayout
             searchInput={""}
             tableContent={
-              <ContentTable content={student.asistencia} columns={columns} scroll={false} />
+              <ContentTable
+                content={student.asistencia}
+                columns={columns}
+                scroll={false}
+              />
             }
           />
         </Panel>
@@ -113,8 +53,19 @@ const CollapsePanel = ({ studentArray }) => {
 
 const Attendance = () => {
   const currentDate = useGetCurrentMonth() + "-" + useGetCurrentYear();
-  const [familyState, setFamilyState] = useState(family);
   const [selectedDate, setSelectedDate] = useState(currentDate);
+
+  const { parentData, students } = useSelector(
+    (store) => store.parent
+  );
+  const dispatch = useDispatch();
+  useEffect(() => {
+    // Cada estudiante de por si ya incluye las notificaciones en la consulta
+    //Tambien incluye el curso y las asignaturas
+    if (parentData.id) {
+      dispatch(fetchStudents(parentData.id));
+    }
+  }, [parentData]);
 
   useEffect(() => {
     // Cuando se elimina la fecha, la fecha por defecto queda en formato YYYY-MM
@@ -141,7 +92,7 @@ const Attendance = () => {
       </Space>
 
       <div style={{ marginTop: 22, maxWidth: 600 }}>
-        <CollapsePanel studentArray={familyState.students} />
+        <CollapsePanel studentArray={students} />
       </div>
     </div>
   );

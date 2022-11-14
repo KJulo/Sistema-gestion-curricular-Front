@@ -1,6 +1,6 @@
 import React from "react";
 
-const getAverage = (record) => {
+export const getAverage = (record) => {
   // obtener los id unicos
   const unique = [...new Set(record.map((r) => r.id_asignatura))];
   // obtener distintos arreglos divididos por su asignatura

@@ -16,11 +16,19 @@ import {
   updateStudentsNotes,
   updateStudentsAttendance,
   updateNotification,
-  
 } from "@slices/parents";
 
 // Network
-import { profesor, curso, alumno, notas, asignatura, asistencia, apoderado, notificacion } from "@network/index";
+import {
+  profesor,
+  curso,
+  alumno,
+  notas,
+  asignatura,
+  asistencia,
+  apoderado,
+  notificacion,
+} from "@network/index";
 import { message } from "antd";
 
 function* getParent(action) {
@@ -34,9 +42,14 @@ function* getParent(action) {
   }
 }
 
-function* getStudents() {
+function* getStudents(action) {
   try {
-    const response = (yield call(alumno.getStudents)).data.data;
+    const query = {
+      params: {
+        id_apoderado: action.payload,
+      },
+    };
+    const response = (yield call(alumno.getStudentsParams, query)).data.data;
     yield put(updateStudents(response));
   } catch (e) {
     console.log(e);
@@ -99,10 +112,11 @@ function* getNotification(action) {
   try {
     const params = {
       id_curso: action.payload.idCurso,
-    }
-    const notification = (yield call(notificacion.getNotifications, { params })).data.data
-    const payload = { ...action.payload, notification }
-    yield put(updateNotification(payload))
+    };
+    const notification = (yield call(notificacion.getNotifications, { params }))
+      .data.data;
+    const payload = { ...action.payload, notification };
+    yield put(updateNotification(payload));
   } catch (error) {
     message.warning("No se ha podido obtener las notificaciones");
   }

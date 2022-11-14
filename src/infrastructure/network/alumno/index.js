@@ -4,6 +4,7 @@ const { baseAlumnoURI, alumnoURI } = services();
 
 const alumno = (client) => ({
   getStudents: () => client.get(baseAlumnoURI),
+  getStudentsParams: (query) => client.get(baseAlumnoURI, query),
   getStudentById: (id) => client.get(alumnoURI.replace(':id', id)),
   deleteStudent: (id) => client.delete(alumnoURI.replace(':id', id)),
   addStudent: (data) => client.post(baseAlumnoURI, data),

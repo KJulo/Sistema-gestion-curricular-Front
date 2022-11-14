@@ -2,14 +2,11 @@ import React, { useState, useEffect } from "react";
 import "@styles/Marks.less";
 
 // antd
-import { Checkbox, Collapse, Typography, Statistic, DatePicker, Button } from "antd";
-import { CalendarOutlined, ReconciliationFilled } from "@ant-design/icons";
-import moment from "moment";
-const { Title } = Typography;
+import { Collapse, Statistic, Divider } from "antd";
 const { Panel } = Collapse;
 
-// hooks
-import { useAverage } from "@hooks/useAverage";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchStudents } from "@slices/parents";
 
 //containers
 import { AdminTableLayout } from "@containers/index";
@@ -20,14 +17,20 @@ import { ContentTable, DefaultTitleContent } from "@components/index";
 // constants
 import { family } from "@constants/familyMarks.js";
 import { columns } from "@constants/marksTable";
+import { getAverage } from "@utils/maths";
 
 const StudentsAverage = ({ students }) => {
   return students.map((student) => (
     <div>
       <Statistic
-        title={student.nombres.split(" ")[0] + " " + student.apellidos[0]}
-        value={"Promedio: " + useAverage(student.notas, 2)}
+        title={`${student.nombres} ${student.apellidos}`}
+        value={
+          student.nota.length > 0
+            ? `Promedio: ${getAverage(student.nota)}`
+            : "Estudiante sin notas."
+        }
       />
+      <Divider />
     </div>
   ));
 };
@@ -43,7 +46,13 @@ const CollapsePanel = ({ studentArray }) => {
         <Panel header={student.nombres + " " + student.apellidos} key={index}>
           <AdminTableLayout
             searchInput={""}
-            tableContent={<ContentTable content={student.notas} columns={columns} scroll={false} />}
+            tableContent={
+              <ContentTable
+                content={student.nota}
+                columns={columns}
+                scroll={false}
+              />
+            }
           />
         </Panel>
       ))}
@@ -52,8 +61,16 @@ const CollapsePanel = ({ studentArray }) => {
 };
 
 const Marks = () => {
-  const [familyState, setFamily] = useState(family);
-  const { parents, students } = familyState;
+  const dispatch = useDispatch();
+  const { parentData, students } = useSelector(
+    (store) => store.parent
+  );
+
+  useEffect(() => {
+    if (parentData.id) dispatch(fetchStudents(parentData.id));
+  }, [parentData]);
+
+  console.log(students);
 
   return (
     <div>
@@ -61,10 +78,10 @@ const Marks = () => {
         title={"Notas"}
         subtitle="Aquí podrás revisar las notas con más detalle de tus pupilos."
       />
-      <StudentsAverage students={familyState.students} />
+      <StudentsAverage students={students} />
 
       <div style={{ marginTop: 22 }}>
-        <CollapsePanel studentArray={familyState.students} />
+        <CollapsePanel studentArray={students} />
       </div>
     </div>
   );
