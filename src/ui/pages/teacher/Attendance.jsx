@@ -44,7 +44,6 @@ const Attendance = () => {
   const [selectedCourseSubjects, setSelectedCourseSubjects] = useState([]);
 
   useEffect(() => {
-    // TODO: se cae cuando se entre desde otro modulo a este de asistencia
     dispatch(resetStore());
     dispatch(fetchCourses());
     dispatch(fetchStudents());

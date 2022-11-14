@@ -62,8 +62,11 @@ const VitualClassroom = () => {
   const [hasSubMenu, setHasSubMenu] = useState(false);
   useEffect(() => {
     dispatch(fetchCourses());
-    dispatch(fetchForumsAndContent());
   }, []);
+
+  useEffect(() => {
+    dispatch(fetchForumsAndContent());
+  }, [courses.length]);
 
   // El hook useState se actualiza al siguiente render, por ello, utilizar useEffect
   useEffect(() => {

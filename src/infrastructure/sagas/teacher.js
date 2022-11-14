@@ -151,11 +151,15 @@ function* getForumsAndContent() {
   try {
     const forums = (yield call(foro.getForums)).data.data;
     const contents = (yield call(contenido.getContents)).data.data;
+
     // combinar arreglos
     const forumsWithContent = forums.map((f) => {
+      const objs = f.objetivo.split("[cut@},{@cut]");
       return {
         ...f,
         contenidos: contents.filter((c) => c.id_foro === f.id),
+        dateRange: [f.objetivoInicio, f.objetivoTermino],
+        objetivos: objs !== [""] ? objs : [],
       };
     });
     yield put(setForumsAndContent(forumsWithContent));
@@ -201,25 +205,70 @@ function* goEditContent(action) {
 }
 
 function* createForums(action) {
-  const { course, forums } = action.payload;
+  const { course, forums, deleted } = action.payload;
   try {
+    // Añadir o agregar
     for (let i = 0; i < forums.length; i++) {
       const subject = course.asignaturas.find((a) => a.nombre === course.asignatura);
-      yield call(foro.createForum, {
+
+      let obj = "";
+      forums[i].objetivos.map((o) => {
+        // comprobar si hay numeros, ejemplo 1: Objetivo, 2: Objetivo
+        const matchNumbers = o.descripcion.match(/\d+:/);
+
+        if (matchNumbers) {
+          let index = o.descripcion.indexOf(matchNumbers[0]);
+          if (index === 0) {
+            if (obj === "") {
+              obj = o.descripcion.replace(matchNumbers[0] + " ", "");
+              return;
+            } else {
+              obj = obj + "[cut@},{@cut]" + o.descripcion.replace(matchNumbers[0] + " ", "");
+              return;
+            }
+          }
+        }
+
+        if (obj === "") {
+          obj = o.descripcion;
+        } else {
+          obj = obj + "[cut@},{@cut]" + o.descripcion;
+        }
+      });
+
+      const params = {
         id_asignatura: subject.id,
         titulo: forums[i].nombre,
-      });
+        tipo: "unidad",
+        objetivo: obj,
+        objetivoInicio: forums[i].dateRange[0],
+        objetivoTermino: forums[i].dateRange[1],
+      };
+
+      if (forums[i].id.includes("noRegistrado")) {
+        yield call(foro.createForum, params);
+      } else {
+        yield call(foro.editForum, { id: forums[i].id, payload: params });
+      }
+    }
+    // Eliminar si está registrado
+    for (let i = 0; i < deleted.length; i++) {
+      if (!deleted[i].id.includes("noRegistrado")) {
+        yield call(foro.deleteForum, deleted[i].id);
+      }
     }
     message.success(
-      "Se han creado las unidades con éxito en el Aula Virtual de " +
+      "Se han actualizado las unidades con éxito en el Aula Virtual de " +
         course.nombre +
         " " +
         course.paralelo
     );
+    yield put(fetchForumsAndContent());
+    yield put(setIsLoading(false));
   } catch (e) {
     console.log(e);
     yield put(setIsLoading(false));
-    message.error("No se ha podido registrar las unidades con éxito.");
+    message.error("No se ha podido registrar las unidades.");
   }
 }
 
