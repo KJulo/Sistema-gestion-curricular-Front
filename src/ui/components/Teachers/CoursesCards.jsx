@@ -31,6 +31,7 @@ const CoursesCards = ({ courses, management, isLoading }) => {
     const payload = {
       course: management.course,
       forums: management.units,
+      deleted: management.deleted,
     };
     if (payload.forums.length === 0) {
       message.destroy();
@@ -38,11 +39,12 @@ const CoursesCards = ({ courses, management, isLoading }) => {
     } else {
       dispatch(addForums(payload));
     }
-    // setModalText('The modal will be closed after two seconds');
   };
 
   const handleCancel = () => {
     setOpen(false);
+    message.destroy();
+    message.warning("Recuerde guardar sus cambios.");
   };
 
   return hasCourses ? (
@@ -77,6 +79,7 @@ const CoursesCards = ({ courses, management, isLoading }) => {
         <Planification course={selectedCourse} management={management} />
         <br></br>
         <Button
+          loading={isLoading}
           onClick={handleOk}
           type="primary"
           shape="round"

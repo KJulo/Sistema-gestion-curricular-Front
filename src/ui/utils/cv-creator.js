@@ -30,9 +30,9 @@ export class DocumentCreator {
             }),
             this.createContactInfo(course, teacher),
             this.createTable(units),
-          ]
-        }
-      ]
+          ],
+        },
+      ],
     });
 
     return document;
@@ -43,31 +43,31 @@ export class DocumentCreator {
       // alignment: AlignmentType.CENTER,
       children: [
         new TextRun({
-          text: "Asignatura: "+course.asignatura,
+          text: "Asignatura: " + course.asignatura,
           bold: true,
           break: 1,
         }),
         new TextRun({
-          text: "Curso: "+course.nombre,
+          text: "Curso: " + course.nombre,
           bold: true,
           break: 1,
         }),
         new TextRun({
-          text: "Paralelo: "+course.paralelo,
+          text: "Paralelo: " + course.paralelo,
           bold: true,
           break: 1,
         }),
         new TextRun({
-          text: "Profesor: "+teacher.nombres + ' ' +teacher.apellidos,
+          text: "Profesor: " + teacher.nombres + " " + teacher.apellidos,
           bold: true,
           break: 1,
         }),
         new TextRun({
-          text: "Año: "+course.anho,
+          text: "Año: " + course.anho,
           bold: true,
           break: 1,
         }),
-      ]
+      ],
     });
   }
 
@@ -82,118 +82,121 @@ export class DocumentCreator {
           // Fila 1
           titleRows,
           // Content
-          ...units.map((unit) => (
-            new TableRow({
-              children: [
-                // Unit description
-                new TableCell({
-                  children: [
-                    new Paragraph({
-                      text: unit.nombre,
-                      bold: true,
-                    }),
-                    //Objetives
-                    ...unit.objetivos.map((obj) => {
-                      return new Paragraph({
-                        text: obj.descripcion
-                      })
-                    })
-                  ],
-                }),
-                // Date
-                new TableCell({
-                  children: [
-                    new Paragraph({
-                        text: 'desde ' + unit.dateRange[0]
-                    }),
-                    new Paragraph({
-                      text: 'hasta ' + unit.dateRange[1]
-                    })
-                  ],
-                }),
-                // Responsability
-                new TableCell({
-                  children: [
-                    ...unit.valores.map((val) => {
-                      return new Paragraph({
-                        text: val.descripcion
-                      })
-                    })
-                  ],
-                })
-              ],
-            })
-          ))
-        ]
-      })
+          ...units.map(
+            (unit) =>
+              new TableRow({
+                children: [
+                  // Unit description
+                  new TableCell({
+                    children: [
+                      new Paragraph({
+                        text: unit.nombre,
+                        bold: true,
+                      }),
+                      //Objetives
+                      ...unit.objetivos.map((obj) => {
+                        return new Paragraph({
+                          text: obj.descripcion,
+                        });
+                      }),
+                    ],
+                  }),
+                  // Date
+                  new TableCell({
+                    children: [
+                      new Paragraph({
+                        text: "desde " + unit.dateRange[0],
+                      }),
+                      new Paragraph({
+                        text: "hasta " + unit.dateRange[1],
+                      }),
+                    ],
+                  }),
+                  // Responsability
+                  new TableCell({
+                    children:
+                      unit.valores && unit.valores.length
+                        ? [
+                            ...unit.valores.map((val) => {
+                              return new Paragraph({
+                                text: val.descripcion,
+                              });
+                            }),
+                          ]
+                        : [
+                            new Paragraph({
+                              text: "",
+                            }),
+                          ],
+                  }),
+                ],
+              })
+          ),
+        ],
+      });
     } else {
       return new Table({
         columnWidths: columnWidth,
-        rows: [
-          titleRows,
-          this.createTableRow(["-", "-", "-"]),
-        ]
-      })
+        rows: [titleRows, this.createTableRow(["-", "-", "-"])],
+      });
     }
   }
 
   createTableRow(paragraphs) {
     return new TableRow({
-      children: paragraphs.map((paragraph) => (
-        new TableCell({
-          children: [new Paragraph({
-            text: paragraph,
-            bold: true,
-          })],
-        })
-      )),
-    })
+      children: paragraphs.map(
+        (paragraph) =>
+          new TableCell({
+            children: [
+              new Paragraph({
+                text: paragraph,
+                bold: true,
+              }),
+            ],
+          })
+      ),
+    });
   }
 
-  createParagraph (text) {
+  createParagraph(text) {
     return new Paragraph({
-      children: [
-          new TextRun(text),
-      ],
-    })
+      children: [new TextRun(text)],
+    });
   }
 
   createHeading(text) {
     return new Paragraph({
       text: text,
       heading: HeadingLevel.TITLE,
-      thematicBreak: true
+      thematicBreak: true,
     });
   }
 
   createSubHeading(text) {
     return new Paragraph({
       text: text,
-      heading: HeadingLevel.HEADING_2
+      heading: HeadingLevel.HEADING_2,
     });
   }
 
-  createInstitutionHeader(
-    institutionName,
-    dateText
-  ) {
+  createInstitutionHeader(institutionName, dateText) {
     return new Paragraph({
       tabStops: [
         {
           type: TabStopType.RIGHT,
-          position: TabStopPosition.MAX
-        }
+          position: TabStopPosition.MAX,
+        },
       ],
       children: [
         new TextRun({
           text: institutionName,
-          bold: true
+          bold: true,
         }),
         new TextRun({
           text: `\t${dateText}`,
-          bold: true
-        })
-      ]
+          bold: true,
+        }),
+      ],
     });
   }
 
@@ -202,9 +205,9 @@ export class DocumentCreator {
       children: [
         new TextRun({
           text: roleText,
-          italics: true
-        })
-      ]
+          italics: true,
+        }),
+      ],
     });
   }
 
@@ -212,34 +215,34 @@ export class DocumentCreator {
     return new Paragraph({
       text: text,
       bullet: {
-        level: 0
-      }
+        level: 0,
+      },
     });
   }
 
   // tslint:disable-next-line:no-any
   createSkillList(skills) {
     return new Paragraph({
-      children: [new TextRun(skills.map(skill => skill.name).join(", ") + ".")]
+      children: [new TextRun(skills.map((skill) => skill.name).join(", ") + ".")],
     });
   }
 
   // tslint:disable-next-line:no-any
   createAchivementsList(achivements) {
     return achivements.map(
-      achievement =>
+      (achievement) =>
         new Paragraph({
           text: achievement.name,
           bullet: {
-            level: 0
-          }
+            level: 0,
+          },
         })
     );
   }
 
   createInterests(interests) {
     return new Paragraph({
-      children: [new TextRun(interests)]
+      children: [new TextRun(interests)],
     });
   }
 
@@ -248,13 +251,8 @@ export class DocumentCreator {
   }
 
   // tslint:disable-next-line:no-any
-  createPositionDateText(
-    startDate,
-    endDate,
-    isCurrent
-  ) {
-    const startDateText =
-      this.getMonthFromInt(startDate.month) + ". " + startDate.year;
+  createPositionDateText(startDate, endDate, isCurrent) {
+    const startDateText = this.getMonthFromInt(startDate.month) + ". " + startDate.year;
     const endDateText = isCurrent
       ? "Present"
       : `${this.getMonthFromInt(endDate.month)}. ${endDate.year}`;

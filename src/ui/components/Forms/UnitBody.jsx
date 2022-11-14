@@ -14,10 +14,12 @@ const { RangePicker } = DatePicker;
 import moment from "moment";
 
 import { Objetive, Value } from "@components";
+import { useEffect } from "react";
 
 const UnitBody = ({ unit }) => {
   const dispatch = useDispatch();
   const dateFormat = "YYYY/MM/DD";
+  const todayDate = moment(new Date()).format(dateFormat);
 
   const addOjetive = (objetive) => {
     dispatch(appendObjetiveManagement({ unit: unit, objetive: objetive }));
@@ -35,7 +37,10 @@ const UnitBody = ({ unit }) => {
     <Col>
       <Title level={5}>Duración de la Unidad</Title>
       <RangePicker
-        defaultValue={[moment("2015/01/01", dateFormat), moment("2015/01/01", dateFormat)]}
+        defaultValue={[
+          moment(unit.dateRange[0], dateFormat),
+          moment(unit.dateRange[1], dateFormat),
+        ]}
         format={dateFormat}
         onChange={onChange}
       />
@@ -45,7 +50,13 @@ const UnitBody = ({ unit }) => {
       </Title>
 
       {unit.objetivos?.length > 0 ? (
-        unit.objetivos.map((objetive, i) => <Objetive unit={unit} objetive={objetive} index={i} />)
+        unit.objetivos.map((objetive, i) => {
+          if (objetive) {
+            return <Objetive unit={unit} objetive={objetive} index={i} />;
+          } else {
+            return <></>;
+          }
+        })
       ) : (
         <></>
       )}
@@ -56,7 +67,7 @@ const UnitBody = ({ unit }) => {
         icon={<PlusOutlined />}
         onClick={() =>
           addOjetive({
-            id: randomId(),
+            id: randomId() + "noRegistrado",
             descripcion: unit.objetivos.length + 1 + ": Objetivo " + (unit.objetivos.length + 1),
           })
         }>
@@ -77,12 +88,13 @@ const UnitBody = ({ unit }) => {
         type="dashed"
         block
         icon={<PlusOutlined />}
-        onClick={() =>
+        onClick={() => {
+          const lengthValores = unit.valores ? unit.valores.length : 0;
           addValue({
-            id: randomId(),
-            descripcion: unit.valores.length + 1 + ": Valor " + (unit.valores.length + 1),
-          })
-        }>
+            id: randomId() + "noRegistrado",
+            descripcion: lengthValores + 1 + ": Valor " + (lengthValores + 1),
+          });
+        }}>
         Añadir valor
       </Button>
     </Col>
