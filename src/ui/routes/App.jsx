@@ -34,6 +34,7 @@ import {
   AdminViewTeacher,
   AdminViewCourse,
   TeacherVirtualClassroom,
+  Profile
 } from "@pages/index";
 
 import RequireAuth from "../feature/RequireAuth.jsx";
@@ -84,6 +85,8 @@ const App = () => {
                   <Route path="cursos" element={<AdminCourses />} />
                   <Route path="cursos/:id" element={<AdminViewCourse />} />
 
+                  <Route path="perfil" element={<Profile />} />
+
                   <Route path="*" element={<Navigate to="/administrador" />} />
                 </Route>
               </Route>
@@ -94,6 +97,7 @@ const App = () => {
                   <Route path="asistencia" element={<StudentAttendance />} />
                   <Route path="notas" element={<StudentMarks />} />
                   <Route path="aula-virtual" element={<StudentVirtualClassroom />} />
+                  <Route path="perfil" element={<Profile />} />
                   <Route path="*" element={<Navigate to="/alumno" />} />
                 </Route>
               </Route>
@@ -103,6 +107,7 @@ const App = () => {
                   <Route path="" element={<ParentsHome />} />
                   <Route path="asistencia" element={<ParentsAttendance />} />
                   <Route path="notas" element={<ParentsMarks />} />
+                  <Route path="perfil" element={<Profile />} />
                   <Route path="*" element={<Navigate to="/apoderado" />} />
                 </Route>
               </Route>
@@ -113,6 +118,7 @@ const App = () => {
                   <Route path="modulo-asistencia" element={<TeacherAttendance />} />
                   <Route path="modulo-notas" element={<TeacherMarks />} />
                   <Route path="modulo-aulas" element={<TeacherVirtualClassroom />} />
+                  <Route path="perfil" element={<Profile />} />
                   <Route path="*" element={<Navigate to="/profesor" />} />
                 </Route>
               </Route>
