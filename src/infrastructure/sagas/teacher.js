@@ -283,9 +283,10 @@ function* createMark(action) {
         fecha: selectedDate,
         descripcion: values[i].toString(),
         ponderacion: decimalPonderacion.toString(),
+        nota: values[i].toString(),
       };
       newMarks.push(params);
-      // yield call(notas.addNota, params);
+      yield call(notas.addNota, params);
     }
     yield put(appendStudentsMarks(newMarks));
     message.success("Se han creado las notas con éxito");

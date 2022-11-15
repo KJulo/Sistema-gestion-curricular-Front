@@ -28,7 +28,7 @@ import {
   foro,
   profesor,
   contenido,
-  notificacion
+  notificacion,
 } from "@network/index";
 import { message } from "antd";
 
@@ -145,15 +145,14 @@ function* getForumsAndContent() {
 function* getNotification(action) {
   try {
     const params = {
-      id_curso: action.payload
-    }
-    const notification = (yield call(notificacion.getNotifications, {params})).data.data
-    yield put(updateNotification(notification))
+      id_curso: action.payload,
+    };
+    const notification = (yield call(notificacion.getNotifications, { params })).data.data;
+    yield put(updateNotification(notification));
   } catch (error) {
     message.warning("No se ha podido obtener las notificaciones.");
   }
 }
-
 
 function* watchGetNotification() {
   yield takeLatest(fetchNotification, getNotification);
@@ -173,8 +172,6 @@ function* watchGetCourse() {
 function* watchForumsAndContent() {
   yield takeLatest(fetchForumsAndContent, getForumsAndContent);
 }
-
-
 
 export default [
   watchGetNotification(),
