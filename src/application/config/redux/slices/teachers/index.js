@@ -182,7 +182,7 @@ export const teacherSlice = createSlice({
 
       stateUnits.map((unit) => {
         if (unit.id === payload.unit.id) {
-          return { ...unit, objetivos: unit.objetivos.push(payload.objetive) };
+          return { ...unit, objetivos: unit.objetivos.push({ ...payload.objetive, state: false }) };
         } else {
           return unit;
         }

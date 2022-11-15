@@ -50,9 +50,9 @@ const UnitBody = ({ unit }) => {
       </Title>
 
       {unit.objetivos?.length > 0 ? (
-        unit.objetivos.map((objetive, i) => {
-          if (objetive) {
-            return <Objetive unit={unit} objetive={objetive} index={i} />;
+        unit.objetivos.map((obj, i) => {
+          if (obj) {
+            return <Objetive unit={unit} objetive={obj} index={i} />;
           } else {
             return <></>;
           }
@@ -67,7 +67,7 @@ const UnitBody = ({ unit }) => {
         icon={<PlusOutlined />}
         onClick={() =>
           addOjetive({
-            id: randomId() + "noRegistrado",
+            id: randomId(),
             descripcion: unit.objetivos.length + 1 + ": Objetivo " + (unit.objetivos.length + 1),
           })
         }>

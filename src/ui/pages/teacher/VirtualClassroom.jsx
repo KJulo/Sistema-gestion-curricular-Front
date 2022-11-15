@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 // antd
-import { Typography, Space, Menu, Select, Modal, Input, Alert, Layout, Checkbox } from "antd";
+import { Typography, Card, Menu, Select, Modal, Input, Alert, Layout, Checkbox } from "antd";
 const { Sider, Content } = Layout;
 const { TextArea } = Input;
 import {
@@ -240,30 +240,31 @@ const VitualClassroom = () => {
                 <></>
               )}
               <PlusSquareOutlined
+                style={{ marginBottom: 20 }}
                 onClick={() => {
                   onClickAdd();
                 }}
               />
             </Content>
             <div className="side-objetives">
-              <Title level={3}>Objetivos</Title>
-              TODO seccion objetivos
-              <Checkbox.Group
-                className="vertical-flex"
-                style={{
-                  width: "100%",
-                }}
-                onChange={onChangeCheckbox}>
-                <Checkbox value="1" style={{ margin: 0 }}>
-                  Objetivo 1
-                </Checkbox>
-                <Checkbox value="2" style={{ margin: 0 }}>
-                  Objetivo 2
-                </Checkbox>
-                <Checkbox value="3" style={{ margin: 0 }}>
-                  Objetivo 2
-                </Checkbox>
-              </Checkbox.Group>
+              {currentSubMenu.objetivos.length > 0 && (
+                <Card title="Objetivos" style={{ width: 300 }} hoverable>
+                  <Checkbox.Group
+                    className="vertical-flex"
+                    style={{
+                      width: "100%",
+                    }}
+                    onChange={onChangeCheckbox}>
+                    {currentSubMenu.objetivos.map((obj) => (
+                      <li>{obj.descripcion}</li>
+                      // TODO implementar el checkbox de los objetivos
+                      // <Checkbox value={obj.descripcion} style={{ margin: 0 }}>
+                      //   {obj.descripcion}
+                      // </Checkbox>
+                    ))}
+                  </Checkbox.Group>
+                </Card>
+              )}
             </div>
           </>
         ) : (
