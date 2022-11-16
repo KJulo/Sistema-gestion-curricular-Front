@@ -35,6 +35,7 @@ export { default as CoursesCards } from "@components/Teachers/CoursesCards";
 export { default as EditTeacher } from "@components/Teachers/EditTeacher";
 export { default as FilterSubject } from "@components/Teachers/FilterSubject";
 export { default as AddMark } from "@components/Teachers/AddMark";
+export { default as DateTimeModal } from "@components/DateTimeModal";
 
 //students
 export { default as StudentContent } from "@components/Students/HomeContent.jsx";

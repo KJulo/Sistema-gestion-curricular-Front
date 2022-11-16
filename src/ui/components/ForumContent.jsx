@@ -8,27 +8,16 @@ import { useDispatch } from "react-redux";
 import { editContent } from "@slices/teachers";
 
 import { EditOutlined, DeleteOutlined, CalendarOutlined, RightOutlined } from "@ant-design/icons";
-import {
-  Col,
-  Row,
-  Button,
-  Modal,
-  Input,
-  message,
-  Popconfirm,
-  DatePicker,
-  Select,
-  Space,
-  TimePicker,
-} from "antd";
-const { Option } = Select;
+import { Row, Modal, Input, Popconfirm, Select } from "antd";
 const { TextArea } = Input;
 
-const ForumContent = ({ content, isEdit, process, forumId }) => {
+// Components
+import { DateTimeModal } from "@components";
+
+const ForumContent = ({ content, isEdit, process, isLoading, forumId }) => {
   const dispatch = useDispatch();
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-  const messageTime = 2000;
 
   const onDeleteText = "¿Desea eliminar esto?";
 
@@ -37,12 +26,6 @@ const ForumContent = ({ content, isEdit, process, forumId }) => {
     alignItems: "center",
     marginBottom: 5,
     gap: 20,
-  };
-  const modalStyle = {
-    gap: 10,
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "flex-start",
   };
 
   function onClickEdit() {
@@ -65,15 +48,7 @@ const ForumContent = ({ content, isEdit, process, forumId }) => {
       })
     );
   }
-  function handdleOkCalendar() {
-    /**
-     * TODO editar o crear notificaciones
-     * * crear un useEffect para los onChange de los datePicker
-     */
-    const input = document.getElementsByTagName("input");
-    console.log(input);
-    setIsCalendarOpen(false);
-  }
+
   function onClose() {
     setIsEditOpen(false);
     setIsCalendarOpen(false);
@@ -130,12 +105,7 @@ const ForumContent = ({ content, isEdit, process, forumId }) => {
         </Input.Group>
       </Modal>
 
-      <Modal title="Añadir tiempo" open={isCalendarOpen} onOk={onClose} onCancel={onClose}>
-        <Input.Group style={modalStyle}>
-          <DatePicker onChange={(value) => console.log(value)} />
-          <TimePicker onChange={(value) => console.log(value)} />
-        </Input.Group>
-      </Modal>
+      <DateTimeModal isOpen={isCalendarOpen} setOpen={setIsCalendarOpen} isLoading={isLoading} />
     </>
   );
 };

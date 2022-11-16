@@ -226,6 +226,7 @@ const VitualClassroom = () => {
                   content={item}
                   isEdit={true}
                   process={process}
+                  isLoading={isLoading}
                   forumId={currentSubMenu.id}
                 />
               ))}
