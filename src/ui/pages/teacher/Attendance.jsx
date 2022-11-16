@@ -204,8 +204,6 @@ const Attendance = () => {
     }
   }, [isLoading]);
 
-  console.log(onChangeDate, courses, selectedCourseSubjects);
-
   return (
     <div>
       <DefaultTitleContent

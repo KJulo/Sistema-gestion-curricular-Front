@@ -52,18 +52,26 @@ export const Planification = ({ course, management }) => {
         let objetivos = f.objetivos ?? [];
         if (objetivos.length > 0) {
           let cont = 0;
-          objetivos = objetivos.map((o) => {
-            if (o !== "" && (typeof o === "string" || !o.hasOwnProperty("id"))) {
+          objetivos = objetivos.map((obj) => {
+            // validar propiedades
+            if (
+              obj.descripcion !== "" &&
+              (typeof obj.descripcion === "string" || !obj.descripcion.hasOwnProperty("id"))
+            ) {
               cont = cont + 1;
+              // validar si hay están los numeros al principio
+              if (obj.descripcion.match(/\d+:/).index === 0) {
+                return {
+                  id: randomId(),
+                  descripcion: obj.descripcion,
+                };
+              }
               return {
                 id: randomId(),
-                descripcion: cont + ": " + o,
+                descripcion: cont + ": " + obj.descripcion,
               };
             }
           });
-        }
-        if (objetivos.length === 1 && !objetivos[0]) {
-          objetivos = [];
         }
         delete f.nombre;
         dispatch(appendUnitsManagement({ ...f, objetivos: objetivos, nombre: titulo }));

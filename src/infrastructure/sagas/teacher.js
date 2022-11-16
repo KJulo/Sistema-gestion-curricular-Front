@@ -152,9 +152,13 @@ function* getForumsAndContent() {
     const forums = (yield call(foro.getForums)).data.data;
     const contents = (yield call(contenido.getContents)).data.data;
 
-    // combinar arreglos
+    // Combinar arreglos
     const forumsWithContent = forums.map((f) => {
-      const objs = f.objetivo.split("[cut@},{@cut]");
+      let objs = [""];
+      if (f.objetivo) {
+        objs = JSON.parse(f.objetivo).data;
+      }
+
       return {
         ...f,
         contenidos: contents.filter((c) => c.id_foro === f.id),
@@ -211,30 +215,9 @@ function* createForums(action) {
     for (let i = 0; i < forums.length; i++) {
       const subject = course.asignaturas.find((a) => a.nombre === course.asignatura);
 
-      let obj = "";
-      forums[i].objetivos.map((o) => {
-        // comprobar si hay numeros, ejemplo 1: Objetivo, 2: Objetivo
-        const matchNumbers = o.descripcion.match(/\d+:/);
-
-        if (matchNumbers) {
-          let index = o.descripcion.indexOf(matchNumbers[0]);
-          if (index === 0) {
-            if (obj === "") {
-              obj = o.descripcion.replace(matchNumbers[0] + " ", "");
-              return;
-            } else {
-              obj = obj + "[cut@},{@cut]" + o.descripcion.replace(matchNumbers[0] + " ", "");
-              return;
-            }
-          }
-        }
-
-        if (obj === "") {
-          obj = o.descripcion;
-        } else {
-          obj = obj + "[cut@},{@cut]" + o.descripcion;
-        }
-      });
+      // Convertir los objetivos en string para guardarlos en el mismo campo
+      let obj = { data: forums[i].objetivos };
+      obj = JSON.stringify(obj);
 
       const params = {
         id_asignatura: subject.id,
@@ -245,6 +228,7 @@ function* createForums(action) {
         objetivoTermino: forums[i].dateRange[1],
       };
 
+      // Añadir o editar
       if (forums[i].id.includes("noRegistrado")) {
         yield call(foro.createForum, params);
       } else {
@@ -299,9 +283,10 @@ function* createMark(action) {
         fecha: selectedDate,
         descripcion: values[i].toString(),
         ponderacion: decimalPonderacion.toString(),
+        nota: values[i].toString(),
       };
       newMarks.push(params);
-      // yield call(notas.addNota, params);
+      yield call(notas.addNota, params);
     }
     yield put(appendStudentsMarks(newMarks));
     message.success("Se han creado las notas con éxito");
