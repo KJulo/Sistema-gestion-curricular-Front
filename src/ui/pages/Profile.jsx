@@ -44,7 +44,7 @@ const Profile = () => {
               gap: "12px",
             }}
           >
-            <DefaultTitleContent title="Información personal" action={<EditPassword />} />
+            <DefaultTitleContent title="Información personal" action={<EditPassword user={user} />} />
             <Avatar size={128} icon={<UserOutlined />} />
             <Text strong>Nombre(s): {user.nombres}</Text>
             <Text strong>Apellido(s): {user.apellidos}</Text>
