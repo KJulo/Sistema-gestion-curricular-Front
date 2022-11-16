@@ -7,17 +7,13 @@ import { useDispatch } from "react-redux";
 // Redux
 import { editContent } from "@slices/teachers";
 
-import { EditOutlined, DeleteOutlined, CalendarOutlined, RightOutlined } from "@ant-design/icons";
+import { EditOutlined, DeleteOutlined, RightOutlined } from "@ant-design/icons";
 import { Row, Modal, Input, Popconfirm, Select } from "antd";
 const { TextArea } = Input;
 
-// Components
-import { DateTimeModal } from "@components";
-
-const ForumContent = ({ content, isEdit, process, isLoading, forumId }) => {
+const ForumContent = ({ content, isEdit, forumId }) => {
   const dispatch = useDispatch();
   const [isEditOpen, setIsEditOpen] = useState(false);
-  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
   const onDeleteText = "¿Desea eliminar esto?";
 
@@ -31,9 +27,7 @@ const ForumContent = ({ content, isEdit, process, isLoading, forumId }) => {
   function onClickEdit() {
     setIsEditOpen(true);
   }
-  function onClickCalendar() {
-    setIsCalendarOpen(true);
-  }
+
   function handdleOkContent() {
     setIsEditOpen(false);
     const title = document.getElementById("input").value;
@@ -51,7 +45,6 @@ const ForumContent = ({ content, isEdit, process, isLoading, forumId }) => {
 
   function onClose() {
     setIsEditOpen(false);
-    setIsCalendarOpen(false);
   }
 
   function onConfirmDelete(content) {
@@ -78,7 +71,6 @@ const ForumContent = ({ content, isEdit, process, isLoading, forumId }) => {
                 cancelText="Cancelar">
                 <DeleteOutlined />
               </Popconfirm>
-              <CalendarOutlined onClick={() => onClickCalendar(content)} />
             </div>
           ) : (
             <></>
@@ -104,8 +96,6 @@ const ForumContent = ({ content, isEdit, process, isLoading, forumId }) => {
           />
         </Input.Group>
       </Modal>
-
-      <DateTimeModal isOpen={isCalendarOpen} setOpen={setIsCalendarOpen} isLoading={isLoading} />
     </>
   );
 };

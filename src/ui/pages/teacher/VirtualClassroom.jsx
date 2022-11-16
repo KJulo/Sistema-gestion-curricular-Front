@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 // antd
-import { Typography, Card, Menu, Select, Modal, Input, Alert, Layout, Checkbox } from "antd";
-const { Sider, Content } = Layout;
+import { Typography, Card, Menu, Select, Modal, Input, Alert, Layout, Checkbox, Row } from "antd";
+const { Content } = Layout;
 const { TextArea } = Input;
 import {
   AppstoreOutlined,
@@ -11,6 +11,7 @@ import {
   CloseSquareFilled,
   MoreOutlined,
   RightOutlined,
+  CalendarOutlined,
 } from "@ant-design/icons";
 
 // styles
@@ -18,21 +19,19 @@ import "@styles/Home.less";
 import "@styles/VirtualClass.less";
 
 // hooks
-import { useGetCurrentMonth, useGetCurrentYear, useGetCurrentDay } from "@hooks/useDate";
 import { useEffect } from "react";
 
 // Redux
-import {
-  fetchStudents,
-  fetchCourses,
-  fetchStudentsNotes,
-  setIsLoading,
-  addContent,
-  fetchForumsAndContent,
-} from "@slices/teachers";
+import { fetchCourses, addContent, fetchForumsAndContent } from "@slices/teachers";
 
 //components
-import { ForumContent, FilterButton, LoadingSpinner, DefaultTitleContent } from "@components/index";
+import {
+  ForumContent,
+  FilterButton,
+  LoadingSpinner,
+  DefaultTitleContent,
+  DateTimeModal,
+} from "@components/index";
 
 //constants
 const { Title } = Typography;
@@ -49,6 +48,7 @@ const defaultMenu = [
 const VitualClassroom = () => {
   const dispatch = useDispatch();
   const [isAddOpen, setIsAddOpen] = useState(false);
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
   const {
     isLoading,
@@ -165,6 +165,10 @@ const VitualClassroom = () => {
     console.log(`checked = `, e);
   };
 
+  function onClickCalendar() {
+    setIsCalendarOpen(true);
+  }
+
   return (
     <div>
       <div
@@ -181,7 +185,12 @@ const VitualClassroom = () => {
           subtitle="¡Haz click abajo para cambiar de curso! Recuerda que tu administrador designa tus cursos."
         />
         <LoadingSpinner isLoading={isLoading}>
-          <FilterButton options={courseNames} onChange={handleChange} />
+          <Row style={{ alignItems: "center", gap: 13 }}>
+            <FilterButton options={courseNames} onChange={handleChange} />
+            {courseNames[0] && (
+              <CalendarOutlined style={{ fontSize: 23 }} onClick={() => onClickCalendar()} />
+            )}
+          </Row>
         </LoadingSpinner>
       </div>
 
@@ -222,13 +231,7 @@ const VitualClassroom = () => {
           <>
             <Content>
               {currentSubMenu.contenidos.map((item) => (
-                <ForumContent
-                  content={item}
-                  isEdit={true}
-                  process={process}
-                  isLoading={isLoading}
-                  forumId={currentSubMenu.id}
-                />
+                <ForumContent content={item} isEdit={true} forumId={currentSubMenu.id} />
               ))}
               {currentSubMenu.contenidos.length === 0 ? (
                 <Alert
@@ -271,6 +274,7 @@ const VitualClassroom = () => {
         ) : (
           <></>
         )}
+
         <Modal
           title="Añadir nueva información o tarea"
           open={isAddOpen}
@@ -281,6 +285,8 @@ const VitualClassroom = () => {
             <TextArea rows={6} placeholder="Contenido." id="textArea" />
           </Input.Group>
         </Modal>
+
+        <DateTimeModal isOpen={isCalendarOpen} setOpen={setIsCalendarOpen} isLoading={isLoading} />
       </Layout>
     </div>
   );
