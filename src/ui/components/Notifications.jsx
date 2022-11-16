@@ -24,7 +24,10 @@ const Notifications = ({ data }) => {
           dataSource={data}
           renderItem={(item) => (
             <List.Item>
-              {`${moment(item.fecha).format("DD/MM/YYYY")} | ${item.titulo} | ${item.descripcion}`}
+              <List.Item.Meta
+                title={<p> {`${item.titulo} - ${moment(item.fecha).format("DD/MM/YYYY")}`}</p>}
+                description={item.descripcion}
+              />
             </List.Item>
           )}
         />

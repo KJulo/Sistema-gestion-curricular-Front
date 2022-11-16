@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from "react-redux";
 
 //actions
 import { FETCH_STUDENTS_ADMIN } from "@infrastructure/sagas/types/admin";
+import { Spin } from "antd";
 
 const Students = () => {
   const dispatch = useDispatch();
@@ -32,12 +33,19 @@ const Students = () => {
     <div>
       <DefaultTitleContent title={"Alumnos"} action={<AddStudent />} />
       <div style={true ? {} : { pointerEvents: "none" }}>
-        <AdminTableLayout
-          searchInput={<SearchContent placeHolder="Buscar alumno" />}
-          tableContent={
-            <ContentTable content={students} columns={columns} scroll={false} />
-          }
-        />
+        {Object.keys(students[0]).length !== 0 ? (
+          <AdminTableLayout
+            tableContent={
+              <ContentTable
+                content={students}
+                columns={columns}
+                scroll={false}
+              />
+            }
+          />
+        ) : (
+          <Spin />
+        )}
       </div>
     </div>
   );

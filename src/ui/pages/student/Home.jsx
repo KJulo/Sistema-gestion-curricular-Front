@@ -29,7 +29,7 @@ const Home = () => {
   }, [student]);
 
   return (
-    <div style={{ minHeight: 280 }}>
+    <div style={{ minHeight: 280}}>
       <DefaultTitleContent
         title={"Hola, " + student.nombres + " " + student.apellidos}
         subtitle="Aquí podrás ver tus tareas pendientes y tu izquierda, podrás seguir navegando por el sitio, ¡Buen día!"
@@ -37,7 +37,7 @@ const Home = () => {
 
       <div
         className="flex-container"
-        style={{ padding: 10, justifyContent: "space-around" }}
+        style={{ padding: 10, justifyContent: "space-around",flexDirection:"column" }}
       >
         <img src={SchoolImg} alt="Logo Colegio" style={{ margin: 10 }} />
 

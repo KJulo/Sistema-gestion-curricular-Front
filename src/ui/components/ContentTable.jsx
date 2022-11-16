@@ -7,6 +7,7 @@ import { Table } from "antd";
 import "@styles/ContentTable.less";
 
 const ContentTable = ({ content, columns, scroll }) => {
+  
   return (
     <Table
       columns={columns}

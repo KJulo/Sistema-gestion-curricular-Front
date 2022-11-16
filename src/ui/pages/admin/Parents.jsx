@@ -17,6 +17,7 @@ import { content, columns } from "@constants/admin/parents";
 //redux
 import { useDispatch, useSelector } from "react-redux";
 import { FETCH_PARENTS_ADMIN } from "@infrastructure/sagas/types/admin";
+import { Spin } from "antd";
 
 const Parents = () => {
   const dispatch = useDispatch();
@@ -30,12 +31,19 @@ const Parents = () => {
     <div>
       <DefaultTitleContent title={"Apoderados"} action={<AddParent />} />
       <div style={true ? {} : { pointerEvents: "none" }}>
-        <AdminTableLayout
-          //searchInput={<SearchContent placeHolder="Buscar apoderado" />}
-          tableContent={
-            <ContentTable content={parents} columns={columns} type="Parents" />
-          }
-        />
+        {Object.keys(parents[0]).length !== 0 ? (
+          <AdminTableLayout
+            tableContent={
+              <ContentTable
+                content={parents}
+                columns={columns}
+                type="Parents"
+              />
+            }
+          />
+        ) : (
+          <Spin />
+        )}
       </div>
     </div>
   );
