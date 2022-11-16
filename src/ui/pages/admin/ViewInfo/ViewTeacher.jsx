@@ -11,6 +11,7 @@ import {
   Col,
   List,
   Divider,
+  Spin,
 } from "antd";
 import { DeleteOutlined, UserOutlined } from "@ant-design/icons";
 import { useNavigate, useLocation } from "react-router-dom";
@@ -44,7 +45,7 @@ const ViewTeacher = () => {
     });
     navigate("/administrador/profesores");
   };
-  if (teacher) {
+  if (Object.keys(teacher).length > 0 && teacher.id === id) {
     return (
       <Row style={{ display: "flex", flexFlow: "column" }}>
         <Col>
@@ -127,7 +128,7 @@ const ViewTeacher = () => {
       </Row>
     );
   } else {
-    return <div>loading...</div>;
+    return <Spin />;
   }
 };
 

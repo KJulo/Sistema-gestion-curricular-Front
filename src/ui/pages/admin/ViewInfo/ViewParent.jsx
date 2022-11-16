@@ -8,6 +8,7 @@ import {
   Button,
   Popconfirm,
   message,
+  Spin,
 } from "antd";
 
 import {
@@ -47,7 +48,7 @@ const ViewParent = () => {
     navigate("/administrador/apoderados");
   };
 
-  if (parent) {
+  if (Object.keys(parent).length > 0 && parent.id === id) {
     return (
       <>
         <Card
@@ -106,7 +107,7 @@ const ViewParent = () => {
       </>
     );
   } else {
-    return <></>;
+    return <Spin />;
   }
 };
 

@@ -8,6 +8,7 @@ import {
   Button,
   Popconfirm,
   message,
+  Spin,
 } from "antd";
 const { Text } = Typography;
 import { DeleteOutlined, UserOutlined } from "@ant-design/icons";
@@ -50,7 +51,7 @@ const ViewStudent = () => {
   };
   const { student } = useSelector((store) => store.admin);
 
-  if (student) {
+  if (Object.keys(student).length > 0 && student.id === id) {
     return (
       <>
         <Card
@@ -132,7 +133,7 @@ const ViewStudent = () => {
       </>
     );
   } else {
-    return <div>Cargando...</div>;
+    return <Spin />;
   }
 };
 
