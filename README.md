@@ -4,7 +4,7 @@
 
 Se debe tener instalado Node JS para la ejecución y buildeo del proyecto, en este caso se utilizó la versión 16.16.0.
 
-Crear archivo .env en la raíz del proyecto. El archivo .env debe contener los siguientes parámetros.
+Se debe además crear un archivo.env en la raiz del proyecto. El archivo .env debe contener los siguientes parámetros.
 
 - `SERVER_PORT: *Puerto del Backend`
 - `SERVER_URL: *URL del Backend`
