@@ -26,7 +26,7 @@ import { AdminTableLayout } from "@containers/index";
 import { LoadingSpinner } from "@components";
 
 //constants
-import { columns } from "@constants/attendanceTable";
+import { columns } from "@constants/student/attendanceTable";
 import { setIsLoading, fetchAttendance, updateFilters } from "@slices/students";
 import { useDispatch, useSelector } from "react-redux";
 

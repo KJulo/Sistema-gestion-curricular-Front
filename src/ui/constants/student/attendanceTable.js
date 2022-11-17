@@ -15,14 +15,6 @@ export const columns = [
     },
   },
   {
-    title: "Asignatura",
-    dataIndex: "asignatura",
-    key: "asignatura",
-    render: (record) => {
-      return <span>{record.nombre}</span>;
-    },
-  },
-  {
     title: "Asistencia",
     dataIndex: "asistencia",
     key: "asistencia",

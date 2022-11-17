@@ -5,7 +5,7 @@ import Notifications from "@components/Notifications";
 import { DefaultTitleContent } from "@components";
 
 // antd
-import { Typography } from "antd";
+import { Col, Row, Typography } from "antd";
 const { Title } = Typography;
 
 // styles
@@ -20,7 +20,7 @@ import { fetchNotification } from "@slices/students";
 
 const Home = () => {
   const dispatch = useDispatch();
-  const { student, notifications } = useSelector((store) => store.student);
+  const { student, notifications, course } = useSelector((store) => store.student);
 
   useEffect(() => {
     if (student.id_curso) {
@@ -29,16 +29,20 @@ const Home = () => {
   }, [student]);
 
   return (
-    <div style={{ minHeight: 280}}>
+    <div style={{ minHeight: 280 }}>
       <DefaultTitleContent
-        title={"Hola, " + student.nombres + " " + student.apellidos}
+        title={
+          <Col>
+            <Row>{"Hola, " + student.nombres + " " + student.apellidos}</Row>
+            <Row>{course.nombre + " - " + course.paralelo}</Row>
+          </Col>
+        }
         subtitle="Aquí podrás ver tus tareas pendientes y tu izquierda, podrás seguir navegando por el sitio, ¡Buen día!"
       />
 
       <div
         className="flex-container"
-        style={{ padding: 10, justifyContent: "space-around",flexDirection:"column" }}
-      >
+        style={{ padding: 10, justifyContent: "space-around", flexDirection: "column" }}>
         <img src={SchoolImg} alt="Logo Colegio" style={{ margin: 10 }} />
 
         <Notifications data={notifications} />

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 // antd
-import { Typography, Space, Menu, Select, Modal, Input, Alert } from "antd";
+import { Typography, Space, Menu, Select, Modal, Input, Alert, Col, Row } from "antd";
 import {
   AppstoreOutlined,
   PlusSquareOutlined,
@@ -149,7 +149,12 @@ const VitualClassroom = () => {
   return (
     <div>
       <DefaultTitleContent
-        title={"Aula Virtual"}
+        title={
+          <Col>
+            <Row>Aula Virtual</Row>
+            <Row>{course.nombre + " - " + course.paralelo}</Row>
+          </Col>
+        }
         subtitle="Aquí podrás revisar las unidades y material de tu curso."
       />
 

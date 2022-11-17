@@ -62,8 +62,6 @@ export const studentSlice = createSlice({
     },
     updateForumsAndContent: (state, action) => {
       const { payload } = action;
-      console.log(payload);
-      console.log(state.course);
       state.course = {
         ...state.course,
         asignaturas: state.course.asignaturas.map((subject) => {

@@ -24,7 +24,7 @@ import { AdminTableLayout } from "@containers/index";
 import { ContentTable, DefaultTitleContent } from "@components/index";
 
 // constants
-import { columns } from "@constants/attendanceTable";
+import { columns } from "@constants/student/attendanceTable";
 import { useDispatch, useSelector } from "react-redux";
 
 const CollapsePanel = ({ studentArray }) => {
@@ -38,11 +38,7 @@ const CollapsePanel = ({ studentArray }) => {
           <AdminTableLayout
             searchInput={""}
             tableContent={
-              <ContentTable
-                content={student.asistencia}
-                columns={columns}
-                scroll={false}
-              />
+              <ContentTable content={student.asistencia} columns={columns} scroll={false} />
             }
           />
         </Panel>
@@ -55,9 +51,7 @@ const Attendance = () => {
   const currentDate = useGetCurrentMonth() + "-" + useGetCurrentYear();
   const [selectedDate, setSelectedDate] = useState(currentDate);
 
-  const { parentData, students } = useSelector(
-    (store) => store.parent
-  );
+  const { parentData, students } = useSelector((store) => store.parent);
   const dispatch = useDispatch();
   useEffect(() => {
     // Cada estudiante de por si ya incluye las notificaciones en la consulta

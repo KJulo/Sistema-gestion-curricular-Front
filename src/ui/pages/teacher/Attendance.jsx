@@ -33,7 +33,8 @@ import {
 import { AdminTableLayout } from "@containers/index";
 
 //constants
-import { columns, status } from "@constants/teacher/attendanceTable";
+import { columns } from "@constants/teacher/attendanceTable";
+import { status } from "@constants/attendanceStatus";
 
 const Attendance = () => {
   const dispatch = useDispatch();
