@@ -14,6 +14,7 @@ export { default as DocumentGenerator } from "@components/DocumentGenerator";
 export { default as Warning } from "@components/Warning";
 export { default as StudentCards } from "@components/StudentCards";
 export { default as EditPassword } from "@components/EditPassword";
+export { default as Notifications } from "@components/Notifications";
 
 //admin
 export { default as AdminMenu } from "@components/Admin/NavigationMenu";
@@ -36,6 +37,7 @@ export { default as CoursesCards } from "@components/Teachers/CoursesCards";
 export { default as EditTeacher } from "@components/Teachers/EditTeacher";
 export { default as FilterSubject } from "@components/Teachers/FilterSubject";
 export { default as AddMark } from "@components/Teachers/AddMark";
+export { default as DateTimeModal } from "@components/DateTimeModal";
 
 //students
 export { default as StudentContent } from "@components/Students/HomeContent.jsx";

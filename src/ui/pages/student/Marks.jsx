@@ -19,7 +19,7 @@ import { ContentTable, DefaultTitleContent, LoadingSpinner } from "@components/i
 import { AdminTableLayout } from "@containers/index";
 
 //constants
-import { columns } from "@constants/marksTable";
+import { columns } from "@constants/student/marksTable";
 
 const Marks = () => {
   const dispatch = useDispatch();
@@ -42,7 +42,10 @@ const Marks = () => {
         {student.hasOwnProperty("nombres") ? (
           <Statistic
             title={student.nombres.split(" ")[0] + " " + student.apellidos[0]}
-            value={"Promedio: " + (useAverage(marks, 2) === "NaN" ? "-" : useAverage(marks, 2))}
+            value={
+              "Promedio: " +
+              (useAverage(marks, 2) === "NaN" ? "Sin notas aún" : useAverage(marks, 2))
+            }
           />
         ) : (
           <></>

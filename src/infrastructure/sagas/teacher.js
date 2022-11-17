@@ -31,6 +31,9 @@ import {
   addMarks,
   appendStudentsMarks,
   updateStudentAttendance,
+  addNotificacion,
+  updateNotifications,
+  updatingNotificacion,
 } from "@slices/teachers";
 
 // Network
@@ -43,6 +46,7 @@ import {
   asistencia,
   foro,
   contenido,
+  notificacion,
 } from "@network/index";
 
 function* getTeacher(action) {
@@ -58,27 +62,25 @@ function* getTeacher(action) {
 
 function* getCourses() {
   try {
-    const responseCourses = (yield call(curso.getCourses)).data.data;
-    const responseSubjects = (yield call(asignatura.getAsignaturas)).data.data;
+    const courses = (yield call(curso.getCourses)).data.data;
+    const subjects = (yield call(asignatura.getAsignaturas)).data.data;
 
-    // Combinar las asignaturas con su correspondiente curso
+    // Combinar las asignaturas y notificaciones con su correspondiente curso
     let merged = [];
-    for (let i = 0; i < responseCourses.length; i++) {
-      // obtener lista de asignaturas
-      const subjectList = responseSubjects.filter(
-        (subject) => subject.id_curso === responseCourses[i].id
-      );
-      if (subjectList) {
-        merged.push({
-          ...responseCourses[i],
-          asignaturas: subjectList,
-        });
-      } else {
-        merged.push({
-          ...responseCourses[i],
-          asignaturas: [],
-        });
-      }
+    for (let i = 0; i < courses.length; i++) {
+      // combinar con lista de asinaturas
+      const subjectList = subjects.filter((subject) => subject.id_curso === courses[i].id);
+      // // combinar con lista de notificaciones
+      // const notifications = (yield call(notificacion.getNotifications, {
+      //   params: { id_curso: courses[i].id },
+      // })).data.data;
+      // const notificationList = notifications.filter((noti) => noti.id_curso === courses[i].id);
+      // Combinar todo en uno
+      merged.push({
+        ...courses[i],
+        asignaturas: subjectList != null ? subjectList : [],
+        // notificaciones: notificationList != null ? notificationList : [],
+      });
     }
     yield put(updateCourses(merged));
   } catch (e) {
@@ -297,6 +299,45 @@ function* createMark(action) {
   }
 }
 
+function* createNotification(action) {
+  const { idCurso, titulo, descripcion, fecha } = action.payload;
+  try {
+    const params = {
+      id_curso: idCurso,
+      titulo: titulo,
+      descripcion: descripcion,
+      fecha: fecha,
+    };
+
+    yield call(notificacion.addNotification, params);
+    message.success("Se ha añadido la notificación al curso");
+
+    // hacer update a las notificaciones
+    yield put(updatingNotificacion(idCurso));
+  } catch (e) {
+    console.log(e);
+    yield put(setIsLoading(false));
+    message.error("No se ha podido registrar o actualizar la notificación.");
+  }
+}
+
+function* updateNotificationToCourses(action) {
+  const { payload } = action;
+  console.log(payload);
+  try {
+    // hacer update a las notificaciones
+    const notifications = (yield call(notificacion.getNotifications, {
+      payload: { id_curso: payload },
+    })).data.data;
+    console.log("notificaciones obtenidas con id", notifications, payload);
+    yield put(updateNotifications(notifications));
+  } catch (e) {
+    console.log(e);
+    yield put(setIsLoading(false));
+    message.error("Error al obtener las notificaciones.");
+  }
+}
+
 function* watchGetTeacherUser() {
   yield takeLatest(fetchTeacher, getTeacher);
 }
@@ -336,6 +377,12 @@ function* watchAddForums() {
 function* watchAddMarks() {
   yield takeLatest(addMarks, createMark);
 }
+function* watchAddNotification() {
+  yield takeLatest(addNotificacion, createNotification);
+}
+function* watchFetchNotifications() {
+  yield takeLatest(updatingNotificacion, updateNotificationToCourses);
+}
 
 export default [
   watchGetTeacherUser(),
@@ -351,4 +398,6 @@ export default [
   watchAddForums(),
   watchGoEditAttendance(),
   watchAddMarks(),
+  watchAddNotification(),
+  watchFetchNotifications(),
 ];
