@@ -55,23 +55,32 @@ const VitualClassroom = () => {
     process,
     courses: { list: courses },
   } = useSelector((store) => store.teacher);
-  const [currentCourse, setCurrentCourse] = useState(null);
+  const [currentCourse, setCurrentCourse] = useState(courses.length > 0 ? courses[0] : null);
   const [currentMenu, setCurrentMenu] = useState(null);
   const [currentSubMenu, setCurrentSubMenu] = useState(null);
   const [hasMenu, setHasMenu] = useState(false);
   const [hasSubMenu, setHasSubMenu] = useState(false);
+  const courseNames = courses.map((course) => course.nombre + " - " + course.paralelo);
+
+  // Buscar cursos si es que no hay
   useEffect(() => {
-    dispatch(fetchCourses());
+    if (courses.length === 0) {
+      dispatch(fetchCourses());
+    }
   }, []);
 
+  // Si se actualiza la cantidad de cursos
   useEffect(() => {
-    dispatch(fetchForumsAndContent());
+    if (courses.length > 0) {
+      setCurrentCourse(courses[0]);
+      dispatch(fetchForumsAndContent());
+    }
   }, [courses.length]);
 
-  // El hook useState se actualiza al siguiente render, por ello, utilizar useEffect
+  // Si se actualiza la información del curso seleccionado
   useEffect(() => {
-    if (courses.length > 0) setCurrentCourse(courses[0]);
-  }, [courses]);
+    setCurrentCourse(courses.find((c) => c.id === currentCourse?.id));
+  }, [courses.find((c) => c.id === currentCourse?.id)]);
 
   useEffect(() => {
     setHasMenu(false);
@@ -103,9 +112,6 @@ const VitualClassroom = () => {
       setHasSubMenu(currentMenu.foros.length > 0);
   }, [currentMenu]);
 
-  // Optiones
-  const courseNames = courses.map((course) => course.nombre + " - " + course.paralelo);
-
   // Asignaturas del curso
   const subjects = currentCourse
     ? currentCourse.asignaturas.map((asignatura) => ({
@@ -126,7 +132,6 @@ const VitualClassroom = () => {
       : defaultMenu;
 
   const handleChange = (value) => {
-    console.log(value);
     if (courses[value] !== currentCourse) {
       setCurrentCourse(courses[value]);
     }
@@ -170,7 +175,7 @@ const VitualClassroom = () => {
   }
 
   return (
-    <div>
+    <div isLoading={isLoading}>
       <div
         style={{
           justifyContent: "space-between",
@@ -184,14 +189,12 @@ const VitualClassroom = () => {
           title={"Módulo Aula Virtual"}
           subtitle="¡Haz click abajo para cambiar de curso! Recuerda que tu administrador designa tus cursos."
         />
-        <LoadingSpinner isLoading={isLoading}>
-          <Row style={{ alignItems: "center", gap: 13 }}>
-            <FilterButton options={courseNames} onChange={handleChange} />
-            {courseNames[0] && (
-              <CalendarOutlined style={{ fontSize: 23 }} onClick={() => onClickCalendar()} />
-            )}
-          </Row>
-        </LoadingSpinner>
+        <Row style={{ alignItems: "center", gap: 13 }}>
+          <FilterButton options={courseNames} onChange={handleChange} />
+          {courseNames[0] && (
+            <CalendarOutlined style={{ fontSize: 23 }} onClick={() => onClickCalendar()} />
+          )}
+        </Row>
       </div>
 
       {hasMenu ? (
@@ -286,7 +289,15 @@ const VitualClassroom = () => {
           </Input.Group>
         </Modal>
 
-        <DateTimeModal isOpen={isCalendarOpen} setOpen={setIsCalendarOpen} isLoading={isLoading} />
+        {currentCourse && (
+          <DateTimeModal
+            courseId={currentCourse.id}
+            notifications={currentCourse.notificaciones}
+            isOpen={isCalendarOpen}
+            setOpen={setIsCalendarOpen}
+            isLoading={isLoading}
+          />
+        )}
       </Layout>
     </div>
   );
