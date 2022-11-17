@@ -62,16 +62,6 @@ const AddMark = ({ course, students, filters }) => {
     }
   }
 
-  useEffect(() => {
-    message.destroy();
-    if (hasSubjects) {
-      message.destroy();
-    } else {
-      message.destroy();
-      message.info("No puede añadir notas porque no existen asignaturas o alumnos.");
-    }
-  }, [hasSubjects]);
-
   return (
     <>
       <Button

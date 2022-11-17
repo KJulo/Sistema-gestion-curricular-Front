@@ -31,8 +31,11 @@ const Home = () => {
     courses: { management, list: courses },
   } = useSelector((store) => store.teacher);
 
+  // Buscar cursos si es que no hay
   useEffect(() => {
-    dispatch(fetchCourses());
+    if (courses.length === 0) {
+      dispatch(fetchCourses());
+    }
   }, []);
 
   useEffect(() => {

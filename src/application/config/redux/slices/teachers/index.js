@@ -51,6 +51,12 @@ export const teacherSlice = createSlice({
     addMarks: (state) => {
       state.isLoading = true;
     },
+    addNotificacion: (state) => {
+      state.isLoading = true;
+    },
+    updatingNotificacion: (state) => {
+      state.isLoading = true;
+    },
     updateTeacher: (state, action) => {
       state.teacher = { ...state.teacher, ...action.payload };
       state.isLoading = false;
@@ -457,6 +463,22 @@ export const teacherSlice = createSlice({
       state.courses.list = coursesWithForums;
       state.isLoading = false;
     },
+    updateNotifications: (state, action) => {
+      const { payload } = action;
+
+      const coursesWithNotifications = state.courses.list.map((course) => {
+        const finded = payload.filter((n) => n.id_curso === course.id);
+        if (finded) {
+          return {
+            ...course,
+            notificaciones: finded,
+          };
+        }
+        return course;
+      });
+      state.courses.list = coursesWithNotifications;
+      state.isLoading = false;
+    },
   },
 });
 
@@ -504,6 +526,9 @@ export const {
   addMarks,
   appendStudentsMarks,
   updateStateForum,
+  addNotificacion,
+  updateNotifications,
+  updatingNotificacion,
 } = teacherSlice.actions;
 
 // exportar reducer del slice para mandarlo a la store

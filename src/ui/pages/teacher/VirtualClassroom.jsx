@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 // antd
-import { Typography, Card, Menu, Select, Modal, Input, Alert, Layout, Checkbox } from "antd";
-const { Sider, Content } = Layout;
+import { Typography, Card, Menu, Select, Modal, Input, Alert, Layout, Checkbox, Row } from "antd";
+const { Content } = Layout;
 const { TextArea } = Input;
 import {
   AppstoreOutlined,
@@ -11,6 +11,7 @@ import {
   CloseSquareFilled,
   MoreOutlined,
   RightOutlined,
+  CalendarOutlined,
 } from "@ant-design/icons";
 
 // styles
@@ -18,21 +19,19 @@ import "@styles/Home.less";
 import "@styles/VirtualClass.less";
 
 // hooks
-import { useGetCurrentMonth, useGetCurrentYear, useGetCurrentDay } from "@hooks/useDate";
 import { useEffect } from "react";
 
 // Redux
-import {
-  fetchStudents,
-  fetchCourses,
-  fetchStudentsNotes,
-  setIsLoading,
-  addContent,
-  fetchForumsAndContent,
-} from "@slices/teachers";
+import { fetchCourses, addContent, fetchForumsAndContent } from "@slices/teachers";
 
 //components
-import { ForumContent, FilterButton, LoadingSpinner, DefaultTitleContent } from "@components/index";
+import {
+  ForumContent,
+  FilterButton,
+  LoadingSpinner,
+  DefaultTitleContent,
+  DateTimeModal,
+} from "@components/index";
 
 //constants
 const { Title } = Typography;
@@ -49,29 +48,39 @@ const defaultMenu = [
 const VitualClassroom = () => {
   const dispatch = useDispatch();
   const [isAddOpen, setIsAddOpen] = useState(false);
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
   const {
     isLoading,
     process,
     courses: { list: courses },
   } = useSelector((store) => store.teacher);
-  const [currentCourse, setCurrentCourse] = useState(null);
+  const [currentCourse, setCurrentCourse] = useState(courses.length > 0 ? courses[0] : null);
   const [currentMenu, setCurrentMenu] = useState(null);
   const [currentSubMenu, setCurrentSubMenu] = useState(null);
   const [hasMenu, setHasMenu] = useState(false);
   const [hasSubMenu, setHasSubMenu] = useState(false);
+  const courseNames = courses.map((course) => course.nombre + " - " + course.paralelo);
+
+  // Buscar cursos si es que no hay
   useEffect(() => {
-    dispatch(fetchCourses());
+    if (courses.length === 0) {
+      dispatch(fetchCourses());
+    }
   }, []);
 
+  // Si se actualiza la cantidad de cursos
   useEffect(() => {
-    dispatch(fetchForumsAndContent());
+    if (courses.length > 0) {
+      setCurrentCourse(courses[0]);
+      dispatch(fetchForumsAndContent());
+    }
   }, [courses.length]);
 
-  // El hook useState se actualiza al siguiente render, por ello, utilizar useEffect
+  // Si se actualiza la información del curso seleccionado
   useEffect(() => {
-    if (courses.length > 0) setCurrentCourse(courses[0]);
-  }, [courses]);
+    setCurrentCourse(courses.find((c) => c.id === currentCourse?.id));
+  }, [courses.find((c) => c.id === currentCourse?.id)]);
 
   useEffect(() => {
     setHasMenu(false);
@@ -103,9 +112,6 @@ const VitualClassroom = () => {
       setHasSubMenu(currentMenu.foros.length > 0);
   }, [currentMenu]);
 
-  // Optiones
-  const courseNames = courses.map((course) => course.nombre + " - " + course.paralelo);
-
   // Asignaturas del curso
   const subjects = currentCourse
     ? currentCourse.asignaturas.map((asignatura) => ({
@@ -126,7 +132,6 @@ const VitualClassroom = () => {
       : defaultMenu;
 
   const handleChange = (value) => {
-    console.log(value);
     if (courses[value] !== currentCourse) {
       setCurrentCourse(courses[value]);
     }
@@ -165,8 +170,12 @@ const VitualClassroom = () => {
     console.log(`checked = `, e);
   };
 
+  function onClickCalendar() {
+    setIsCalendarOpen(true);
+  }
+
   return (
-    <div>
+    <div isLoading={isLoading}>
       <div
         style={{
           justifyContent: "space-between",
@@ -180,9 +189,12 @@ const VitualClassroom = () => {
           title={"Módulo Aula Virtual"}
           subtitle="¡Haz click abajo para cambiar de curso! Recuerda que tu administrador designa tus cursos."
         />
-        <LoadingSpinner isLoading={isLoading}>
+        <Row style={{ alignItems: "center", gap: 13 }}>
           <FilterButton options={courseNames} onChange={handleChange} />
-        </LoadingSpinner>
+          {courseNames[0] && (
+            <CalendarOutlined style={{ fontSize: 23 }} onClick={() => onClickCalendar()} />
+          )}
+        </Row>
       </div>
 
       {hasMenu ? (
@@ -222,12 +234,7 @@ const VitualClassroom = () => {
           <>
             <Content>
               {currentSubMenu.contenidos.map((item) => (
-                <ForumContent
-                  content={item}
-                  isEdit={true}
-                  process={process}
-                  forumId={currentSubMenu.id}
-                />
+                <ForumContent content={item} isEdit={true} forumId={currentSubMenu.id} />
               ))}
               {currentSubMenu.contenidos.length === 0 ? (
                 <Alert
@@ -270,6 +277,7 @@ const VitualClassroom = () => {
         ) : (
           <></>
         )}
+
         <Modal
           title="Añadir nueva información o tarea"
           open={isAddOpen}
@@ -280,6 +288,16 @@ const VitualClassroom = () => {
             <TextArea rows={6} placeholder="Contenido." id="textArea" />
           </Input.Group>
         </Modal>
+
+        {currentCourse && (
+          <DateTimeModal
+            courseId={currentCourse.id}
+            notifications={currentCourse.notificaciones}
+            isOpen={isCalendarOpen}
+            setOpen={setIsCalendarOpen}
+            isLoading={isLoading}
+          />
+        )}
       </Layout>
     </div>
   );
