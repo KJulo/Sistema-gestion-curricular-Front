@@ -15,7 +15,6 @@ import { AdminTableLayout } from "@containers/index";
 import { ContentTable, DefaultTitleContent } from "@components/index";
 
 // constants
-import { family } from "@constants/familyMarks.js";
 import { columns } from "@constants/marksTable";
 import { getAverage } from "@utils/maths";
 
@@ -46,13 +45,7 @@ const CollapsePanel = ({ studentArray }) => {
         <Panel header={student.nombres + " " + student.apellidos} key={index}>
           <AdminTableLayout
             searchInput={""}
-            tableContent={
-              <ContentTable
-                content={student.nota}
-                columns={columns}
-                scroll={false}
-              />
-            }
+            tableContent={<ContentTable content={student.nota} columns={columns} scroll={false} />}
           />
         </Panel>
       ))}
@@ -62,9 +55,7 @@ const CollapsePanel = ({ studentArray }) => {
 
 const Marks = () => {
   const dispatch = useDispatch();
-  const { parentData, students } = useSelector(
-    (store) => store.parent
-  );
+  const { parentData, students } = useSelector((store) => store.parent);
 
   useEffect(() => {
     if (parentData.id) dispatch(fetchStudents(parentData.id));

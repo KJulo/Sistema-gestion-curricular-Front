@@ -6,12 +6,6 @@ import { Card } from "antd";
 
 import "@styles/Notifications.less";
 
-// constants
-import { homeWork } from "@constants/homeWork";
-
-import { useDispatch, useSelector } from "react-redux";
-
-import { fetchNotification } from "@slices/students";
 import moment from "moment";
 
 const Notifications = ({ data }) => {
@@ -20,7 +14,6 @@ const Notifications = ({ data }) => {
       <Divider orientation="center">Notificaciones</Divider>
       <Card>
         <List
-          
           dataSource={data}
           renderItem={(item) => (
             <List.Item>

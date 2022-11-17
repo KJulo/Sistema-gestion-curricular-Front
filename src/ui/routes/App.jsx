@@ -34,7 +34,7 @@ import {
   AdminViewTeacher,
   AdminViewCourse,
   TeacherVirtualClassroom,
-  Profile
+  Profile,
 } from "@pages/index";
 
 import RequireAuth from "../feature/RequireAuth.jsx";
@@ -44,10 +44,6 @@ import { ConfigProvider } from "antd";
 
 //layout
 import { MainLayout } from "@layouts/index";
-
-// constants
-import { parentsMenu, teacherMenu, studentMenu } from "@constants/menu";
-import { student, teacher, parents } from "@constants/users";
 
 //locale
 import "moment/locale/es-us";

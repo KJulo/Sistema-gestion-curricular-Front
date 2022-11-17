@@ -21,9 +21,7 @@ import { AdminTableLayout } from "@containers/index";
 import { columns } from "@constants/teacher/marksTable";
 
 const getMarkTest = (students, test) => {
-  return students.notas
-    .map((marks) => (marks.nombre === test ? marks.nota : null)) // devuelve un arreglo con muchos null y una nota
-    .find((nota) => nota !== null); // devuelve solo la nota
+  return students?.nota.find((marks) => marks.nombre === test);
 };
 
 const getColumns = (content) => {
@@ -34,31 +32,32 @@ const getColumns = (content) => {
 
   // Obtener nombres de los test para las columnas
   const testNames = new Set();
-  content.map((student) => student.notas.map((test) => testNames.add(test.nombre)));
+  content?.map((student) => student?.nota?.map((test) => testNames.add(test.nombre)));
 
   // Columnas adicionales por cada prueba del curso
-  const testColums = Array.from(testNames).map((test) => ({
+  const evaluationColumn = Array.from(testNames).map((test) => ({
     title: test,
     key: test.toLowerCase(),
     render: (record) => {
+      const nota = getMarkTest(record, test);
       return (
         <div
-          style={getMarkTest(record, test) >= 4 ? { color: "blue" } : { color: "red" }}
+          style={nota?.nota >= 4 ? { color: "blue" } : { color: "red" }}
           onClick={() => {
             handleClick(record);
           }}>
-          {getMarkTest(record, test)}
+          {nota?.nota} - {nota?.ponderacion * 100}%
         </div>
       );
     },
   }));
 
-  return columns.concat(testColums);
+  return columns.concat(evaluationColumn);
 };
 
 const Marks = () => {
   const dispatch = useDispatch();
-  const content = useSelector((store) => store.teacher.students.list);
+  const { list: content } = useSelector((store) => store.teacher.students);
   const {
     activeFilters,
     isLoading,
@@ -69,17 +68,19 @@ const Marks = () => {
   const [selectedCourse, setSelectedCourse] = useState(null);
 
   useEffect(() => {
-    dispatch(setIsLoading(true));
     dispatch(fetchCourses());
     dispatch(fetchStudents());
     dispatch(fetchStudentsNotes());
-    dispatch(setIsLoading(false));
   }, []);
+
+  useEffect(() => {
+    setStudentsFiltered(content);
+  }, [content]);
 
   // Filtro de curso
   useEffect(() => {
     if (activeFilters)
-      setStudentsFiltered(content.filter((c) => c.id_curso === activeFilters.courseId));
+      setStudentsFiltered(content?.filter((c) => c.curso.id === activeFilters.courseId));
   }, [activeFilters]);
 
   useEffect(() => {
@@ -93,7 +94,7 @@ const Marks = () => {
   };
 
   return (
-    <div>
+    <LoadingSpinner isLoading={isLoading}>
       <DefaultTitleContent
         title={"Módulo Notas"}
         subtitle="En este módulo podrás ver y añadir las notas de tus alumnos."
@@ -116,7 +117,7 @@ const Marks = () => {
           />
         </LoadingSpinner>
       </div>
-    </div>
+    </LoadingSpinner>
   );
 };
 

@@ -243,6 +243,7 @@ function* createForums(action) {
         yield call(foro.deleteForum, deleted[i].id);
       }
     }
+
     message.success(
       "Se han actualizado las unidades con éxito en el Aula Virtual de " +
         course.nombre +

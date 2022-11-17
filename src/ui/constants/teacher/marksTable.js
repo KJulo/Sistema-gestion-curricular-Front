@@ -42,8 +42,8 @@ export const columns = [
   },
   {
     title: "Promedio",
-    dataIndex: "notas",
-    key: "notas",
+    dataIndex: "nota",
+    key: "nota",
     width: 95,
     render: (record) => {
       return <div>{getAverage(record)}</div>;

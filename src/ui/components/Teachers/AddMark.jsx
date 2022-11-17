@@ -15,7 +15,6 @@ const AddMark = ({ course, students, filters }) => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [markState, setMarkState] = useState({}); // { rut: nota }
   const hasSubjects = course?.asignaturas.length > 0;
 
   const showModal = () => {
@@ -69,7 +68,7 @@ const AddMark = ({ course, students, filters }) => {
         size="large"
         icon={<PlusOutlined />}
         onClick={showModal}
-        disabled={students.length === 0}>
+        disabled={students?.length === 0}>
         Añadir Nota
       </Button>
 
@@ -125,10 +124,10 @@ const AddMark = ({ course, students, filters }) => {
           </Space>
 
           <Title level={5} style={{ marginTop: 20 }}>
-            {students.length > 0 ? "Estudiantes" : "Sin estudiantes"}
+            {students?.length > 0 ? "Estudiantes" : "Sin estudiantes"}
           </Title>
 
-          {students.map((student) => (
+          {students?.map((student) => (
             <Form.Item
               label={`${student.nombres} ${student.apellidos}`}
               name={student.rut}

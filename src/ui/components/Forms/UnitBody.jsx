@@ -35,7 +35,7 @@ const UnitBody = ({ unit }) => {
 
   return (
     <Col>
-      <Title level={5}>Duración de la Unidad</Title>
+      <Title level={5}>Duración de la unidad</Title>
       <RangePicker
         defaultValue={[
           moment(unit.dateRange[0], dateFormat),
