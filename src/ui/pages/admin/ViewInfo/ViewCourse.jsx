@@ -38,6 +38,7 @@ import {
   Col,
   Result,
   List,
+  Spin,
 } from "antd";
 
 const { Text } = Typography;
@@ -70,7 +71,7 @@ const ViewCourse = () => {
   };
 
   const { course } = useSelector((store) => store.admin);
-  if (course) {
+  if (Object.keys(course).length > 0 && course.id === id) {
     return (
       <>
         <DefaultTitleContent
@@ -232,7 +233,7 @@ const ViewCourse = () => {
       </>
     );
   } else {
-    return <></>;
+    return <Spin />;
   }
 };
 

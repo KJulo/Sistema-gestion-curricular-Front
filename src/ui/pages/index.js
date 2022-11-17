@@ -33,3 +33,6 @@ export { default as TeacherVirtualClassroom } from "@pages/teacher/VirtualClassr
 
 // Not Found
 export { default as NotFound } from "@pages/NotFound";
+
+// Profile
+export { default as Profile } from "@pages/Profile";

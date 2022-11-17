@@ -49,7 +49,7 @@ const AddTeacher = () => {
               },
             ]}
           >
-            <Input placeholder="Nombre Nombre"/>
+            <Input placeholder="Nombre Nombre" />
           </Form.Item>
 
           <Form.Item
@@ -62,7 +62,7 @@ const AddTeacher = () => {
               },
             ]}
           >
-            <Input placeholder="Apellido Apellido"/>
+            <Input placeholder="Apellido Apellido" />
           </Form.Item>
 
           <Form.Item
@@ -75,15 +75,24 @@ const AddTeacher = () => {
               },
             ]}
           >
-            <Input placeholder="+56912345678"/>
+            <Input placeholder="+56912345678" />
           </Form.Item>
 
           <Form.Item label="Telefono secundario" name="telefonoEmergencia">
-            <Input placeholder="+56912345678"/>
+            <Input placeholder="+56912345678" />
           </Form.Item>
 
-          <Form.Item label="Dirección" name="direccion">
-            <Input placeholder="Av. Brasil XXXX"/>
+          <Form.Item
+            label="Dirección"
+            name="direccion"
+            rules={[
+              {
+                required: true,
+                message: "Por favor ingrese la direccion del apoderado",
+              },
+            ]}
+          >
+            <Input placeholder="Av. Brasil XXXX" />
           </Form.Item>
 
           <Form.Item
@@ -100,15 +109,20 @@ const AddTeacher = () => {
               },
             ]}
           >
-            <Input placeholder="11.111.111-1"/>
+            <Input placeholder="11.111.111-1" />
           </Form.Item>
 
           <Form.Item
             label="Correo"
             name="correo"
-            rules={[{ required: true, message:"Por favor ingrese el correo del apoderado" }]}
+            rules={[
+              {
+                required: true,
+                message: "Por favor ingrese el correo del apoderado",
+              },
+            ]}
           >
-            <Input placeholder="correo@correo.com"/>
+            <Input placeholder="correo@correo.com" />
           </Form.Item>
 
           <Form.Item
