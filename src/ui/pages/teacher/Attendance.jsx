@@ -215,7 +215,7 @@ const Attendance = () => {
           filters={[
             <DatePicker onChange={onChangeDate} />,
             <TeacherFilterCourse courses={courses} includeDate={true} />,
-            <FilterSubject subjects={selectedCourseSubjects} />,
+            // <FilterSubject subjects={selectedCourseSubjects} />,
           ]}
           tableContent={
             <ContentTable
