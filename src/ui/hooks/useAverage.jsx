@@ -1,5 +1,4 @@
 export function useAverage(marks, decimals) {
-  console.log(marks);
   let total = 0;
   let subjects = 0;
   let sumBySubjects = {};
