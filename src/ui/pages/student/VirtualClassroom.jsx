@@ -64,36 +64,29 @@ const VitualClassroom = () => {
   }, []);
 
   useEffect(() => {
-    if (courseHasData) {
-      dispatch(fetchForumsAndContent());
-    }
-  }, [courseHasData]);
-
-  useEffect(() => {
-    if (course.hasOwnProperty("id")) setCourseHasData(true);
-  }, [course]);
-
-  useEffect(() => {
     setHasMenu(false);
     setHasSubMenu(false);
-    if (course && course.hasOwnProperty("asignaturas")) {
+    // La primera vez que se traiga el contenido ejecutr esto
+    if (course.hasOwnProperty("id") && !courseHasData) {
+      setCourseHasData(true);
+    }
+    // Las demás veces solo traer la data
+    if (course.hasOwnProperty("asignaturas")) {
+      setHasMenu(course.asignaturas.length > 0);
       const menu = course.asignaturas[0];
       if (menu) {
+        console.log(menu);
         setCurrentMenu(menu);
         if (menu.foros && menu.foros.length > 0) {
           setHasSubMenu(true);
           const submenu = menu.foros[0];
           if (submenu) {
+            console.log(submenu);
             setCurrentSubMenu(submenu);
           }
         }
       }
     }
-  }, [course]);
-
-  // Validación de asignaturas
-  useEffect(() => {
-    if (course && course.hasOwnProperty("asignaturas")) setHasMenu(course.asignaturas.length > 0);
   }, [course]);
 
   // Validacion de foros
@@ -126,7 +119,7 @@ const VitualClassroom = () => {
     let item = course.asignaturas.find((asignatura) => asignatura.id == e.key);
     setHasSubMenu(false);
     setCurrentMenu(item);
-    setCurrentSubMenu(item.foros.length > 0 ? item.foros[0] : null);
+    setCurrentSubMenu(item.foros?.length > 0 ? item.foros[0] : null);
     console.log("item seleccionado: ", item);
   };
 
@@ -147,7 +140,7 @@ const VitualClassroom = () => {
   }
 
   return (
-    <div>
+    <LoadingSpinner isLoading={isLoading}>
       <DefaultTitleContent
         title={
           <Col>
@@ -204,7 +197,7 @@ const VitualClassroom = () => {
           </Input.Group>
         </Modal>
       </div>
-    </div>
+    </LoadingSpinner>
   );
 };
 

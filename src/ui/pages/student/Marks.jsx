@@ -27,7 +27,6 @@ const Marks = () => {
 
   // Recuperar data
   useEffect(() => {
-    dispatch(setIsLoading(true));
     dispatch(fetchMarks(student));
   }, [student]);
 
@@ -50,13 +49,13 @@ const Marks = () => {
         ) : (
           <></>
         )}
-      </LoadingSpinner>
 
-      <div style={true ? {} : { pointerEvents: "none" }}>
-        <AdminTableLayout
-          tableContent={<ContentTable content={marks} columns={columns} scroll={false} />}
-        />
-      </div>
+        <div style={true ? {} : { pointerEvents: "none" }}>
+          <AdminTableLayout
+            tableContent={<ContentTable content={marks} columns={columns} scroll={false} />}
+          />
+        </div>
+      </LoadingSpinner>
     </div>
   );
 };
