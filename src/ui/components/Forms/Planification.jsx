@@ -41,6 +41,10 @@ export const Planification = ({ course, management }) => {
   const todayDate = moment(new Date()).format(dateFormat);
 
   useEffect(() => {
+    setSelectedSubject(course.asignaturas[0]?.nombre);
+  }, [course]);
+
+  useEffect(() => {
     // update management course
     dispatch(updateCourseManagement({ ...course, asignatura: selectedSubject }));
     // update management units

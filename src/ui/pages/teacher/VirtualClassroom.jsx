@@ -2,18 +2,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 // antd
-import {
-  Typography,
-  Card,
-  Menu,
-  Select,
-  Modal,
-  Input,
-  Alert,
-  Layout,
-  Checkbox,
-  Row,
-} from "antd";
+import { Typography, Card, Menu, Select, Modal, Input, Alert, Layout, Checkbox, Row } from "antd";
 const { Content } = Layout;
 const { TextArea } = Input;
 import {
@@ -33,11 +22,7 @@ import "@styles/VirtualClass.less";
 import { useEffect } from "react";
 
 // Redux
-import {
-  fetchCourses,
-  addContent,
-  fetchForumsAndContent,
-} from "@slices/teachers";
+import { fetchCourses, addContent, fetchForumsAndContent } from "@slices/teachers";
 
 //components
 import {
@@ -70,16 +55,12 @@ const VitualClassroom = () => {
     process,
     courses: { list: courses },
   } = useSelector((store) => store.teacher);
-  const [currentCourse, setCurrentCourse] = useState(
-    courses.length > 0 ? courses[0] : null
-  );
+  const [currentCourse, setCurrentCourse] = useState(courses.length > 0 ? courses[0] : null);
   const [currentMenu, setCurrentMenu] = useState(null);
   const [currentSubMenu, setCurrentSubMenu] = useState(null);
   const [hasMenu, setHasMenu] = useState(false);
   const [hasSubMenu, setHasSubMenu] = useState(false);
-  const courseNames = courses.map(
-    (course) => course.nombre + " - " + course.paralelo
-  );
+  const courseNames = courses.map((course) => course.nombre + " - " + course.paralelo);
 
   // Buscar cursos si es que no hay
   useEffect(() => {
@@ -158,9 +139,7 @@ const VitualClassroom = () => {
 
   const onClickMenu = (e) => {
     // buscar el asignatura del id y setearlo
-    let item = currentCourse.asignaturas.find(
-      (asignatura) => asignatura.id == e.key
-    );
+    let item = currentCourse.asignaturas.find((asignatura) => asignatura.id == e.key);
     setHasSubMenu(false);
     setCurrentMenu(item);
     setCurrentSubMenu(item.foros.length > 0 ? item.foros[0] : null);
@@ -182,7 +161,7 @@ const VitualClassroom = () => {
     setIsAddOpen(false);
     const title = document.getElementById("input").value;
     const body = document.getElementById("textArea").value;
-    console.log(currentSubMenu)
+    console.log(currentSubMenu);
     dispatch(
       addContent({
         id_asignatura: currentSubMenu.id_asignatura,
@@ -212,8 +191,7 @@ const VitualClassroom = () => {
           display: "flex",
           marginBottom: "20px",
           flexDirection: "column",
-        }}
-      >
+        }}>
         <DefaultTitleContent
           title={"Módulo Aula Virtual"}
           subtitle="¡Haz click abajo para cambiar de curso! Recuerda que tu administrador designa tus cursos."
@@ -221,10 +199,7 @@ const VitualClassroom = () => {
         <Row style={{ alignItems: "center", gap: 13 }}>
           <FilterButton options={courseNames} onChange={handleChange} />
           {courseNames[0] && (
-            <CalendarOutlined
-              style={{ fontSize: 23 }}
-              onClick={() => onClickCalendar()}
-            />
+            <CalendarOutlined style={{ fontSize: 23 }} onClick={() => onClickCalendar()} />
           )}
         </Row>
       </div>
@@ -266,11 +241,7 @@ const VitualClassroom = () => {
           <>
             <Content>
               {currentSubMenu.contenidos.map((item) => (
-                <ForumContent
-                  content={item}
-                  isEdit={true}
-                  forumId={currentSubMenu.id}
-                />
+                <ForumContent content={item} isEdit={true} forumId={currentSubMenu.id} />
               ))}
               {currentSubMenu.contenidos.length === 0 ? (
                 <Alert
@@ -297,8 +268,7 @@ const VitualClassroom = () => {
                     style={{
                       width: "100%",
                     }}
-                    onChange={onChangeCheckbox}
-                  >
+                    onChange={onChangeCheckbox}>
                     {currentSubMenu.objetivos.map((obj) => (
                       <li>{obj.descripcion}</li>
                       // TODO implementar el checkbox de los objetivos
@@ -319,15 +289,9 @@ const VitualClassroom = () => {
           title="Añadir nueva información o tarea"
           open={isAddOpen}
           onOk={handdleClose}
-          onCancel={() => setIsAddOpen(false)}
-        >
+          onCancel={() => setIsAddOpen(false)}>
           <Input.Group>
-            <Input
-              size="large"
-              placeholder="Titulo."
-              prefix={<RightOutlined />}
-              id="input"
-            />
+            <Input size="large" placeholder="Titulo." prefix={<RightOutlined />} id="input" />
             <TextArea rows={6} placeholder="Contenido." id="textArea" />
           </Input.Group>
         </Modal>
