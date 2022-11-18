@@ -6,18 +6,7 @@ import moment from "moment";
 
 // Antd
 import { PlusOutlined } from "@ant-design/icons";
-import {
-  Button,
-  Form,
-  Input,
-  Modal,
-  Select,
-  Space,
-  Typography,
-  InputNumber,
-  message,
-  Tooltip,
-} from "antd";
+import { Button, Form, Popconfirm, Typography, InputNumber, Tooltip, Row, Col } from "antd";
 
 // Redux
 import { useDispatch } from "react-redux";
@@ -27,7 +16,7 @@ import { setActiveFilter, addMarks } from "@slices/teachers";
 import { Filter, DatePicker } from "@components";
 
 // TODO utilizar este formulario tanto para crear como editr evaluacion
-const MarkForm = ({ form, mark, handleOk }) => {
+const MarkForm = ({ form, mark, handleOk, onDelete, onCancel }) => {
   const { Title } = Typography;
   const dateFormat = "DD/MM/YYYY";
   const dispatch = useDispatch();
@@ -66,6 +55,25 @@ const MarkForm = ({ form, mark, handleOk }) => {
         ]}>
         <InputNumber min={1} placeholder={+mark.nota} max={7} />
       </Form.Item>
+      <Row style={{ marginTop: 70, marginBottom: -10, gap: 15 }}>
+        <Popconfirm
+          title="¿Estás seguro/a de eliminar esta nota?"
+          onConfirm={onDelete}
+          okText="Eliminar"
+          cancelText="Volver">
+          <Button type="link" danger>
+            Eliminar
+          </Button>
+        </Popconfirm>
+        <Col style={{ marginRight: -20, gap: 5, display: "flex" }}>
+          <Button htmlType="button" onClick={onCancel}>
+            Cancelar
+          </Button>
+          <Button type="primary" htmlType="submit">
+            Aceptar
+          </Button>
+        </Col>
+      </Row>
     </Form>
   );
 };

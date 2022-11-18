@@ -43,18 +43,22 @@ export const getColumns = (content, onClick) => {
     key: test.toLowerCase(),
     render: (record) => {
       const nota = getMarkTest(record, test);
-      return (
-        <div style={{ cursor: "pointer" }}>
-          <div
-            style={nota?.nota >= 4 ? { color: "blue" } : { color: "red" }}
-            onClick={() => {
-              onClick({ student: record, selectedMark: nota });
-            }}>
-            {nota?.nota} - {nota?.ponderacion * 100}%{" "}
-            <EditOutlined style={{ marginRight: "6px" }} />
+      if (nota) {
+        return (
+          <div style={{ cursor: "pointer" }}>
+            <div
+              style={nota?.nota >= 4 ? { color: "blue" } : { color: "red" }}
+              onClick={() => {
+                onClick({ student: record, selectedMark: nota });
+              }}>
+              {nota?.nota} - {nota?.ponderacion * 100}%{" "}
+              <EditOutlined style={{ marginRight: "6px" }} />
+            </div>
           </div>
-        </div>
-      );
+        );
+      } else {
+        return <></>;
+      }
     },
   }));
 
