@@ -50,7 +50,7 @@ function* getAttendance() {
     const merge = responseAttendance.map((a) => {
       return {
         ...a,
-        asignatura: responseSubjects.find((s) => s.id === a.id_asignatura)?.nombre,
+        asignatura: responseSubjects.find((s) => s.id === a.id_asignatura).nombre,
       };
     });
     yield put(updateAttendance(merge));

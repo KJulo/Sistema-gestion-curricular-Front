@@ -54,12 +54,12 @@ const ViewParent = () => {
         <Card
           style={{ textAlign: "center" }}
           title={
-            <div style={{ display:"flex", flexWrap:"wrap" }}>
+            <div style={{ marginLeft: "210px" }}>
               <Text strong>Información personal</Text>
             </div>
           }
           extra={
-            <div style={{display:"flex", flexWrap:"wrap", gap:"16px"}}>
+            <div>
               <EditParent parent={parent} />
               <Popconfirm
                 title="¿Estás seguro de que quieres eliminar a este usuario?"

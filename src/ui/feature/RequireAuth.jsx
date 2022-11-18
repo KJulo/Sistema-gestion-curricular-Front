@@ -21,7 +21,7 @@ const RequireAuth = ({ role }) => {
 
   return (
     <>
-      {localData?.data && token && user.type === role ? (
+      {localData?.data || (token && user.type === role) ? (
         <Outlet />
       ) : (
         <Navigate to="/login" state={{ from: location }} replace />

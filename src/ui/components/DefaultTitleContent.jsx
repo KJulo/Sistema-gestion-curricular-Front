@@ -15,7 +15,6 @@ const DefaultTitleContent = ({ title, subtitle, action }) => {
         alignItems: "center",
         display: "flex",
         marginBottom: "20px",
-        gap: "24px",
       }}>
       <Space direction="vertical">
         <Title style={{ marginBottom: 5 }}>{title}</Title>
