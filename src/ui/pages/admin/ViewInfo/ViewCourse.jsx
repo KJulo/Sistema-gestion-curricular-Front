@@ -81,7 +81,7 @@ const ViewCourse = () => {
               : ""
           }
           action={
-            <div style={{display:"flex", gap:"8px"}}>
+            <div style={{ display: "flex", gap: "8px" }}>
               <EditCourse course={course} />
               <Popconfirm
                 title="¿Estás seguro de que quieres eliminar este curso?"
@@ -218,7 +218,13 @@ const ViewCourse = () => {
         <div>
           <SubTitleContent
             title="Alumno(s)"
-            action={<AppendStudent type="course" data={course.id} />}
+            action={
+              <AppendStudent
+                type="course"
+                data={course.id}
+                alumnos={course.alumno}
+              />
+            }
           />
           <AdminTableLayout
             tableContent={

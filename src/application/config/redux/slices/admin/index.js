@@ -5,19 +5,22 @@ export const adminSlice = createSlice({
   name: "admin",
   initialState: {
     admin: {},
-    courses: [{}],
+    courses: [],
     course: {},
-    subjects: [{}],
+    subjects: [],
     subject: {},
-    teachers: [{}],
+    teachers: [],
     teacher: {},
-    parents: [{}],
+    parents: [],
     parent: {},
-    students: [{}],
+    students: [],
     student: {},
   },
   reducers: {
     fetchAdmin: () => {},
+    fetchingDataAdmin: (state, action) => {
+      state.isFetching = action.payload;
+    },
     updateAdmin: (state, action) => {
       state.admin = { ...state.admin, ...action.payload };
     },
@@ -33,6 +36,11 @@ export const adminSlice = createSlice({
     appendTeacherAdmin: (state, action) => {
       state.teachers = [action.payload, ...state.teachers];
     },
+    deleteTeacherAdmin: (state, action) => {
+      state.teachers = state.teachers.filter(
+        (teacher) => teacher.id !== action.payload
+      );
+    },
     updateStudentsAdmin: (state, action) => {
       state.students = action.payload;
     },
@@ -41,6 +49,11 @@ export const adminSlice = createSlice({
     },
     appendStudentAdmin: (state, action) => {
       state.students = [action.payload, ...state.students];
+    },
+    deleteStudentAdmin: (state, action) => {
+      state.students = state.students.filter(
+        (student) => student.id !== action.payload
+      );
     },
     updateParentsAdmin: (state, action) => {
       state.parents = action.payload;
@@ -51,6 +64,11 @@ export const adminSlice = createSlice({
     appendParentAdmin: (state, action) => {
       state.parents = [action.payload, ...state.parents];
     },
+    deleteParentAdmin: (state, action) => {
+      state.parents = state.parents.filter(
+        (parent) => parent.id !== action.payload
+      );
+    },
     updateCoursesAdmin: (state, action) => {
       state.courses = action.payload;
     },
@@ -59,6 +77,11 @@ export const adminSlice = createSlice({
     },
     appendCourseAdmin: (state, action) => {
       state.courses = [action.payload, ...state.courses];
+    },
+    deleteCourseAdmin: (state, action) => {
+      state.courses = state.courses.filter(
+        (course) => course.id !== action.payload
+      );
     },
     updateSubjectAdmin: (state, action) => {
       state.course = {
@@ -97,11 +120,10 @@ export const adminSlice = createSlice({
           state.parent.alumno.findIndex((e) => e.id === action.payload.id) ===
           -1
             ? [...state.parent.alumno, action.payload]
-            : state.parent.alumno ,
+            : state.parent.alumno,
       };
     },
     deleteParentStudentsAdmin: (state, action) => {
-      
       state.parent = {
         ...state.parent,
         alumno: state.parent.alumno.filter(
@@ -116,21 +138,26 @@ export const adminSlice = createSlice({
 export const {
   courseFiltersUpdate,
   fetchAdmin,
+  fetchingDataAdmin,
   updateAdmin,
   updateTeachersAdmin,
   updateTeacherAdmin,
   appendTeacherAdmin,
+  deleteTeacherAdmin,
   updateParentsAdmin,
   updateParentAdmin,
   appendParentAdmin,
+  deleteParentAdmin,
   updateParentStudentsAdmin,
   deleteParentStudentsAdmin,
   updateStudentsAdmin,
   updateStudentAdmin,
   appendStudentAdmin,
+  deleteStudentAdmin,
   updateCoursesAdmin,
   updateCourseAdmin,
   appendCourseAdmin,
+  deleteCourseAdmin,
   filterSubjectCourseAdmin,
   updateSubjectAdmin,
   updateCourseStudentAdmin,

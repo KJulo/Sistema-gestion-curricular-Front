@@ -100,7 +100,7 @@ const ViewParent = () => {
           <Divider />
           <SubTitleContent
             title="Pupilos"
-            action={<AddParentStudent data={parent.id} />}
+            action={<AddParentStudent data={parent.id} students={parent.alumno} />}
           />
           <ContentTable content={parent.alumno} columns={columnsParent} type="student" />
         </Card>

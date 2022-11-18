@@ -26,12 +26,12 @@ const Parents = () => {
     dispatch({ type: FETCH_PARENTS_ADMIN });
   }, []);
 
-  const { parents } = useSelector((store) => store.admin);
+  const { parents, isFetching } = useSelector((store) => store.admin);
   return (
     <div>
       <DefaultTitleContent title={"Apoderados"} action={<AddParent />} />
       <div style={true ? {} : { pointerEvents: "none" }}>
-        {Object.keys(parents[0]).length !== 0 ? (
+        {!isFetching ? (
           <AdminTableLayout
             tableContent={
               <ContentTable

@@ -1,22 +1,27 @@
 import React, { useState, useEffect } from "react";
-import { Button, Input, Select } from "antd";
+import { Button, Input, message } from "antd";
 import { useDispatch } from "react-redux";
 import { PlusOutlined } from "@ant-design/icons";
 import { APPEND_COURSE_STUDENT_ADMIN } from "@infrastructure/sagas/types/admin";
 
-const AppendStudent = ({ type, data }) => {
+const AppendStudent = ({ type, data, alumnos }) => {
   const [idEstudiante, setIdEstudiante] = useState();
   const dispatch = useDispatch();
-  
 
   const agregarEstudiante = () => {
     if (idEstudiante) {
       if (type === "course") {
-        console.log("agregar estudiante a curso");
-        dispatch({
-          type: APPEND_COURSE_STUDENT_ADMIN,
-          payload: { id: idEstudiante, id_curso: data },
-        });
+        const alumnoExist = alumnos.some(
+          (alumno) => alumno.id === idEstudiante
+        );
+        if (alumnoExist) {
+          message.error("El estudiante ya se encuentra en el curso");
+        } else {
+          dispatch({
+            type: APPEND_COURSE_STUDENT_ADMIN,
+            payload: { id: idEstudiante, id_curso: data },
+          });
+        }
       } else if (type === "parent") {
         console.log("parent");
       }
