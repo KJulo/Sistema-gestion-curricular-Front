@@ -33,6 +33,7 @@ const MainLayout = ({ userType }) => {
 
   const { user } = useSelector((store) => store.auth);
 
+
   useEffect(() => {
     if (user) {
       if (userType === "admin") dispatch(fetchAdmin(user));
@@ -59,7 +60,7 @@ const MainLayout = ({ userType }) => {
         }}>
         <div style={{ display: "flex", alignItems: "center" }}>
           <img style={{ margin: "16px", height: "32px" }} src={SchoolLogo}></img>
-          <span>Colegio Fuensalvida</span>
+          <span>{user?.nombre_colegio ? user.nombre_colegio : null}</span>
         </div>
 
         <SiderMenu userType={userType} />
