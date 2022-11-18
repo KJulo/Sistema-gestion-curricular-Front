@@ -288,8 +288,8 @@ function* createMark(action) {
         ponderacion: decimalPonderacion.toString(),
         nota: values[i].toString(),
       };
-      newMarks.push(params);
-      yield call(notas.addNota, params);
+      const markResponse = yield call(notas.addNota, params);
+      newMarks.push(markResponse.data.data);
     }
     yield put(appendStudentsMarks(newMarks));
     message.success("Se han creado las notas con éxito");

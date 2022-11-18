@@ -15,6 +15,7 @@ export { default as Warning } from "@components/Warning";
 export { default as StudentCards } from "@components/StudentCards";
 export { default as EditPassword } from "@components/EditPassword";
 export { default as Notifications } from "@components/Notifications";
+export { default as Filter } from "@components/Filter";
 
 //admin
 export { default as AdminMenu } from "@components/Admin/NavigationMenu";
@@ -64,3 +65,4 @@ export { default as UnitHeader } from "@components/Forms/UnitHeader";
 export { default as UnitBody } from "@components/Forms/UnitBody";
 export { default as Objetive } from "@components/Forms/Objetive";
 export { default as Value } from "@components/Forms/Value";
+export { default as MarkForm } from "@components/Forms/MarkForm";

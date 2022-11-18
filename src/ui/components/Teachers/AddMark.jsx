@@ -1,7 +1,18 @@
 import React, { useEffect, useState } from "react";
 
 import { PlusOutlined } from "@ant-design/icons";
-import { Button, Form, Input, Modal, Select, Space, Typography, InputNumber, message } from "antd";
+import {
+  Button,
+  Form,
+  Input,
+  Modal,
+  Select,
+  Space,
+  Typography,
+  InputNumber,
+  message,
+  Tooltip,
+} from "antd";
 const { Title } = Typography;
 
 import { useDispatch } from "react-redux";
@@ -90,22 +101,26 @@ const AddMark = ({ course, students, filters }) => {
             ]}>
             <Input />
           </Form.Item>
-          <Form.Item
-            label="Ponderación (%)"
-            name="ponderacion"
-            defaultValue={100}
-            min={0}
-            max={100}
-            formatter={(value) => `${value}%`}
-            parser={(value) => value.replace("%", "")}
-            rules={[
-              {
-                required: true,
-                message: "Ingrese un valor",
-              },
-            ]}>
-            <InputNumber disabled={!hasSubjects} min={0} max={100} />
-          </Form.Item>
+          <Tooltip
+            placement="bottom"
+            title="Es el porcentaje al que equivale esta nota respecto al total de evaluaciones.">
+            <Form.Item
+              label="Ponderación (%)"
+              name="ponderacion"
+              defaultValue={100}
+              min={0}
+              max={100}
+              formatter={(value) => `${value}%`}
+              parser={(value) => value.replace("%", "")}
+              rules={[
+                {
+                  required: true,
+                  message: "Ingrese un valor",
+                },
+              ]}>
+              <InputNumber disabled={!hasSubjects} min={0} max={100} />
+            </Form.Item>
+          </Tooltip>
           <Space direction="horizontal">
             {hasSubjects ? (
               <Select

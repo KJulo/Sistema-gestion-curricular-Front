@@ -99,27 +99,19 @@ export const teacherSlice = createSlice({
     },
     appendStudentsMarks: (state, action) => {
       const marksList = action.payload;
-
       const studentsWithNotes = state.students.list.map((student) => {
         // recorrer la lista de estudiantes
-        let mark = marksList.find((n) => n.id_alumno === student.id); // ver si hay nota para el estudiante
+        const mark = marksList.filter((n) => n.id_alumno === student.id); // ver si hay nota para el estudiante
         if (mark) {
-          const nota = mark.descripcion;
-          delete mark.descripcion;
-          mark = {
-            ...mark,
-            nota: nota,
-          };
           // retorna al estudiante añadiendo la nueva nota
           return {
             ...student,
-            nota: student.notas.concat(mark),
+            nota: student.nota.concat(mark),
           };
         } else {
           return student;
         }
       });
-
       state.students.list = studentsWithNotes;
       state.isLoading = false;
     },
