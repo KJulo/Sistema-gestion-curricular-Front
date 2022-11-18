@@ -38,7 +38,11 @@ const CollapsePanel = ({ studentArray }) => {
           <AdminTableLayout
             searchInput={""}
             tableContent={
-              <ContentTable content={student.asistencia} columns={columns} scroll={false} />
+              <ContentTable
+                content={student.asistencia}
+                columns={columns}
+                scroll={false}
+              />
             }
           />
         </Panel>
@@ -77,13 +81,6 @@ const Attendance = () => {
         title={"Asistencia"}
         subtitle="Aquí podras revisar la asistencia con más detalle que llevan tus pupilos."
       />
-      <Space direction="vertical">
-        <DatePicker
-          defaultValue={moment(currentDate, "MM-YYYY")}
-          picker="month"
-          onChange={onChange}
-        />
-      </Space>
 
       <div style={{ marginTop: 22, maxWidth: 600 }}>
         <CollapsePanel studentArray={students} />
