@@ -36,6 +36,7 @@ import {
   updatingNotificacion,
   updateMark,
   updateStudentMark,
+  deleteMark,
 } from "@slices/teachers";
 
 // Network
@@ -124,6 +125,20 @@ function* changeStudentNote(action) {
     console.log(e);
     yield put(setIsLoading(false));
     message.error("Error al registrar la nota.");
+  }
+}
+
+function* removeStudentNote(action) {
+  const payload = action.payload;
+  try {
+    const response = yield call(notas.deleteNota, payload.id);
+    // Quitar nota para eliminarla de la store
+    yield put(updateStudentMark({ ...response.data.data, nota: "" }));
+    message.success("Nota eliminada.");
+  } catch (e) {
+    console.log(e);
+    yield put(setIsLoading(false));
+    message.error("Error al eliminar la nota.");
   }
 }
 
@@ -404,6 +419,9 @@ function* watchFetchNotifications() {
 function* watchEditStudentNote() {
   yield takeLatest(updateMark, changeStudentNote);
 }
+function* watchDeleteStudentNote() {
+  yield takeLatest(deleteMark, removeStudentNote);
+}
 
 export default [
   watchGetTeacherUser(),
@@ -422,4 +440,5 @@ export default [
   watchAddNotification(),
   watchFetchNotifications(),
   watchEditStudentNote(),
+  watchDeleteStudentNote(),
 ];

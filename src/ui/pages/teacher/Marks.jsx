@@ -2,7 +2,13 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 // redux
-import { fetchStudents, fetchCourses, fetchStudentsNotes, updateMark } from "@slices/teachers";
+import {
+  fetchStudents,
+  fetchCourses,
+  fetchStudentsNotes,
+  updateMark,
+  deleteMark,
+} from "@slices/teachers";
 
 //components
 import {
@@ -80,6 +86,12 @@ const Marks = () => {
     form.resetFields();
   };
 
+  const onDelete = () => {
+    setIsModalVisible(false);
+    dispatch(deleteMark(selectedMark));
+    form.resetFields();
+  };
+
   return (
     <div>
       <DefaultTitleContent
@@ -108,8 +120,15 @@ const Marks = () => {
               visible={isModalVisible}
               onOk={form.submit}
               onCancel={handleCancel}
-              width={300}>
-              <MarkForm form={form} mark={selectedMark} handleOk={handleOk} />
+              width={300}
+              footer={null}>
+              <MarkForm
+                form={form}
+                mark={selectedMark}
+                handleOk={handleOk}
+                onDelete={onDelete}
+                onCancel={handleCancel}
+              />
             </Modal>
           )}
         </LoadingSpinner>
