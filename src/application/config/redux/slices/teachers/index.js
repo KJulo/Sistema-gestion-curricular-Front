@@ -113,7 +113,7 @@ export const teacherSlice = createSlice({
           // retorna al estudiante añadiendo la nueva nota
           return {
             ...student,
-            notas: student.notas.concat(mark),
+            nota: student.notas.concat(mark),
           };
         } else {
           return student;

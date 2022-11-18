@@ -18,42 +18,7 @@ import {
 import { AdminTableLayout } from "@containers/index";
 
 //constants
-import { columns } from "@constants/teacher/marksTable";
-
-const getMarkTest = (students, test) => {
-  return students?.nota.find((marks) => marks.nombre === test);
-};
-
-const getColumns = (content) => {
-  // Al hacer click en el icono de switch, cambiar estado de asiste
-  const handleClick = (record) => {
-    console.log(record);
-  };
-
-  // Obtener nombres de los test para las columnas
-  const testNames = new Set();
-  content?.map((student) => student?.nota?.map((test) => testNames.add(test.nombre)));
-
-  // Columnas adicionales por cada prueba del curso
-  const evaluationColumn = Array.from(testNames).map((test) => ({
-    title: test,
-    key: test.toLowerCase(),
-    render: (record) => {
-      const nota = getMarkTest(record, test);
-      return (
-        <div
-          style={nota?.nota >= 4 ? { color: "blue" } : { color: "red" }}
-          onClick={() => {
-            handleClick(record);
-          }}>
-          {nota?.nota} - {nota?.ponderacion * 100}%
-        </div>
-      );
-    },
-  }));
-
-  return columns.concat(evaluationColumn);
-};
+import { getColumns } from "@constants/teacher/marksTable";
 
 const Marks = () => {
   const dispatch = useDispatch();
@@ -73,20 +38,14 @@ const Marks = () => {
     dispatch(fetchStudentsNotes());
   }, []);
 
+  // Update
   useEffect(() => {
-    setStudentsFiltered(content);
-  }, [content]);
-
-  // Filtro de curso
-  useEffect(() => {
-    if (activeFilters)
-      setStudentsFiltered(content?.filter((c) => c.curso.id === activeFilters.courseId));
-  }, [activeFilters]);
-
-  useEffect(() => {
-    setTableColumns(getColumns(studentsFiltered));
-    setSelectedCourse(courses.find((c) => c.id === activeFilters?.courseId));
-  }, [studentsFiltered]);
+    const courseFiltered = courses.find((c) => c.id === activeFilters.courseId);
+    const newStudents = content?.filter((c) => c.curso.id === activeFilters.courseId);
+    setStudentsFiltered(newStudents);
+    setTableColumns(getColumns(newStudents));
+    setSelectedCourse(courseFiltered);
+  }, [activeFilters, content]);
 
   // Al hacer click en el icono de switch, cambiar estado de asiste
   const handleClick = (record) => {
@@ -94,7 +53,7 @@ const Marks = () => {
   };
 
   return (
-    <LoadingSpinner isLoading={isLoading}>
+    <div>
       <DefaultTitleContent
         title={"Módulo Notas"}
         subtitle="En este módulo podrás ver y añadir las notas de tus alumnos."
@@ -117,7 +76,7 @@ const Marks = () => {
           />
         </LoadingSpinner>
       </div>
-    </LoadingSpinner>
+    </div>
   );
 };
 

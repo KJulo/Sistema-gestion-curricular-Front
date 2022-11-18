@@ -26,6 +26,41 @@ export const getAverage = (record) => {
   return average;
 };
 
+export const getColumns = (content) => {
+  const getMarkTest = (students, test) => {
+    return students?.nota.find((marks) => marks.nombre === test);
+  };
+
+  // Al hacer click en el icono de switch, cambiar estado de asiste
+  const handleClick = (record) => {
+    console.log(record);
+  };
+
+  // Obtener nombres de los test para las columnas
+  const testNames = new Set();
+  content?.map((student) => student?.nota?.map((test) => testNames.add(test.nombre)));
+
+  // Columnas adicionales por cada prueba del curso
+  const evaluationColumn = Array.from(testNames).map((test) => ({
+    title: test,
+    key: test.toLowerCase(),
+    render: (record) => {
+      const nota = getMarkTest(record, test);
+      return (
+        <div
+          style={nota?.nota >= 4 ? { color: "blue" } : { color: "red" }}
+          onClick={() => {
+            handleClick(record);
+          }}>
+          {nota?.nota} - {nota?.ponderacion * 100}%
+        </div>
+      );
+    },
+  }));
+
+  return columns.concat(evaluationColumn);
+};
+
 export const columns = [
   {
     title: "Nombre",
