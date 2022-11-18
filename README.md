@@ -11,7 +11,7 @@ Se debe además crear un archivo.env en la raiz del proyecto. El archivo .env de
 
 ## Instalación
 
-- Instalar las dependencias del proyecto ingresando el comando `npm run install`
+- Instalar las dependencias del proyecto ingresando el comando `npm install`
 
   - Se puede utilizar la aplicación en modo desarrollo utilizando el comando `npm run start`
 
