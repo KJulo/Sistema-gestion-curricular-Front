@@ -55,9 +55,15 @@ const Home = () => {
         action=""
       />
       <div className="flex-container">
-        <LoadingSpinner isLoading={courses.length === 0 || isLoading}>
+        {isLoading ? (
+          <LoadingSpinner isLoading={courses.length === 0 || isLoading}>
+            <></>
+          </LoadingSpinner>
+        ) : courses.length === 0 ? (
+          <>Sin cursos que mostrar</>
+        ) : (
           <CoursesCards courses={courses} management={management} isLoading={isLoading} />
-        </LoadingSpinner>
+        )}
       </div>
     </div>
   );

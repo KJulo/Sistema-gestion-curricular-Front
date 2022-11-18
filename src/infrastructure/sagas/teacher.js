@@ -61,6 +61,7 @@ function* getTeacher(action) {
     console.log(e);
     yield put(errorFetch({ code: 500, error: "Error de servidor." }));
   }
+  yield put(setIsLoading(false));
 }
 
 function* getCourses() {
@@ -90,6 +91,7 @@ function* getCourses() {
     console.log(e);
     yield put(errorFetch({ code: 500, error: "Error de servidor." }));
   }
+  yield put(setIsLoading(false));
 }
 
 function* getStudents() {
@@ -101,6 +103,7 @@ function* getStudents() {
     console.log(e);
     yield put(errorFetch({ code: 500, error: "Error de servidor." }));
   }
+  yield put(setIsLoading(false));
 }
 
 function* getStudentsNotes() {
@@ -111,6 +114,7 @@ function* getStudentsNotes() {
     console.log(e);
     yield put(errorFetch({ code: 500, error: "Error de servidor." }));
   }
+  yield put(setIsLoading(false));
 }
 
 function* changeStudentNote(action) {
@@ -123,9 +127,9 @@ function* changeStudentNote(action) {
     message.success("Nota editada.");
   } catch (e) {
     console.log(e);
-    yield put(setIsLoading(false));
     message.error("Error al registrar la nota.");
   }
+  yield put(setIsLoading(false));
 }
 
 function* removeStudentNote(action) {
@@ -137,9 +141,9 @@ function* removeStudentNote(action) {
     message.success("Nota eliminada.");
   } catch (e) {
     console.log(e);
-    yield put(setIsLoading(false));
     message.error("Error al eliminar la nota.");
   }
+  yield put(setIsLoading(false));
 }
 
 function* getStudentsAttendance() {
@@ -150,6 +154,7 @@ function* getStudentsAttendance() {
     console.log(e);
     yield put(errorFetch({ code: 500, error: "Error de servidor." }));
   }
+  yield put(setIsLoading(false));
 }
 
 function* createAttendance(action) {
@@ -160,9 +165,9 @@ function* createAttendance(action) {
     message.success("Asistencia registrada.");
   } catch (e) {
     console.log(e);
-    yield put(setIsLoading(false));
     message.error("Error al registrar la asistencia.");
   }
+  yield put(setIsLoading(false));
 }
 
 function* goEditAttendance(action) {
@@ -176,9 +181,9 @@ function* goEditAttendance(action) {
     message.success("Asistencia registrada.");
   } catch (e) {
     console.log(e);
-    yield put(setIsLoading(false));
     message.error("Error al editar la asistencia.");
   }
+  yield put(setIsLoading(false));
 }
 
 function* getForumsAndContent() {
@@ -205,6 +210,7 @@ function* getForumsAndContent() {
     console.log(e);
     yield put(errorFetch({ code: 500, error: "Error de servidor." }));
   }
+  yield put(setIsLoading(false));
 }
 
 function* delContent(action) {
@@ -216,6 +222,7 @@ function* delContent(action) {
     console.log(e);
     yield put(errorFetch({ code: 500, error: "Error de servidor." }));
   }
+  yield put(setIsLoading(false));
 }
 
 function* createContent(action) {
@@ -228,6 +235,7 @@ function* createContent(action) {
     yield put(setIsLoading(false));
     message.error("Error al crear la contenido.");
   }
+  yield put(setIsLoading(false));
 }
 
 function* goEditContent(action) {
@@ -240,6 +248,7 @@ function* goEditContent(action) {
     yield put(setIsLoading(false));
     message.error("Error al editar la contenido.");
   }
+  yield put(setIsLoading(false));
 }
 
 function* createForums(action) {
@@ -289,6 +298,7 @@ function* createForums(action) {
     yield put(setIsLoading(false));
     message.error("No se ha podido registrar las unidades.");
   }
+  yield put(setIsLoading(false));
 }
 
 function* createMark(action) {
@@ -330,6 +340,7 @@ function* createMark(action) {
     yield put(setIsLoading(false));
     message.error("No se ha podido registrar la nota.");
   }
+  yield put(setIsLoading(false));
 }
 
 function* createNotification(action) {
@@ -352,6 +363,7 @@ function* createNotification(action) {
     yield put(setIsLoading(false));
     message.error("No se ha podido registrar o actualizar la notificación.");
   }
+  yield put(setIsLoading(false));
 }
 
 function* updateNotificationToCourses(action) {
@@ -367,6 +379,7 @@ function* updateNotificationToCourses(action) {
     yield put(setIsLoading(false));
     message.error("Error al obtener las notificaciones.");
   }
+  yield put(setIsLoading(false));
 }
 
 function* watchGetTeacherUser() {

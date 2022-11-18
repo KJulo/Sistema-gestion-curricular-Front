@@ -192,9 +192,7 @@ export const teacherSlice = createSlice({
       state.isLoading = false;
     },
     appendUnitsManagement: (state, action) => {
-      state.courses.management.units = state.courses.management.units.concat(
-        action.payload
-      );
+      state.courses.management.units = state.courses.management.units.concat(action.payload);
       state.isLoading = false;
     },
     updateUnitManagement: (state, action) => {
@@ -325,11 +323,8 @@ export const teacherSlice = createSlice({
     },
     updateDateManagement: (state, action) => {
       const data = action.payload;
-      state.courses.management.units = state.courses.management.units.map(
-        (unit) =>
-          unit.id === data.unit.id
-            ? { ...unit, dateRange: data.dateRange }
-            : unit
+      state.courses.management.units = state.courses.management.units.map((unit) =>
+        unit.id === data.unit.id ? { ...unit, dateRange: data.dateRange } : unit
       );
       state.isLoading = false;
     },
@@ -347,13 +342,12 @@ export const teacherSlice = createSlice({
     setActiveFilter: (state, action) => {
       const data = action.payload;
       state.activeFilters = { ...state.activeFilters, ...data };
+      state.isLoading = false;
     },
     setStudentsAttendance: (state, action) => {
       const data = action.payload;
       const studentsWithAttendance = state.students.list.map((student) => {
-        const studentAttendance = data.filter(
-          (d) => d.id_alumno === student.id
-        );
+        const studentAttendance = data.filter((d) => d.id_alumno === student.id);
         if (studentAttendance.length > 0) {
           return {
             ...student,
@@ -421,9 +415,7 @@ export const teacherSlice = createSlice({
               foros: subject.foros.map((foro) => {
                 return {
                   ...foro,
-                  contenidos: foro.contenidos.filter(
-                    (c) => c.id !== payload.id
-                  ),
+                  contenidos: foro.contenidos.filter((c) => c.id !== payload.id),
                 };
               }),
             };

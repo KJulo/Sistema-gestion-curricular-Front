@@ -47,7 +47,7 @@ const FilterCourse = ({ courses }) => {
       </Select>
     </div>
   ) : (
-    <LoadingSpinner isLoading={true} size={"small"} style={{ marginTop: 10 }} />
+    <></>
   );
 };
 
