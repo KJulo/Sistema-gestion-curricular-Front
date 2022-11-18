@@ -59,7 +59,7 @@ const MainLayout = ({ userType }) => {
         }}>
         <div style={{ display: "flex", alignItems: "center" }}>
           <img style={{ margin: "16px", height: "32px" }} src={SchoolLogo}></img>
-          <span>Colegio fuensalvida</span>
+          <span>Colegio Fuensalvida</span>
         </div>
 
         <SiderMenu userType={userType} />

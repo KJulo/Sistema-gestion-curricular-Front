@@ -3,6 +3,7 @@ import { call, put, takeLatest } from "redux-saga/effects";
 // Reducers
 import {
   fetchAdmin,
+  fetchingDataAdmin,
   updateAdmin,
   updateCoursesAdmin,
   updateCourseAdmin,
@@ -10,12 +11,16 @@ import {
   updateTeachersAdmin,
   updateTeacherAdmin,
   appendTeacherAdmin,
+  deleteTeacherAdmin,
   updateStudentsAdmin,
   updateStudentAdmin,
   appendStudentAdmin,
+  deleteStudentAdmin,
   updateParentsAdmin,
   updateParentAdmin,
   appendParentAdmin,
+  deleteParentAdmin,
+  deleteCourseAdmin,
   filterSubjectCourseAdmin,
   updateSubjectAdmin,
   updateCourseStudentAdmin,
@@ -59,8 +64,16 @@ import {
 } from "./types/admin";
 
 // Network
-import { administrador, alumno, curso, apoderado, profesor, asignatura } from "@network/index";
+import {
+  administrador,
+  alumno,
+  curso,
+  apoderado,
+  profesor,
+  asignatura,
+} from "@network/index";
 import { message } from "antd";
+
 
 function* getAdmin(action) {
   const { payload } = action;
@@ -74,19 +87,25 @@ function* getAdmin(action) {
 
 function* getTeachers() {
   try {
+    yield put(fetchingDataAdmin(true));
     const response = yield call(profesor.getTeachers);
     yield put(updateTeachersAdmin(response.data.data));
   } catch (error) {
     console.log(error);
+  } finally {
+    yield put(fetchingDataAdmin(false));
   }
 }
 
 function* getTeacher(action) {
   try {
+    yield put(fetchingDataAdmin(true));
     const response = yield call(profesor.getTeacherById, action.payload);
     yield put(updateTeacherAdmin(response.data.data));
   } catch (error) {
     console.log(error);
+  } finally {
+    yield put(fetchingDataAdmin(false));
   }
 }
 
@@ -94,7 +113,7 @@ function* addTeacher(action) {
   try {
     const response = yield call(profesor.addTeacher, action.payload);
     yield put(appendTeacherAdmin(response.data.data));
-    message.success("Se ha creado el profesor con exito");
+    message.success("Se ha creado el profesor con éxito");
   } catch (error) {
     message.error("Debido a un error, no se ha podido crear el profesor");
     console.log(error);
@@ -105,9 +124,11 @@ function* updateTeacher(action) {
   try {
     const response = yield call(profesor.patchTeacher, action.payload);
     yield put(updateTeacherAdmin(response.data.data));
-    message.success("Profesor actualizado con exito.");
+    message.success("Profesor actualizado con éxito.");
   } catch (error) {
-    message.success("Debido a un error, no se ha podido actualizar el profesor");
+    message.success(
+      "Debido a un error, no se ha podido actualizar el profesor"
+    );
     console.log(error);
   }
 }
@@ -115,7 +136,8 @@ function* updateTeacher(action) {
 function* deleteTeacher(action) {
   try {
     yield call(profesor.deleteTeacher, action.payload.id);
-    message.success("Se ha eliminado el profesor con exito");
+    yield put(deleteTeacherAdmin(action.payload.id));
+    message.success("Se ha eliminado el profesor con éxito");
   } catch (error) {
     message.error("Debido a un error, no se ha podido eliminar al profesor");
     console.log(error);
@@ -124,19 +146,25 @@ function* deleteTeacher(action) {
 
 function* getStudents() {
   try {
+    yield put(fetchingDataAdmin(true));
     const response = yield call(alumno.getStudents);
     yield put(updateStudentsAdmin(response.data.data));
   } catch (error) {
     console.log(error);
+  } finally {
+    yield put(fetchingDataAdmin(false));
   }
 }
 
 function* getStudent(action) {
   try {
+    yield put(fetchingDataAdmin(true));
     const response = yield call(alumno.getStudentById, action.payload);
     yield put(updateStudentAdmin(response.data.data));
   } catch (error) {
     console.log(error);
+  } finally {
+    yield put(fetchingDataAdmin(false));
   }
 }
 
@@ -144,7 +172,7 @@ function* addStudent(action) {
   try {
     const response = yield call(alumno.addStudent, action.payload);
     yield put(appendStudentAdmin(response.data.data));
-    message.success("Se ha creado el alumno con exito");
+    message.success("Se ha creado el alumno con éxito");
   } catch (error) {
     message.error("Debido a un error, no se ha podido crear el alumno");
     console.log(error);
@@ -156,12 +184,12 @@ function* updateStudent(action) {
     const response = yield call(alumno.patchStudent, action.payload);
     yield put(updateStudentAdmin(response.data.data));
     if (action.payload.contrasena) {
-      message.success("Se ha editado el alumno con exito");
+      message.success("Se ha editado el alumno con éxito");
     } else {
       if (action.payload.id_apoderado) {
-        message.success("Se ha agregado el apoderado con exito");
+        message.success("Se ha agregado el apoderado con éxito");
       } else {
-        message.success("Se ha eliminado el apoderado con exito");
+        message.success("Se ha eliminado el apoderado con éxito");
       }
     }
   } catch (error) {
@@ -169,9 +197,13 @@ function* updateStudent(action) {
       message.error("Debido a un error, no se ha podido editar el alumno");
     } else {
       if (action.payload.id_apoderado) {
-        message.error("Debido a un error, no se ha podido agregar el apoderado");
+        message.error(
+          "Debido a un error, no se ha podido agregar el apoderado"
+        );
       } else {
-        message.error("Debido a un error, no se ha podido eliminar el apoderado");
+        message.error(
+          "Debido a un error, no se ha podido eliminar el apoderado"
+        );
       }
     }
     console.log(error);
@@ -181,7 +213,8 @@ function* updateStudent(action) {
 function* deleteStudent(action) {
   try {
     yield call(alumno.deleteStudent, action.payload.id);
-    message.success("Se ha eliminado el alumno con exito");
+    yield put(deleteStudentAdmin(action.payload.id));
+    message.success("Se ha eliminado el alumno con éxito");
   } catch (error) {
     message.error("Debido a un error, no se ha podido eliminar el alumno");
     console.log(error);
@@ -190,19 +223,25 @@ function* deleteStudent(action) {
 
 function* getParents() {
   try {
+    yield put(fetchingDataAdmin(true));
     const response = yield call(apoderado.getParents);
     yield put(updateParentsAdmin(response.data.data));
   } catch (error) {
     console.log(error);
+  } finally {
+    yield put(fetchingDataAdmin(false));
   }
 }
 
 function* getParent(action) {
   try {
+    yield put(fetchingDataAdmin(true));
     const response = yield call(apoderado.getParentById, action.payload);
     yield put(updateParentAdmin(response.data.data));
   } catch (error) {
     console.log(error);
+  } finally {
+    yield put(fetchingDataAdmin(false));
   }
 }
 
@@ -210,7 +249,7 @@ function* addParent(action) {
   try {
     const response = yield call(apoderado.addParent, action.payload);
     yield put(appendParentAdmin(response.data.data));
-    message.success("Se ha agregado el apoderado con exito");
+    message.success("Se ha agregado el apoderado con éxito");
   } catch (error) {
     message.error("Debido a un error, no se ha podido agregar el apoderado");
     console.log(error);
@@ -221,9 +260,11 @@ function* updateParent(action) {
   try {
     const response = yield call(apoderado.patchParent, action.payload);
     yield put(updateParentAdmin(response.data.data));
-    message.success("Se ha editado el apoderado con exito");
+    message.success("Se ha editado el apoderado con éxito");
   } catch (error) {
-    message.error("Debido a un error, no se ha podido editar el apoderado con exito");
+    message.error(
+      "Debido a un error, no se ha podido editar el apoderado con éxito"
+    );
     console.log(error);
   }
 }
@@ -231,28 +272,37 @@ function* updateParent(action) {
 function* deleteParent(action) {
   try {
     yield call(apoderado.deleteParent, action.payload.id);
-    message.success("Se ha eliminado el apoderado con exito");
+    yield put(deleteParentAdmin(action.payload.id));
+    message.success("Se ha eliminado el apoderado con éxito");
   } catch (error) {
-    message.error("Debido a un error, no se ha podido editar el apoderado con exito");
+    message.error(
+      "Debido a un error, no se ha podido editar el apoderado con éxito"
+    );
     console.log(error);
   }
 }
 
 function* getCourses() {
   try {
+    yield put(fetchingDataAdmin(true));
     const response = yield call(curso.getCourses);
     yield put(updateCoursesAdmin(response.data.data));
   } catch (error) {
     console.log(error);
+  } finally {
+    yield put(fetchingDataAdmin(false));
   }
 }
 
 function* getCourse(action) {
   try {
+    yield put(fetchingDataAdmin(true));
     const response = yield call(curso.getCourseById, action.payload);
     yield put(updateCourseAdmin(response.data.data));
   } catch (error) {
     console.log(error);
+  } finally {
+    yield put(fetchingDataAdmin(false));
   }
 }
 
@@ -260,7 +310,7 @@ function* addCourse(action) {
   try {
     const response = yield call(curso.addCourse, action.payload);
     yield put(appendCourseAdmin(response.data.data));
-    message.success("Curso creado con exito");
+    message.success("Curso creado con éxito");
   } catch (error) {
     message.error("Debido a un error, no se ha creado el curso.");
     console.log(error);
@@ -272,9 +322,9 @@ function* updateCourse(action) {
     const response = yield call(curso.patchCourse, action.payload);
     yield put(updateCourseAdmin(response.data.data));
     if (action.payload.asignatura) {
-      message.success("Asignatura creada con exito");
+      message.success("Asignatura creada con éxito");
     } else {
-      message.success("Curso editado con exito");
+      message.success("Curso editado con éxito");
     }
   } catch (error) {
     if (action.payload.asignatura) {
@@ -289,7 +339,8 @@ function* updateCourse(action) {
 function* deleteCourse(action) {
   try {
     yield call(curso.deleteCourse, action.payload.id);
-    message.success("Curso eliminado con exito");
+    yield put(deleteCourseAdmin(action.payload.id));
+    message.success("Curso eliminado con éxito");
   } catch (error) {
     message.error("Debido a un error, no se ha podido eliminar el curso");
     console.log(error);
@@ -300,9 +351,11 @@ function* appendStudentCourse(action) {
   try {
     const response = yield call(alumno.patchStudent, action.payload);
     yield put(updateCourseStudentAdmin(response.data.data));
-    message.success("Se ha agregado con exito el alumno al curso");
+    message.success("Se ha agregado con éxito el alumno al curso");
   } catch (error) {
-    message.error("Debido a un error, no se ha podido agregar el alumno al curso");
+    message.error(
+      "Debido a un error, no se ha podido agregar el alumno al curso"
+    );
     console.log(error);
   }
 }
@@ -312,12 +365,20 @@ function* appendTeacherCourse(action) {
     const response = yield call(curso.patchCourse, action.payload);
     yield put(updateCourseAdmin(response.data.data));
     if (action.payload.id_profesor) {
-      message.success("Se ha agregado el profesor jefe con exito");
+      message.success("Se ha agregado el profesor jefe con éxito");
     } else {
-      message.success("Se ha eliminado el profesor jefe con exito");
+      message.success("Se ha eliminado el profesor jefe con éxito");
     }
   } catch (error) {
-    message.error("Debido a un error, no se ha podido agregar el profesor jefe al curso");
+    if (action.payload.id_profesor) {
+      message.error(
+        "Debido a un error, no se ha podido agregar el profesor jefe al curso"
+      );
+    } else {
+      message.error(
+        "Debido a un error, no se ha podido eliminar el profesor jefe del curso"
+      );
+    }
     console.log(error);
   }
 }
@@ -328,7 +389,9 @@ function* deleteStudentCourse(action) {
     yield put(deleteCourseStudentAdmin(response.data.data));
     message.success("Se ha eliminado el alumno perteneciente al curso");
   } catch (error) {
-    message.error("Debido a un error, no se ha podido eliminar el alumno del curso");
+    message.error(
+      "Debido a un error, no se ha podido eliminar el alumno del curso"
+    );
     console.log(error);
   }
 }
@@ -339,7 +402,9 @@ function* deleteSubject(action) {
     yield put(filterSubjectCourseAdmin(response.data.data));
     message.success("Se ha eliminado la asignatura del curso");
   } catch (error) {
-    message.error("Debido a un error, no se ha podido eliminar la asignatura del curso");
+    message.error(
+      "Debido a un error, no se ha podido eliminar la asignatura del curso"
+    );
     console.log(error);
   }
 }
@@ -348,7 +413,7 @@ function* updateSubject(action) {
   try {
     const response = yield call(asignatura.patchSubject, action.payload);
     yield put(updateSubjectAdmin(response.data.data));
-    message.success("Se ha editado la asignatura con exito");
+    message.success("Se ha editado la asignatura con éxito");
   } catch (error) {
     message.error("Debido a un error, no se ha podido editar la asignatura");
     console.log(error);
@@ -359,7 +424,7 @@ function* appendParentStudents(action) {
   try {
     const response = yield call(alumno.patchStudent, action.payload);
     yield put(updateParentStudentsAdmin(response.data.data));
-    message.success("Se ha agregado el alumno con exito");
+    message.success("Se ha agregado el alumno con éxito");
   } catch (error) {
     message.error("Debido a un error, no se ha podido agregar el alumno");
     console.log(error);
@@ -370,7 +435,7 @@ function* deleteParentStudent(action) {
   try {
     const response = yield call(alumno.patchStudent, action.payload);
     yield put(deleteParentStudentsAdmin(response.data.data));
-    message.success("Se ha eliminado el alumno con exito");
+    message.success("Se ha eliminado el alumno con éxito");
   } catch (error) {
     message.error("Debido a un error, no se ha podido eliminar el alumno");
     console.log(error);

@@ -28,16 +28,15 @@ const Teachers = () => {
     dispatch({ type: FETCH_TEACHERS_ADMIN });
   }, []);
 
-  const { teachers } = useSelector((store) => store.admin);
-  console.log(teachers);
-  
+  const { teachers, isFetching } = useSelector((store) => store.admin);
+
   return (
     <div>
       <DefaultTitleContent
         title={"Profesores"}
         action={<AddTeacher></AddTeacher>}
       />
-      {Object.keys(teachers[0]).length !== 0 ? (
+      {!isFetching ? (
         <div style={true ? {} : { pointerEvents: "none" }}>
           <AdminTableLayout
             tableContent={

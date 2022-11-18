@@ -30,7 +30,7 @@ const EditCourse = ({ course }) => {
         <EditOutlined /> Editar
       </Button>
       <Modal
-        title="Agregar curso"
+        title="Editar curso"
         visible={isModalVisible}
         onOk={form.submit}
         onCancel={handleCancel}
@@ -60,9 +60,6 @@ const EditCourse = ({ course }) => {
             ]}
           >
             <Input />
-          </Form.Item>
-          <Form.Item label="Rut del profesor jefe" name="id_profesor">
-            <Input.Password />
           </Form.Item>
         </Form>
       </Modal>

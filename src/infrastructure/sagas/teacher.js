@@ -173,7 +173,7 @@ function* goEditAttendance(action) {
       id: payload.id_asistencia,
     });
     yield put(updateStudentAttendance(payload));
-    message.success("Campos editados con éxito.");
+    message.success("Asistencia registrada.");
   } catch (e) {
     console.log(e);
     yield put(setIsLoading(false));
@@ -221,7 +221,7 @@ function* delContent(action) {
 function* createContent(action) {
   try {
     const response = yield call(contenido.createContent, action.payload);
-    yield put(contentAdded(response.data.data));
+    yield put(contentAdded({ ...response.data.data, id_asignatura: action.payload.id_asignatura }));
     message.success("Creado con éxito.");
   } catch (e) {
     console.log(e);
@@ -356,13 +356,11 @@ function* createNotification(action) {
 
 function* updateNotificationToCourses(action) {
   const { payload } = action;
-  console.log(payload);
   try {
     // hacer update a las notificaciones
     const notifications = (yield call(notificacion.getNotifications, {
       payload: { id_curso: payload },
     })).data.data;
-    console.log("notificaciones obtenidas con id", notifications, payload);
     yield put(updateNotifications(notifications));
   } catch (e) {
     console.log(e);

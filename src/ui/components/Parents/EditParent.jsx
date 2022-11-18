@@ -27,7 +27,7 @@ const EditParent = ({ parent }) => {
   return (
     <>
       <Button onClick={showModal}>
-        <EditOutlined /> Editar 
+        <EditOutlined /> Editar
       </Button>
       <Modal
         title="Editar apoderado"
@@ -79,7 +79,16 @@ const EditParent = ({ parent }) => {
             <Input />
           </Form.Item>
 
-          <Form.Item label="Dirección" name="direccion">
+          <Form.Item
+            label="Dirección"
+            name="direccion"
+            rules={[
+              {
+                required: true,
+                message: "Por favor ingrese la dirección del apoderado",
+              },
+            ]}
+          >
             <Input />
           </Form.Item>
 
@@ -103,7 +112,12 @@ const EditParent = ({ parent }) => {
           <Form.Item
             label="Correo"
             name="correo"
-            rules={[{ required: true, message:"Por favor ingrese el correo del apoderado"}]}
+            rules={[
+              {
+                required: true,
+                message: "Por favor ingrese el correo del apoderado",
+              },
+            ]}
           >
             <Input />
           </Form.Item>

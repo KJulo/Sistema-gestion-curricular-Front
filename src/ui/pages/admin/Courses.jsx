@@ -27,13 +27,13 @@ const Courses = () => {
     dispatch({ type: FETCH_COURSES_ADMIN });
   }, []);
 
-  const { courses } = useSelector((store) => store.admin);
+  const { courses, isFetching } = useSelector((store) => store.admin);
 
   return (
     <div>
       <DefaultTitleContent title={"Cursos"} action={<AddCourse />} />
       <div style={true ? {} : { pointerEvents: "none" }}>
-        {Object.keys(courses[0]).length !== 0 ? (
+        {!isFetching ? (
           <AdminTableLayout
             tableContent={
               <ContentTable content={courses} columns={columns} type="course" />
