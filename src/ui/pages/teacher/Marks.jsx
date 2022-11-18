@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 // redux
-import { fetchStudents, fetchCourses, fetchStudentsNotes, setIsLoading } from "@slices/teachers";
+import { fetchStudents, fetchCourses, fetchStudentsNotes, updateMark } from "@slices/teachers";
 
 //components
 import {
@@ -35,7 +35,6 @@ const Marks = () => {
   const onClickEdit = (record) => {
     setSelectedMark(record.selectedMark);
     setIsModalVisible(true);
-    console.log(record);
   };
 
   const [selectedMark, setSelectedMark] = useState(null);
@@ -66,14 +65,18 @@ const Marks = () => {
   // Form data
   const handleOk = (values) => {
     setIsModalVisible(false);
-    console.log(values);
-    // if (hasAllConditions(filters)) {
-    //   const params = {
-    //     markInformation: values,
-    //     courseInformation: filters,
-    //   };
-    //   dispatch(addMarks(params));
-    // }
+    const ponderacion = values.ponderacion / 100;
+    const payload = {
+      id: selectedMark.id,
+      id_alumno: selectedMark.id_alumno,
+      descripcion: values.nota.toString(),
+      id_asignatura: selectedMark.id_asignatura,
+      nombre: selectedMark.nombre,
+      nota: values.nota.toString(),
+      ponderacion: ponderacion.toString(),
+      fecha: selectedMark.fecha,
+    };
+    dispatch(updateMark(payload));
     form.resetFields();
   };
 

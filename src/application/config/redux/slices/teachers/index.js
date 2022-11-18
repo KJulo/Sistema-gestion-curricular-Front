@@ -57,6 +57,9 @@ export const teacherSlice = createSlice({
     updatingNotificacion: (state) => {
       state.isLoading = true;
     },
+    updateMark: (state) => {
+      state.isLoading = true;
+    },
     updateTeacher: (state, action) => {
       state.teacher = { ...state.teacher, ...action.payload };
       state.isLoading = false;
@@ -521,6 +524,7 @@ export const {
   addNotificacion,
   updateNotifications,
   updatingNotificacion,
+  updateMark,
 } = teacherSlice.actions;
 
 // exportar reducer del slice para mandarlo a la store

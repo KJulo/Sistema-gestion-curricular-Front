@@ -55,7 +55,7 @@ const MarkForm = ({ form, mark, handleOk }) => {
       </Tooltip>
       <Form.Item
         label={mark.nombre}
-        name="nombre"
+        name="nota"
         placeholder={"1.0"}
         maxLength={16}
         rules={[
