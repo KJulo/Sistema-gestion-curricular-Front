@@ -47,6 +47,8 @@ const CoursesCards = ({ courses, management, isLoading }) => {
     message.warning("Recuerde guardar sus cambios.");
   };
 
+  console.log(courses);
+
   return hasCourses ? (
     <div className="card-container">
       <Row gutter={16}>
@@ -56,7 +58,7 @@ const CoursesCards = ({ courses, management, isLoading }) => {
               title={course.nombre + " - " + course.paralelo}
               content={course.año}
               icon={
-                course.nombre.split(" ")[0] + " " + course.nombre.split(" ")[1][0] + course.paralelo
+                course.nombre?.split(" ")[0] + " " + course.nombre.split(" ")[1][0] + course.paralelo
               }
             />
           </div>
