@@ -118,6 +118,28 @@ export const teacherSlice = createSlice({
       state.students.list = studentsWithNotes;
       state.isLoading = false;
     },
+    updateStudentMark: (state, action) => {
+      const mark = action.payload;
+      const studentsWithNotes = state.students.list.map((student) => {
+        if (student.id === mark.id_alumno) {
+          //si no tiene nota, eliminarlo
+          if (mark.nota === "") {
+            return {
+              ...student,
+              nota: student.nota.filter((n) => n.id !== mark.id),
+            };
+          }
+          return {
+            ...student,
+            nota: student.nota.map((n) => (n.id === mark.id ? mark : n)),
+          };
+        } else {
+          return student;
+        }
+      });
+      state.students.list = studentsWithNotes;
+      state.isLoading = false;
+    },
     updateStudentAttendance: (state, action) => {
       const payload = action.payload;
       const studentList = state.students.list.map((student) => {
@@ -525,6 +547,7 @@ export const {
   updateNotifications,
   updatingNotificacion,
   updateMark,
+  updateStudentMark,
 } = teacherSlice.actions;
 
 // exportar reducer del slice para mandarlo a la store

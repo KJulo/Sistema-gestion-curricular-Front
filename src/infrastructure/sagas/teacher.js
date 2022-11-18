@@ -35,6 +35,7 @@ import {
   updateNotifications,
   updatingNotificacion,
   updateMark,
+  updateStudentMark,
 } from "@slices/teachers";
 
 // Network
@@ -116,8 +117,8 @@ function* changeStudentNote(action) {
   try {
     const id = payload.id;
     delete payload["id"];
-    yield call(notas.editNota, { id, payload });
-    yield put(fetchStudentsNotes());
+    const response = yield call(notas.editNota, { id, payload });
+    yield put(updateStudentMark(response.data.data));
     message.success("Nota editada.");
   } catch (e) {
     console.log(e);
