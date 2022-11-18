@@ -52,12 +52,12 @@ const ViewTeacher = () => {
           <Card
             style={{ textAlign: "center" }}
             title={
-              <div style={{ marginLeft: "210px" }}>
+              <div style={{ display: "flex", flexWrap: "wrap" }}>
                 <Text strong>Información personal</Text>
               </div>
             }
             extra={
-              <div>
+              <div style={{ display: "flex", flexWrap: "wrap", gap:"16px" }}>
                 <EditTeacher teacher={teacher} />
                 <Popconfirm
                   title="¿Estás seguro de que quieres eliminar a este usuario?"
