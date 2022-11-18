@@ -38,9 +38,7 @@ const Attendance = () => {
 
   // Recuperar data
   useEffect(() => {
-    dispatch(setIsLoading(true));
     dispatch(fetchAttendance());
-    dispatch(setIsLoading(false));
   }, [student]);
 
   // Se initializa la variable de estado al cambiar la data de la store

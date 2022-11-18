@@ -1,6 +1,4 @@
 // Constants
-import { courses } from "@constants/teacher/virtualClass.js";
-
 export const initState = {
   teacher: {
     id: "",
@@ -13,7 +11,6 @@ export const initState = {
   },
   courses: {
     list: [],
-    virtualClasses: courses,
     management: {
       course: {},
       units: [],

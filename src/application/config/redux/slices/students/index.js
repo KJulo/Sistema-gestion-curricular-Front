@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, current } from "@reduxjs/toolkit";
 import axios from "axios";
 
 export const studentSlice = createSlice({
@@ -62,6 +62,7 @@ export const studentSlice = createSlice({
     },
     updateForumsAndContent: (state, action) => {
       const { payload } = action;
+      console.log(payload);
       state.course = {
         ...state.course,
         asignaturas: state.course.asignaturas.map((subject) => {

@@ -90,14 +90,32 @@ function* getCourse() {
     const courses = (yield call(curso.getCourses)).data.data;
     const teachers = (yield call(profesor.getTeachers)).data.data;
     const subjects = (yield call(asignatura.getAsignaturas)).data.data;
+    const forums = (yield call(foro.getForums)).data.data;
+    const contents = (yield call(contenido.getContents)).data.data;
+
+    // combinar arreglos
+    const forumsWithContent = forums.map((f) => {
+      return {
+        ...f,
+        contenidos: contents.filter((c) => c.id_foro === f.id),
+      };
+    });
 
     // Combinar las asignaturas con su correspondiente curso
     let merged = [];
     for (let i = 0; i < courses.length; i++) {
       // obtener lista de asignaturas
-      const subjectList = subjects.filter((subject) => subject.id_curso === courses[i].id);
+      let subjectList = subjects.filter((subject) => subject.id_curso === courses[i].id);
       const profesor = teachers.find((t) => t.id === courses[i].id_profesor);
       if (subjectList) {
+        subjectList = subjectList.map((s) => {
+          const forumFinded = forumsWithContent.filter((f) => f.id_asignatura === s.id);
+          if (forumFinded) {
+            return { ...s, foros: forumFinded };
+          } else {
+            return s;
+          }
+        });
         merged.push({
           ...courses[i],
           asignaturas: subjectList,
