@@ -57,6 +57,9 @@ export const teacherSlice = createSlice({
     updatingNotificacion: (state) => {
       state.isLoading = true;
     },
+    updateMark: (state) => {
+      state.isLoading = true;
+    },
     updateTeacher: (state, action) => {
       state.teacher = { ...state.teacher, ...action.payload };
       state.isLoading = false;
@@ -99,27 +102,41 @@ export const teacherSlice = createSlice({
     },
     appendStudentsMarks: (state, action) => {
       const marksList = action.payload;
-
       const studentsWithNotes = state.students.list.map((student) => {
         // recorrer la lista de estudiantes
-        let mark = marksList.find((n) => n.id_alumno === student.id); // ver si hay nota para el estudiante
+        const mark = marksList.filter((n) => n.id_alumno === student.id); // ver si hay nota para el estudiante
         if (mark) {
-          const nota = mark.descripcion;
-          delete mark.descripcion;
-          mark = {
-            ...mark,
-            nota: nota,
-          };
           // retorna al estudiante añadiendo la nueva nota
           return {
             ...student,
-            nota: student.notas.concat(mark),
+            nota: student.nota.concat(mark),
           };
         } else {
           return student;
         }
       });
-
+      state.students.list = studentsWithNotes;
+      state.isLoading = false;
+    },
+    updateStudentMark: (state, action) => {
+      const mark = action.payload;
+      const studentsWithNotes = state.students.list.map((student) => {
+        if (student.id === mark.id_alumno) {
+          //si no tiene nota, eliminarlo
+          if (mark.nota === "") {
+            return {
+              ...student,
+              nota: student.nota.filter((n) => n.id !== mark.id),
+            };
+          }
+          return {
+            ...student,
+            nota: student.nota.map((n) => (n.id === mark.id ? mark : n)),
+          };
+        } else {
+          return student;
+        }
+      });
       state.students.list = studentsWithNotes;
       state.isLoading = false;
     },
@@ -529,6 +546,8 @@ export const {
   addNotificacion,
   updateNotifications,
   updatingNotificacion,
+  updateMark,
+  updateStudentMark,
 } = teacherSlice.actions;
 
 // exportar reducer del slice para mandarlo a la store

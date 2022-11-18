@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 // redux
-import { fetchStudents, fetchCourses, fetchStudentsNotes, setIsLoading } from "@slices/teachers";
+import { fetchStudents, fetchCourses, fetchStudentsNotes, updateMark } from "@slices/teachers";
 
 //components
 import {
@@ -12,6 +12,7 @@ import {
   DefaultTitleContent,
   LoadingSpinner,
   AddMark,
+  MarkForm,
 } from "@components/index";
 
 //containers
@@ -19,8 +20,10 @@ import { AdminTableLayout } from "@containers/index";
 
 //constants
 import { getColumns } from "@constants/teacher/marksTable";
+import { Modal, Form } from "antd";
 
 const Marks = () => {
+  const [form] = Form.useForm();
   const dispatch = useDispatch();
   const { list: content } = useSelector((store) => store.teacher.students);
   const {
@@ -28,8 +31,16 @@ const Marks = () => {
     isLoading,
     courses: { list: courses },
   } = useSelector((store) => store.teacher);
+
+  const onClickEdit = (record) => {
+    setSelectedMark(record.selectedMark);
+    setIsModalVisible(true);
+  };
+
+  const [selectedMark, setSelectedMark] = useState(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
   const [studentsFiltered, setStudentsFiltered] = useState(content);
-  const [tableColumns, setTableColumns] = useState(getColumns(content));
+  const [tableColumns, setTableColumns] = useState(getColumns(content, onClickEdit));
   const [selectedCourse, setSelectedCourse] = useState(null);
 
   useEffect(() => {
@@ -43,13 +54,30 @@ const Marks = () => {
     const courseFiltered = courses.find((c) => c.id === activeFilters.courseId);
     const newStudents = content?.filter((c) => c.curso.id === activeFilters.courseId);
     setStudentsFiltered(newStudents);
-    setTableColumns(getColumns(newStudents));
+    setTableColumns(getColumns(newStudents, onClickEdit));
     setSelectedCourse(courseFiltered);
-  }, [activeFilters, content]);
+  }, [activeFilters.courseId, content]);
 
-  // Al hacer click en el icono de switch, cambiar estado de asiste
-  const handleClick = (record) => {
-    console.log(record);
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
+  // Form data
+  const handleOk = (values) => {
+    setIsModalVisible(false);
+    const ponderacion = values.ponderacion / 100;
+    const payload = {
+      id: selectedMark.id,
+      id_alumno: selectedMark.id_alumno,
+      descripcion: values.nota.toString(),
+      id_asignatura: selectedMark.id_asignatura,
+      nombre: selectedMark.nombre,
+      nota: values.nota.toString(),
+      ponderacion: ponderacion.toString(),
+      fecha: selectedMark.fecha,
+    };
+    dispatch(updateMark(payload));
+    form.resetFields();
   };
 
   return (
@@ -67,13 +95,23 @@ const Marks = () => {
                 course={selectedCourse}
                 students={studentsFiltered}
                 filters={activeFilters}
-                isLoading={isLoading}
               />,
             ]}
             tableContent={
               <ContentTable content={studentsFiltered} columns={tableColumns} scroll={false} />
             }
           />
+
+          {selectedMark && (
+            <Modal
+              title={`Editar nota de ${selectedMark.nombre}`}
+              visible={isModalVisible}
+              onOk={form.submit}
+              onCancel={handleCancel}
+              width={300}>
+              <MarkForm form={form} mark={selectedMark} handleOk={handleOk} />
+            </Modal>
+          )}
         </LoadingSpinner>
       </div>
     </div>

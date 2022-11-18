@@ -1,5 +1,7 @@
 import React from "react";
 
+import { EditOutlined } from "@ant-design/icons";
+
 export const getAverage = (record) => {
   // obtener los id unicos
   const unique = [...new Set(record.map((r) => r.id_asignatura))];
@@ -26,14 +28,9 @@ export const getAverage = (record) => {
   return average;
 };
 
-export const getColumns = (content) => {
+export const getColumns = (content, onClick) => {
   const getMarkTest = (students, test) => {
     return students?.nota.find((marks) => marks.nombre === test);
-  };
-
-  // Al hacer click en el icono de switch, cambiar estado de asiste
-  const handleClick = (record) => {
-    console.log(record);
   };
 
   // Obtener nombres de los test para las columnas
@@ -47,12 +44,15 @@ export const getColumns = (content) => {
     render: (record) => {
       const nota = getMarkTest(record, test);
       return (
-        <div
-          style={nota?.nota >= 4 ? { color: "blue" } : { color: "red" }}
-          onClick={() => {
-            handleClick(record);
-          }}>
-          {nota?.nota} - {nota?.ponderacion * 100}%
+        <div style={{ cursor: "pointer" }}>
+          <div
+            style={nota?.nota >= 4 ? { color: "blue" } : { color: "red" }}
+            onClick={() => {
+              onClick({ student: record, selectedMark: nota });
+            }}>
+            {nota?.nota} - {nota?.ponderacion * 100}%{" "}
+            <EditOutlined style={{ marginRight: "6px" }} />
+          </div>
         </div>
       );
     },

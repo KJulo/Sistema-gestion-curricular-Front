@@ -34,6 +34,8 @@ import {
   addNotificacion,
   updateNotifications,
   updatingNotificacion,
+  updateMark,
+  updateStudentMark,
 } from "@slices/teachers";
 
 // Network
@@ -107,6 +109,21 @@ function* getStudentsNotes() {
   } catch (e) {
     console.log(e);
     yield put(errorFetch({ code: 500, error: "Error de servidor." }));
+  }
+}
+
+function* changeStudentNote(action) {
+  let payload = action.payload;
+  try {
+    const id = payload.id;
+    delete payload["id"];
+    const response = yield call(notas.editNota, { id, payload });
+    yield put(updateStudentMark(response.data.data));
+    message.success("Nota editada.");
+  } catch (e) {
+    console.log(e);
+    yield put(setIsLoading(false));
+    message.error("Error al registrar la nota.");
   }
 }
 
@@ -288,8 +305,8 @@ function* createMark(action) {
         ponderacion: decimalPonderacion.toString(),
         nota: values[i].toString(),
       };
-      newMarks.push(params);
-      yield call(notas.addNota, params);
+      const markResponse = yield call(notas.addNota, params);
+      newMarks.push(markResponse.data.data);
     }
     yield put(appendStudentsMarks(newMarks));
     message.success("Se han creado las notas con éxito");
@@ -384,6 +401,9 @@ function* watchAddNotification() {
 function* watchFetchNotifications() {
   yield takeLatest(updatingNotificacion, updateNotificationToCourses);
 }
+function* watchEditStudentNote() {
+  yield takeLatest(updateMark, changeStudentNote);
+}
 
 export default [
   watchGetTeacherUser(),
@@ -401,4 +421,5 @@ export default [
   watchAddMarks(),
   watchAddNotification(),
   watchFetchNotifications(),
+  watchEditStudentNote(),
 ];
