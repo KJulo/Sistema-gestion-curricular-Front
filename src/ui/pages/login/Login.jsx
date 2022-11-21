@@ -21,6 +21,7 @@ const Login = () => {
 
   const onFinish = async (values) => {
     try {
+      message.destroy();
       const userData = await login(values).unwrap();
       // Guardar sesion en local
       sessionStorage.setItem("sesion", JSON.stringify(userData));
@@ -31,12 +32,12 @@ const Login = () => {
       message.destroy();
       if (err?.originalStatus) {
         message.error("No hay respuesta del servidor");
-      } else if (err?.status === 400) {
+      } else if (err?.status === 400 || err?.status === 500) {
         message.error("Usuario o contraseña incorrectos");
       } else if (err?.status === 401) {
         message.error(err?.data?.error);
       } else {
-        message.error("Error desconocido. Code: ", err?.status);
+        message.error("Ha ocurrido un error inesperado. " + err?.status);
       }
       error();
     }
@@ -44,7 +45,7 @@ const Login = () => {
 
   const error = () => {
     setErrorCount(errorCount + 1);
-    if (errorCount > 2) {
+    if (errorCount === 5) {
       message.destroy();
       message.warning(
         "Demasiados intentos fallidos, compruebe su conexión a internet " +
