@@ -38,11 +38,7 @@ const CollapsePanel = ({ studentArray }) => {
           <AdminTableLayout
             searchInput={""}
             tableContent={
-              <ContentTable
-                content={student.asistencia}
-                columns={columns}
-                scroll={false}
-              />
+              <ContentTable content={student.asistencia} columns={columns} scroll={500} />
             }
           />
         </Panel>

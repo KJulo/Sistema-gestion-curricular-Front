@@ -2,10 +2,9 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 // antd
-import { Typography, Space, Menu, Select, Modal, Input, Alert, Col, Row } from "antd";
+import { Typography, Menu, Select, Modal, Input, Alert, Col, Row } from "antd";
 import {
   AppstoreOutlined,
-  PlusSquareOutlined,
   CloseSquareFilled,
   MoreOutlined,
   RightOutlined,
@@ -21,18 +20,10 @@ import { useGetCurrentMonth, useGetCurrentYear, useGetCurrentDay } from "@hooks/
 import { useEffect } from "react";
 
 // Redux
-import { fetchCourse, setIsLoading, fetchForumsAndContent } from "@slices/students";
+import { fetchCourse } from "@slices/students";
 
 //components
-import {
-  ForumContent,
-  FilterButton,
-  ContentTable,
-  SearchContent,
-  FilterCourse,
-  DefaultTitleContent,
-  LoadingSpinner,
-} from "@components/index";
+import { ForumContent, DefaultTitleContent, LoadingSpinner } from "@components/index";
 
 //constants
 const { Title } = Typography;
@@ -66,11 +57,11 @@ const VitualClassroom = () => {
     setHasMenu(false);
     setHasSubMenu(false);
     // La primera vez que se traiga el contenido ejecutr esto
-    if (course.hasOwnProperty("id") && !courseHasData) {
+    if (course && course.hasOwnProperty("id") && !courseHasData) {
       setCourseHasData(true);
     }
     // Las demás veces solo traer la data
-    if (course.hasOwnProperty("asignaturas")) {
+    if (course && course.hasOwnProperty("asignaturas")) {
       setHasMenu(course.asignaturas.length > 0);
       const menu = course.asignaturas[0];
       if (menu) {
@@ -144,7 +135,15 @@ const VitualClassroom = () => {
         title={
           <Col>
             <Row>Aula Virtual</Row>
-            <Row>{course.nombre + " - " + course.paralelo}</Row>
+            {course && JSON.stringify(course) !== "{}" ? (
+              <Row>{course.nombre + " - " + course.paralelo}</Row>
+            ) : course === undefined ? (
+              <Title level={4} style={{ marginTop: 0 }}>
+                Sin curso asignado.
+              </Title>
+            ) : (
+              <LoadingSpinner isLoading={true} size={"small"} />
+            )}
           </Col>
         }
         subtitle="Aquí podrás revisar las unidades y material de tu curso."

@@ -86,7 +86,7 @@ const Attendance = () => {
         <LoadingSpinner isLoading={isLoading}>
           <AdminTableLayout
             tableContent={
-              <ContentTable content={attendanceFiltered} columns={columns} scroll={false} />
+              <ContentTable content={attendanceFiltered} columns={columns} scroll={500} />
             }
           />
         </LoadingSpinner>

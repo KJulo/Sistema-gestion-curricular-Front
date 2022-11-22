@@ -70,20 +70,19 @@ export const columns = [
     title: "Nombre",
     dataIndex: "nombres",
     key: "nombres",
-    fixed: "left",
-    width: 80,
+    width: 240,
   },
   {
     title: "Rut",
     dataIndex: "rut",
     key: "rut",
-    width: 110,
+    width: 140,
   },
   {
     title: "Promedio",
     dataIndex: "nota",
     key: "nota",
-    width: 95,
+    width: 140,
     render: (record) => {
       return <div>{getAverage(record)}</div>;
     },

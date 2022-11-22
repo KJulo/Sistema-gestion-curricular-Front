@@ -9,7 +9,7 @@ export const studentSlice = createSlice({
     marks: [],
     course: {},
     filters: {},
-    isLoading: true,
+    isLoading: false,
   },
   reducers: {
     fetchStudent: (state) => {

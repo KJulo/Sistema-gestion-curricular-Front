@@ -232,7 +232,7 @@ const Attendance = () => {
             <ContentTable
               content={studentsFiltered}
               columns={columns.concat(editColumn)}
-              scroll={false}
+              scroll={800}
             />
           }
           isLoading={isLoading}

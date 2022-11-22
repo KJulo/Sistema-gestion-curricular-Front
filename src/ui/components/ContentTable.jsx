@@ -7,7 +7,6 @@ import { Table } from "antd";
 import "@styles/ContentTable.less";
 
 const ContentTable = ({ content, columns, scroll }) => {
-  
   return (
     <Table
       columns={columns}
@@ -16,7 +15,7 @@ const ContentTable = ({ content, columns, scroll }) => {
       pagination={{
         position: ["none"],
       }}
-      {...(scroll ? { scroll: { x: 1300 } } : {})}
+      {...(scroll ? { scroll: { x: scroll } } : {})}
     />
   );
 };

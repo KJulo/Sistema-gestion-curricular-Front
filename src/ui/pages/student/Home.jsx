@@ -31,6 +31,8 @@ const Home = () => {
     }
   }, [student]);
 
+  console.log(course);
+
   return (
     <LoadingSpinner isLoading={isLoading}>
       <div style={{ minHeight: 280 }}>
@@ -38,7 +40,15 @@ const Home = () => {
           title={
             <Col>
               <Row>{"Hola, " + student.nombres + " " + student.apellidos}</Row>
-              <Row>{course.nombre + " - " + course.paralelo}</Row>
+              {course && JSON.stringify(course) !== "{}" ? (
+                <Row>{course.nombre + " - " + course.paralelo}</Row>
+              ) : course === undefined ? (
+                <Title level={4} style={{ marginTop: 0 }}>
+                  Sin curso asignado.
+                </Title>
+              ) : (
+                <LoadingSpinner isLoading={true} size={"small"} />
+              )}
             </Col>
           }
           subtitle="Aquí podrás ver tus tareas pendientes y tu izquierda, podrás seguir navegando por el sitio, ¡Buen día!"

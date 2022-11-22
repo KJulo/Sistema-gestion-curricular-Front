@@ -7,25 +7,21 @@ export const columns = [
     title: "Nombre",
     dataIndex: "nombres",
     key: "nombres",
-    fixed: "left",
   },
   {
     title: "Apellidos",
     dataIndex: "apellidos",
     key: "apellidos",
-    fixed: "left",
   },
   {
     title: "Rut",
     dataIndex: "rut",
     key: "rut",
-    fixed: "left",
   },
   {
     title: "Asiste",
     dataIndex: "asistencia",
     key: "asistencia",
-    fixed: "left",
     render: (record) => {
       return (
         <div>

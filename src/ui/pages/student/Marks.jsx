@@ -52,7 +52,7 @@ const Marks = () => {
 
         <div style={true ? {} : { pointerEvents: "none" }}>
           <AdminTableLayout
-            tableContent={<ContentTable content={marks} columns={columns} scroll={false} />}
+            tableContent={<ContentTable content={marks} columns={columns} scroll={700} />}
           />
         </div>
       </LoadingSpinner>
