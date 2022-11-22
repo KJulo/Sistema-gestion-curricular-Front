@@ -1,13 +1,7 @@
 import React, { useEffect } from "react";
 
 //components
-import {
-  DefaultTitleContent,
-  ContentTable,
-  SearchContent,
-  FilterCourse,
-  AddCourse,
-} from "@components/index";
+import { DefaultTitleContent, ContentTable, SearchContent, AddCourse } from "@components/index";
 
 //containers
 import { AdminTableLayout } from "@containers/index";
@@ -35,9 +29,7 @@ const Courses = () => {
       <div style={true ? {} : { pointerEvents: "none" }}>
         {!isFetching ? (
           <AdminTableLayout
-            tableContent={
-              <ContentTable content={courses} columns={columns} type="course" />
-            }
+            tableContent={<ContentTable content={courses} columns={columns} type="course" />}
           />
         ) : (
           <Spin />

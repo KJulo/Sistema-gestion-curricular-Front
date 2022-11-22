@@ -27,6 +27,8 @@ const AddMark = ({ course, students, filters }) => {
   const dispatch = useDispatch();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const hasSubjects = course?.asignaturas.length > 0;
+  const hasCourse = course ? true : false;
+  const hasData = !hasCourse || students?.length === 0;
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -74,14 +76,22 @@ const AddMark = ({ course, students, filters }) => {
 
   return (
     <>
-      <Button
-        type="primary"
-        size="large"
-        icon={<PlusOutlined />}
-        onClick={showModal}
-        disabled={students?.length === 0}>
-        Añadir Nota
-      </Button>
+      <Tooltip
+        title={
+          !hasData
+            ? ""
+            : "No se puede agregar una nota si no existen cursos, asignaturas o alumnos."
+        }
+        placement="right">
+        <Button
+          type="primary"
+          size="large"
+          icon={<PlusOutlined />}
+          onClick={showModal}
+          disabled={hasData}>
+          Añadir Nota
+        </Button>
+      </Tooltip>
 
       <Modal
         title={`Agregar nota a ${course?.nombre} - ${course?.paralelo}`}

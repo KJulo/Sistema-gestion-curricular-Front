@@ -12,12 +12,7 @@ const { Panel } = Collapse;
 import { useGetCurrentMonth, useGetCurrentYear, useGetDateMonthFirst } from "@hooks/useDate";
 
 //components
-import {
-  ContentTable,
-  SearchContent,
-  TeacherFilterCourse,
-  DefaultTitleContent,
-} from "@components/index";
+import { ContentTable, SearchContent, FilterCourse, DefaultTitleContent } from "@components/index";
 
 //containers
 import { AdminTableLayout } from "@containers/index";

@@ -23,7 +23,7 @@ import { SwapOutlined, CheckOutlined } from "@ant-design/icons";
 import {
   ContentTable,
   SearchContent,
-  TeacherFilterCourse,
+  FilterCourse,
   DefaultTitleContent,
   FilterSubject,
   DatePicker,
@@ -45,9 +45,19 @@ const Attendance = () => {
   const [selectedCourseSubjects, setSelectedCourseSubjects] = useState([]);
 
   useEffect(() => {
-    dispatch(resetStore());
-    dispatch(fetchCourses());
-    dispatch(fetchStudents());
+    if (isLoading) {
+      message.destroy();
+    }
+  }, [isLoading]);
+
+  useEffect(() => {
+    if (content) {
+      filterStudents();
+    } else {
+      dispatch(resetStore());
+      dispatch(fetchCourses());
+      dispatch(fetchStudents());
+    }
   }, []);
 
   useEffect(() => {
@@ -66,36 +76,7 @@ const Attendance = () => {
 
   // Filtro de curso y fecha
   useEffect(() => {
-    const condition =
-      activeFilters.hasOwnProperty("courseId") && activeFilters.hasOwnProperty("selectedDate");
-    if (condition) {
-      const studentsByCourse = content.filter((c) => c.id_curso === activeFilters.courseId);
-      const studentsByDate = studentsByCourse.map((student) => {
-        const isEmpty = JSON.stringify(student.asistencia) === "{}";
-        // Buscar en el arreglo de asistencia la asistencia con fecha correspondiente
-        if (!isEmpty) {
-          const attendanceFinded = student?.asistencia?.find(
-            (a) => a.fecha === activeFilters.selectedDate
-          );
-          if (attendanceFinded) {
-            return {
-              ...student,
-              asistencia: { ...attendanceFinded, registrado: "Si" },
-            };
-          }
-        }
-        return {
-          ...student,
-          asistencia: {
-            fecha: activeFilters.selectedDate,
-            asistencia: status[0],
-            registrado: "No",
-          },
-        };
-      });
-
-      setStudentsFiltered(studentsByDate);
-    }
+    filterStudents();
   }, [activeFilters, content]);
 
   const onChangeDate = (_, dateString) => {
@@ -199,11 +180,40 @@ const Attendance = () => {
     },
   ];
 
-  useEffect(() => {
-    if (isLoading) {
-      message.destroy();
+  function filterStudents() {
+    const condition =
+      activeFilters.hasOwnProperty("courseId") && activeFilters.hasOwnProperty("selectedDate");
+    if (condition) {
+      const studentsByCourse = content.filter((c) => c.id_curso === activeFilters.courseId);
+      console.log(studentsByCourse);
+      const studentsByDate = studentsByCourse.map((student) => {
+        const isEmpty = JSON.stringify(student.asistencia) === "{}";
+        // Buscar en el arreglo de asistencia la asistencia con fecha correspondiente
+        if (!isEmpty) {
+          const attendanceFinded = student?.asistencia?.find(
+            (a) => a.fecha === activeFilters.selectedDate
+          );
+          if (attendanceFinded) {
+            return {
+              ...student,
+              asistencia: { ...attendanceFinded, registrado: "Si" },
+            };
+          }
+        }
+        return {
+          ...student,
+          asistencia: {
+            fecha: activeFilters.selectedDate,
+            asistencia: status[0],
+            registrado: "No",
+          },
+        };
+      });
+      console.log(studentsByDate);
+
+      setStudentsFiltered(studentsByDate);
     }
-  }, [isLoading]);
+  }
 
   return (
     <div>
@@ -215,7 +225,7 @@ const Attendance = () => {
         <AdminTableLayout
           filters={[
             <DatePicker onChange={onChangeDate} />,
-            <TeacherFilterCourse courses={courses} includeDate={true} />,
+            <FilterCourse courses={courses} includeDate={true} />,
             // <FilterSubject subjects={selectedCourseSubjects} />,
           ]}
           tableContent={

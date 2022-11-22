@@ -5,7 +5,6 @@ export { default as ContentTable } from "@components/ContentTable";
 export { default as HomeNavBar } from "@components/HomeNavBar";
 export { default as DefaultTitleContent } from "@components/DefaultTitleContent";
 export { default as SearchContent } from "@components/SearchContent";
-export { default as FilterCourse } from "@components/FilterCourse";
 export { default as DatePicker } from "@components/DatePicker";
 export { default as SubTitleContent } from "@components/SubTitleContent";
 export { default as HandleError } from "@components/Error/HandleError";
@@ -16,6 +15,7 @@ export { default as StudentCards } from "@components/StudentCards";
 export { default as EditPassword } from "@components/EditPassword";
 export { default as Notifications } from "@components/Notifications";
 export { default as Filter } from "@components/Filter";
+export { default as EmptySelect } from "@components/EmptySelect";
 
 //admin
 export { default as AdminMenu } from "@components/Admin/NavigationMenu";
@@ -33,7 +33,7 @@ export { default as EditSubject } from "@components/Subject/EditSubject";
 //teachers
 export { default as TeacherMenu } from "@components/Teachers/NavigationMenu.jsx";
 export { default as AddTeacher } from "@components/Teachers/AddTeacher";
-export { default as TeacherFilterCourse } from "@components/Teachers/FilterCourse";
+export { default as FilterCourse } from "@components/Teachers/FilterCourse";
 export { default as CoursesCards } from "@components/Teachers/CoursesCards";
 export { default as EditTeacher } from "@components/Teachers/EditTeacher";
 export { default as FilterSubject } from "@components/Teachers/FilterSubject";

@@ -14,7 +14,7 @@ import {
 import {
   ContentTable,
   SearchContent,
-  TeacherFilterCourse,
+  FilterCourse,
   DefaultTitleContent,
   LoadingSpinner,
   AddMark,
@@ -31,7 +31,7 @@ import { Modal, Form } from "antd";
 const Marks = () => {
   const [form] = Form.useForm();
   const dispatch = useDispatch();
-  const { list: content } = useSelector((store) => store.teacher.students);
+  const { list: students } = useSelector((store) => store.teacher.students);
   const {
     activeFilters,
     isLoading,
@@ -45,8 +45,8 @@ const Marks = () => {
 
   const [selectedMark, setSelectedMark] = useState(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [studentsFiltered, setStudentsFiltered] = useState(content);
-  const [tableColumns, setTableColumns] = useState(getColumns(content, onClickEdit));
+  const [studentsFiltered, setStudentsFiltered] = useState(students);
+  const [tableColumns, setTableColumns] = useState(getColumns(students, onClickEdit));
   const [selectedCourse, setSelectedCourse] = useState(null);
 
   useEffect(() => {
@@ -57,12 +57,16 @@ const Marks = () => {
 
   // Update
   useEffect(() => {
-    const courseFiltered = courses.find((c) => c.id === activeFilters.courseId);
-    const newStudents = content?.filter((c) => c.curso.id === activeFilters.courseId);
-    setStudentsFiltered(newStudents);
-    setTableColumns(getColumns(newStudents, onClickEdit));
-    setSelectedCourse(courseFiltered);
-  }, [activeFilters.courseId, content]);
+    if (courses && courses.length > 0) {
+      const courseFiltered = courses.find((c) => c.id === activeFilters.courseId);
+      setSelectedCourse(courseFiltered);
+    }
+    if (students && students.length > 0) {
+      const newStudents = students?.filter((c) => c.curso?.id === activeFilters.courseId);
+      setStudentsFiltered(newStudents);
+      setTableColumns(getColumns(newStudents, onClickEdit));
+    }
+  }, [activeFilters.courseId, students]);
 
   const handleCancel = () => {
     setIsModalVisible(false);
@@ -102,7 +106,7 @@ const Marks = () => {
         <LoadingSpinner isLoading={isLoading}>
           <AdminTableLayout
             filters={[
-              <TeacherFilterCourse courses={courses} includeDate={false} />,
+              <FilterCourse courses={courses} includeDate={false} />,
               <AddMark
                 course={selectedCourse}
                 students={studentsFiltered}

@@ -26,11 +26,10 @@ import { fetchCourse, setIsLoading, fetchForumsAndContent } from "@slices/studen
 //components
 import {
   ForumContent,
-  FilterCourse,
   FilterButton,
   ContentTable,
   SearchContent,
-  TeacherFilterCourse,
+  FilterCourse,
   DefaultTitleContent,
   LoadingSpinner,
 } from "@components/index";
