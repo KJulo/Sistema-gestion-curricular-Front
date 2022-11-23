@@ -76,7 +76,7 @@ export const columns = [
     title: "Rut",
     dataIndex: "rut",
     key: "rut",
-    width: 140,
+    width: 180,
   },
   {
     title: "Promedio",

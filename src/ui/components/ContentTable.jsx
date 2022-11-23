@@ -15,7 +15,7 @@ const ContentTable = ({ content, columns, scroll }) => {
       pagination={{
         position: ["none"],
       }}
-      {...(scroll ? { scroll: { x: scroll } } : {})}
+      scroll={{ x: true }}
     />
   );
 };

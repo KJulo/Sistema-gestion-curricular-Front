@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from "react";
 import "@styles/VirtualClass.less";
 
+//slices
 import { deleteContent } from "@slices/teachers";
 import { useDispatch } from "react-redux";
-
-// Redux
 import { editContent } from "@slices/teachers";
+
+//hooks
+import useHyperLinkDetector from "@hooks/useHyperLinkDetector";
 
 import { EditOutlined, DeleteOutlined, RightOutlined } from "@ant-design/icons";
 import { Row, Modal, Input, Popconfirm, Select } from "antd";
@@ -76,7 +78,7 @@ const ForumContent = ({ content, isEdit, forumId }) => {
             <></>
           )}
         </Row>
-        <p>{content.descripcion}</p>
+        <p>{useHyperLinkDetector(content.descripcion)}</p>
       </div>
 
       <Modal title="Editar" open={isEditOpen} onOk={handdleOkContent} onCancel={onClose}>

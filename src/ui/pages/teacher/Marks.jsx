@@ -114,7 +114,7 @@ const Marks = () => {
               />,
             ]}
             tableContent={
-              <ContentTable content={studentsFiltered} columns={tableColumns} scroll={800} />
+              <ContentTable content={studentsFiltered} columns={tableColumns} scroll={1600} />
             }
           />
 
