@@ -11,7 +11,7 @@ const Card = ({ title, content, icon, onClick }) => {
   const courseIcon = <div style={{ ...iconStyle, marginLeft: 20 }}> {icon} </div>;
 
   return (
-    <Col style={{ marginBottom: 20 }}>
+    <Col style={{ marginBottom: 20, display: "flex", justifyContent: "center" }}>
       <CardAntd
         hoverable
         size="large"

@@ -55,7 +55,11 @@ const Home = () => {
         />
 
         <div className="flex-container" style={{ padding: 10, justifyContent: "space-evenly" }}>
-          <img src={SchoolImg} alt="Logo Colegio" style={{ margin: 10, width: 500, height: 350 }} />
+          <img
+            src={SchoolImg}
+            alt="Logo Colegio"
+            style={{ margin: 10, width: 500, height: "max-content" }}
+          />
 
           <Notifications data={notifications} />
         </div>

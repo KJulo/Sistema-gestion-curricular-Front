@@ -35,6 +35,7 @@ export const parent = createSlice({
       const { payload } = action;
       const students = payload.filter((student) => student.id_apoderado === state.parentData.id);
       state.students = students;
+      state.isLoading = false;
     },
     updateCourses: (state, action) => {
       const { payload } = action;
@@ -44,6 +45,7 @@ export const parent = createSlice({
           curso: payload.find((course) => course.id === student.id_curso),
         };
       });
+      state.isLoading = false;
     },
     updateStudentsNotes: (state, action) => {
       const marksList = action.payload;
@@ -93,12 +95,13 @@ export const parent = createSlice({
       state.students = studentsWithAttendance;
       state.isLoading = false;
     },
-    updateNotification: (state, action) => { 
+    updateNotification: (state, action) => {
       const data = action.payload;
-      state.students = state.students.map((student) => { 
+      state.students = state.students.map((student) => {
         student.id === data.id_alumno ? { ...student, notificacion: data } : student;
       });
-    },  
+      state.isLoading = false;
+    },
   },
 });
 
@@ -115,7 +118,7 @@ export const {
   updateCourses,
   updateStudentsNotes,
   updateStudentsAttendance,
-  updateNotification
+  updateNotification,
 } = parent.actions;
 
 // exportar reducer del slice para mandarlo a la store

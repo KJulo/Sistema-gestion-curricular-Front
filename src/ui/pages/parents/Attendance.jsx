@@ -21,7 +21,7 @@ import { fetchStudents } from "@slices/parents";
 import { AdminTableLayout } from "@containers/index";
 
 //components
-import { ContentTable, DefaultTitleContent } from "@components/index";
+import { ContentTable, DefaultTitleContent, LoadingSpinner } from "@components/index";
 
 // constants
 import { columns } from "@constants/student/attendanceTable";
@@ -51,7 +51,7 @@ const Attendance = () => {
   const currentDate = useGetCurrentMonth() + "-" + useGetCurrentYear();
   const [selectedDate, setSelectedDate] = useState(currentDate);
 
-  const { parentData, students } = useSelector((store) => store.parent);
+  const { parentData, students, isLoading } = useSelector((store) => store.parent);
   const dispatch = useDispatch();
   useEffect(() => {
     // Cada estudiante de por si ya incluye las notificaciones en la consulta
@@ -78,9 +78,11 @@ const Attendance = () => {
         subtitle="Aquí podras revisar la asistencia con más detalle que llevan tus pupilos."
       />
 
-      <div style={{ marginTop: 22, maxWidth: 600 }}>
-        <CollapsePanel studentArray={students} />
-      </div>
+      <LoadingSpinner isLoading={isLoading}>
+        <div style={{ marginTop: 22, maxWidth: 600 }}>
+          <CollapsePanel studentArray={students} />
+        </div>
+      </LoadingSpinner>
     </div>
   );
 };

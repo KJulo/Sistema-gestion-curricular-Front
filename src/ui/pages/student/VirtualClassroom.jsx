@@ -150,55 +150,57 @@ const VitualClassroom = () => {
         subtitle="Aquí podrás revisar las unidades y material de tu curso."
       />
 
-      {hasMenu ? (
-        <Menu
-          onClick={onClickMenu}
-          selectedKeys={[currentMenu.id]}
-          mode="horizontal"
-          items={subjects}
-          defaultSelectedKeys={currentMenu.id}
-        />
-      ) : (
-        <Alert message="No se le han añadido asignaturas actualmente." type="info" showIcon />
-      )}
+      <div style={{ marginLeft: -19 }}>
+        {hasMenu ? (
+          <Menu
+            onClick={onClickMenu}
+            selectedKeys={[currentMenu.id]}
+            mode="horizontal"
+            items={subjects}
+            defaultSelectedKeys={currentMenu.id}
+          />
+        ) : (
+          <Alert message="No se le han añadido asignaturas actualmente." type="info" showIcon />
+        )}
 
-      {hasSubMenu ? (
-        <Menu
-          onClick={onClickSubMenu}
-          selectedKeys={[currentSubMenu.id]}
-          mode="horizontal"
-          items={subMenuItems}
-          defaultSelectedKeys={currentSubMenu.titulo}
-        />
-      ) : (
-        <></>
-      )}
-
-      <div className="content-container">
         {hasSubMenu ? (
-          currentSubMenu?.contenidos.length > 0 ? (
-            currentSubMenu?.contenidos?.map((item) => (
-              <ForumContent content={item} isEdit={false} />
-            ))
-          ) : (
-            <>
-              <InfoCircleOutlined /> Sin contenidos aún.
-            </>
-          )
+          <Menu
+            onClick={onClickSubMenu}
+            selectedKeys={[currentSubMenu.id]}
+            mode="horizontal"
+            items={subMenuItems}
+            defaultSelectedKeys={currentSubMenu.titulo}
+          />
         ) : (
           <></>
         )}
 
-        <Modal
-          title="Añadir nueva información o tarea"
-          open={isAddOpen}
-          onOk={handdleClose}
-          onCancel={handdleClose}>
-          <Input.Group>
-            <Input size="large" placeholder="Titulo." prefix={<RightOutlined />} id="input" />
-            <TextArea rows={6} placeholder="Contenido." id="textArea" />
-          </Input.Group>
-        </Modal>
+        <div className="content-container">
+          {hasSubMenu ? (
+            currentSubMenu?.contenidos.length > 0 ? (
+              currentSubMenu?.contenidos?.map((item) => (
+                <ForumContent content={item} isEdit={false} />
+              ))
+            ) : (
+              <>
+                <InfoCircleOutlined /> Sin contenidos aún.
+              </>
+            )
+          ) : (
+            <></>
+          )}
+
+          <Modal
+            title="Añadir nueva información o tarea"
+            open={isAddOpen}
+            onOk={handdleClose}
+            onCancel={handdleClose}>
+            <Input.Group>
+              <Input size="large" placeholder="Titulo." prefix={<RightOutlined />} id="input" />
+              <TextArea rows={6} placeholder="Contenido." id="textArea" />
+            </Input.Group>
+          </Modal>
+        </div>
       </div>
     </LoadingSpinner>
   );

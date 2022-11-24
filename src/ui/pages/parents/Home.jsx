@@ -15,11 +15,11 @@ import "@styles/Home.less";
 
 //components
 import Notifications from "@components/Notifications";
-import { StudentCards, DefaultTitleContent } from "@components";
+import { StudentCards, DefaultTitleContent, LoadingSpinner } from "@components";
 
 const Home = () => {
   const dispatch = useDispatch();
-  const { parentData, students } = useSelector((store) => store.parent);
+  const { parentData, students, isLoading } = useSelector((store) => store.parent);
 
   useEffect(() => {
     // Cada estudiante de por si ya incluye las notificaciones en la consulta
@@ -34,30 +34,27 @@ const Home = () => {
       style={{
         margin: "24px 16px",
         minHeight: 280,
-      }}
-    >
+      }}>
       <DefaultTitleContent
         title={`Hola, ${parentData.nombres} ${parentData.apellidos} !`}
         subtitle="¡Haz click en uno de tus pupilos para desplegar información resumida de ellos!"
       />
 
-      <div
-        className="flex-container"
-        style={{ padding: "1rem", justifyContent: "space-around" }}
-      >
-        <div style={{ display: "contents" }}>
-          <img src={SchoolImg} alt="Logo Colegio" className="fit-image" />
-          <Row className="card-container">
-            {students.map((student) => (
-              <Col>
-                {console.log(student)}
-                <StudentCards student={student} />
-                <Notifications data={student.curso.notificacion} />
-              </Col>
-            ))}
-          </Row>
+      <LoadingSpinner isLoading={isLoading}>
+        <div className="flex-container" style={{ padding: "1rem", justifyContent: "space-around" }}>
+          <div style={{ display: "contents" }}>
+            <img src={SchoolImg} alt="Logo Colegio" className="fit-image" />
+            <Row className="card-container">
+              {students.map((student) => (
+                <Col>
+                  <StudentCards student={student} />
+                  <Notifications data={student.curso.notificacion} />
+                </Col>
+              ))}
+            </Row>
+          </div>
         </div>
-      </div>
+      </LoadingSpinner>
     </div>
   );
 };
