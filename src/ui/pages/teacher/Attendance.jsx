@@ -51,9 +51,10 @@ const Attendance = () => {
   }, [isLoading]);
 
   useEffect(() => {
-    if (content) {
+    if (content && content.length > 0) {
       filterStudents();
     } else {
+      console.log("entra aqui", content);
       dispatch(resetStore());
       dispatch(fetchCourses());
       dispatch(fetchStudents());
@@ -76,6 +77,7 @@ const Attendance = () => {
 
   // Filtro de curso y fecha
   useEffect(() => {
+    console.log("entra");
     filterStudents();
   }, [activeFilters, content]);
 
