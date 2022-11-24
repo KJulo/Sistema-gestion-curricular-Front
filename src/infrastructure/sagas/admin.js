@@ -126,7 +126,7 @@ function* updateTeacher(action) {
     yield put(updateTeacherAdmin(response.data.data));
     message.success("Profesor actualizado con éxito.");
   } catch (error) {
-    message.success(
+    message.error(
       "Debido a un error, no se ha podido actualizar el profesor"
     );
     console.log(error);
@@ -139,7 +139,7 @@ function* deleteTeacher(action) {
     yield put(deleteTeacherAdmin(action.payload.id));
     message.success("Se ha eliminado el profesor con éxito");
   } catch (error) {
-    message.error("Debido a un error, no se ha podido eliminar al profesor");
+    message.error("Debido a un error, no se ha podido eliminar el profesor");
     console.log(error);
   }
 }
@@ -276,7 +276,7 @@ function* deleteParent(action) {
     message.success("Se ha eliminado el apoderado con éxito");
   } catch (error) {
     message.error(
-      "Debido a un error, no se ha podido editar el apoderado con éxito"
+      "Debido a un error, no se ha podido eliminar el apoderado con éxito"
     );
     console.log(error);
   }
@@ -328,7 +328,7 @@ function* updateCourse(action) {
     }
   } catch (error) {
     if (action.payload.asignatura) {
-      message.error("Debido a un error, no se ha podido editar la asignatura");
+      message.error("Debido a un error, no se ha podido crear la asignatura");
     } else {
       message.error("Debido a un error, no se ha podido editar el curso");
     }

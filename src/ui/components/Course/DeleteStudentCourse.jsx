@@ -15,7 +15,7 @@ const DeleteStudentCourse = ({ id }) => {
   };
   return (
     <Popconfirm
-      title="Eliminar alumno del curso"
+      title="¿Desea eliminar el alumno del curso?"
       onConfirm={deleteStudentCourse}
       okText="Si"
       cancelText="No"
