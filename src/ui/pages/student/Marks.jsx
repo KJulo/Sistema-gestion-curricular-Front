@@ -2,11 +2,11 @@ import React, { useState, useEffect } from "react";
 import "@styles/Marks.less";
 
 // antd
-import { Statistic } from "antd";
+import { Col, Divider, Row, Space, Statistic } from "antd";
 
 // hooks
 import { useGetCurrentMonth, useGetCurrentYear, useGetCurrentDay } from "@hooks/useDate";
-import { useAverage } from "@hooks/useAverage";
+import { useAverage, useAverageBySubject } from "@hooks/useAverage";
 
 // redux
 import { useDispatch, useSelector } from "react-redux";
@@ -25,10 +25,18 @@ const Marks = () => {
   const dispatch = useDispatch();
   const { student, isLoading, marks } = useSelector((store) => store.student);
 
+  // Obtener nombres de las asignaturas
+  const testNames = new Set();
+  marks?.map((mark) => testNames.add(mark.asignatura));
+
   // Recuperar data
   useEffect(() => {
     dispatch(fetchMarks(student));
   }, [student]);
+
+  function getAverage(marks) {
+    return useAverage(marks, 2) === "NaN" ? "Sin notas aún" : useAverage(marks, 2);
+  }
 
   return (
     <div>
@@ -39,13 +47,29 @@ const Marks = () => {
 
       <LoadingSpinner isLoading={isLoading}>
         {student.hasOwnProperty("nombres") ? (
-          <Statistic
-            title={student.nombres.split(" ")[0] + " " + student.apellidos[0]}
-            value={
-              "Promedio: " +
-              (useAverage(marks, 2) === "NaN" ? "Sin notas aún" : useAverage(marks, 2))
-            }
-          />
+          <>
+            <Statistic
+              title={student.nombres + " " + student.apellidos}
+              value={"Promedio: " + getAverage(marks)}
+              style={{ width: "fit-content", margin: 0 }}
+            />
+            <Divider />
+            <Row gutter={16}>
+              {Array.from(testNames).length > 0 ? (
+                Array.from(testNames).map((test) => (
+                  <Col>
+                    <Statistic
+                      title={test}
+                      value={useAverageBySubject(marks, test, 2)}
+                      style={{ width: "fit-content", margin: 0 }}
+                    />
+                  </Col>
+                ))
+              ) : (
+                <></>
+              )}
+            </Row>
+          </>
         ) : (
           <></>
         )}
