@@ -54,10 +54,8 @@ const Home = () => {
           subtitle="Aquí podrás ver tus tareas pendientes y tu izquierda, podrás seguir navegando por el sitio, ¡Buen día!"
         />
 
-        <div
-          className="flex-container"
-          style={{ padding: 10, justifyContent: "space-around", flexDirection: "column" }}>
-          <img src={SchoolImg} alt="Logo Colegio" style={{ margin: 10 }} />
+        <div className="flex-container" style={{ padding: 10, justifyContent: "space-evenly" }}>
+          <img src={SchoolImg} alt="Logo Colegio" style={{ margin: 10, width: 500, height: 350 }} />
 
           <Notifications data={notifications} />
         </div>

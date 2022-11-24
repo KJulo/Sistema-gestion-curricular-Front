@@ -8,6 +8,7 @@ import {
   CloseSquareFilled,
   MoreOutlined,
   RightOutlined,
+  InfoCircleOutlined,
 } from "@ant-design/icons";
 const { TextArea } = Input;
 
@@ -175,11 +176,15 @@ const VitualClassroom = () => {
 
       <div className="content-container">
         {hasSubMenu ? (
-          <>
-            {currentSubMenu.contenidos.map((item) => (
+          currentSubMenu?.contenidos.length > 0 ? (
+            currentSubMenu?.contenidos?.map((item) => (
               <ForumContent content={item} isEdit={false} />
-            ))}
-          </>
+            ))
+          ) : (
+            <>
+              <InfoCircleOutlined /> Sin contenidos aún.
+            </>
+          )
         ) : (
           <></>
         )}

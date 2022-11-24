@@ -10,7 +10,7 @@ import moment from "moment";
 
 const Notifications = ({ data }) => {
   return (
-    <div>
+    <div style={{ width: 480 }}>
       <Divider orientation="center">Notificaciones</Divider>
       <Card>
         <List
