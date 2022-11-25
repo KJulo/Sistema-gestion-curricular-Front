@@ -47,6 +47,13 @@ const CoursesCards = ({ courses, management, isLoading }) => {
     message.warning("Recuerde guardar sus cambios.");
   };
 
+  const setTag = (course) => {
+    const names = course.nombre.split(" ");
+    if (names.length !== 1) {
+      return `${names[0]} ${names[1][0]} - ${course.paralelo}`;
+    }
+    return `${course.nombre} - ${course.paralelo}`;
+  }
   return hasCourses ? (
     <div className="card-container">
       <Row gutter={16}>
@@ -56,7 +63,7 @@ const CoursesCards = ({ courses, management, isLoading }) => {
               title={course.nombre + " - " + course.paralelo}
               content={course.año}
               icon={
-                course.nombre.split(" ")[0] + " " + course.nombre.split(" ")[1][0] + course.paralelo
+                setTag(course)
               }
             />
           </div>
