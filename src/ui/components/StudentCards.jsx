@@ -30,8 +30,7 @@ const StudentCards = ({ student }) => {
         open={modalOpen}
         onOk={handdleOkModal}
         onCancel={handdleOkModal}
-        cancelButtonProps={{ style: { display: "none" } }}
-      >
+        cancelButtonProps={{ style: { display: "none" } }}>
         <Title level={4}>Notas</Title>
         <Paragraph>
           <blockquote>
@@ -59,9 +58,7 @@ const StudentMarks = ({ student }) => {
         <Text style={{ color: "black" }}>{` ${total}`}</Text>
         <br></br>
         Promedio del alumno:
-        <Text
-          style={{ color: studentAverage < 4 ? "red" : "blue" }}
-        >{` ${studentAverage}`}</Text>
+        <Text style={{ color: studentAverage < 4 ? "red" : "blue" }}>{` ${studentAverage}`}</Text>
         <br></br>
       </>
     );
@@ -71,13 +68,12 @@ const StudentMarks = ({ student }) => {
 };
 
 const StudentAttendance = ({ student }) => {
+  console.log(student);
   const attendance = student.asistencia;
   if (attendance.length > 0) {
     const total = attendance.length;
     const sum = attendance.reduce((acum, att) => {
-      return acum + att.asistencia === "Si" || att.asistencia === "Justificado"
-        ? 1
-        : 0;
+      return acum + (att.asistencia === "Si" || att.asistencia === "Justificado" ? 1 : 0);
     }, 0);
     return (
       <>
@@ -85,10 +81,10 @@ const StudentAttendance = ({ student }) => {
         <Text style={{ color: "black" }}>{` ${total}`}</Text>
         <br></br>
         Días asistidos:
-        <Text style={{ color: "blue" }}>{` ${sum}`}</Text>
+        <Text style={{ color: "blue" }}>{` ${total - sum}`}</Text>
         <br></br>
         Dias inasistidos:
-        <Text style={{ color: "red" }}>{` ${total - sum}`}</Text>
+        <Text style={{ color: "red" }}>{` ${sum}`}</Text>
         <br></br>
       </>
     );

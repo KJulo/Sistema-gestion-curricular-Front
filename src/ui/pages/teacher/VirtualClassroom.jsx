@@ -159,8 +159,8 @@ const VitualClassroom = () => {
 
   function handdleClose() {
     setIsAddOpen(false);
-    const title = document.getElementById("input").value;
-    const body = document.getElementById("textArea").value;
+    const title = document.getElementById("inputNoti").value;
+    const body = document.getElementById("textAreaNoti").value;
     console.log(currentSubMenu);
     dispatch(
       addContent({
@@ -291,8 +291,8 @@ const VitualClassroom = () => {
           onOk={handdleClose}
           onCancel={() => setIsAddOpen(false)}>
           <Input.Group>
-            <Input size="large" placeholder="Titulo." prefix={<RightOutlined />} id="input" />
-            <TextArea rows={6} placeholder="Contenido." id="textArea" />
+            <Input size="large" placeholder="Titulo." prefix={<RightOutlined />} id="inputNoti" />
+            <TextArea rows={6} placeholder="Contenido." id="textAreaNoti" />
           </Input.Group>
         </Modal>
 
